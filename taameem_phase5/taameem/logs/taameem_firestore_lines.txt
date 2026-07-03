@@ -1,0 +1,675 @@
+﻿
+logs\taameem_log_dump.txt:17722:07-02 13:22:14.855 
+D/ConnectivityManager(22198): StackLog: [android.net.ConnectivityManager.sendRe
+questForNetwork(ConnectivityManager.java:4744)] [android.net.ConnectivityManage
+r.registerDefaultNetworkCallbackForUid(ConnectivityManager.java:5469)] [android
+.net.ConnectivityManager.registerDefaultNetworkCallback(ConnectivityManager.jav
+a:5436)] [android.net.ConnectivityManager.registerDefaultNetworkCallback(Connec
+tivityManager.java:5410)] [com.google.firebase.firestore.remote.AndroidConnecti
+vityMonitor.configureNetworkMonitoring(AndroidConnectivityMonitor.java:87)] [co
+m.google.firebase.firestore.remote.AndroidConnectivityMonitor.<init>(AndroidCon
+nectivityMonitor.java:64)] [com.google.firebase.firestore.remote.RemoteComponen
+etProvider.createConnectivityMonitor(RemoteComponenetProvider.java:94)] [com.go
+ogle.firebase.firestore.remote.RemoteComponenetProvider.initialize(RemoteCompon
+enetProvider.java:41)] [com.google.firebase.firestore.core.ComponentProvider.in
+itialize(ComponentProvider.java:158)] [com.google.firebase.firestore.core.Fires
+toreClient.initialize(FirestoreClient.java:284)] [com.google.firebase.firestore
+.core.FirestoreClient.lambda$new$0$com-google-firebase-firestore-core-Firestore
+Client(FirestoreClient.java:109)] [com.google.firebase.firestore.core.Firestore
+Client$$ExternalSyntheticLambda19.run(D8$$SyntheticClass:0)] [com.google.fireba
+se.firestore.util.AsyncQueue.lambda$enqueue$2(AsyncQueue.java:445)] [com.google
+.firebase.firestore.util.AsyncQueue$$ExternalSyntheticLambda4.call(D8$$Syntheti
+cClass:0)] [com.google.firebase.firestore.util.AsyncQueue$SynchronizedShutdownA
+wareExecutor.lambda$executeAndReportResult$1(AsyncQueue.java:330)] [com.google.
+firebase.firestore.util.AsyncQueue$SynchronizedShutdownAwareExecutor$$ExternalS
+yntheticLambda2.run(D8$$SyntheticClass:0)] 
+[java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:520)] 
+[java.util.concurrent.FutureTask.run(FutureTask.java:328)] [java.util.concurren
+t.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecut
+or.java:323)] [java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExec
+utor.java:1100)] [java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPool
+Executor.java:624)] [com.google.firebase.firestore.util.AsyncQueue$Synchronized
+ShutdownAwareExecutor$DelayedStartFactory.run(AsyncQueue.java:235)] 
+[java.lang.Thread.run(Thread.java:1572)]
+logs\taameem_log_dump.txt:17944:07-02 13:22:15.017 
+D/ConnectivityManager(22198): StackLog: [android.net.ConnectivityManager.sendRe
+questForNetwork(ConnectivityManager.java:4744)] [android.net.ConnectivityManage
+r.registerDefaultNetworkCallbackForUid(ConnectivityManager.java:5469)] [android
+.net.ConnectivityManager.registerDefaultNetworkCallback(ConnectivityManager.jav
+a:5436)] [android.net.ConnectivityManager.registerDefaultNetworkCallback(Connec
+tivityManager.java:5410)] [io.grpc.android.AndroidChannelBuilder$AndroidChannel
+.configureNetworkMonitoring(AndroidChannelBuilder.java:217)] [io.grpc.android.A
+ndroidChannelBuilder$AndroidChannel.<init>(AndroidChannelBuilder.java:198)] 
+[io.grpc.android.AndroidChannelBuilder.build(AndroidChannelBuilder.java:169)] [
+com.google.firebase.firestore.remote.GrpcCallProvider.initChannel(GrpcCallProvi
+der.java:116)] [com.google.firebase.firestore.remote.GrpcCallProvider.lambda$in
+itChannelTask$6$com-google-firebase-firestore-remote-GrpcCallProvider(GrpcCallP
+rovider.java:242)] [com.google.firebase.firestore.remote.GrpcCallProvider$$Exte
+rnalSyntheticLambda4.call(D8$$SyntheticClass:0)] [com.google.android.gms.tasks.
+zzz.run(com.google.android.gms:play-services-tasks@@18.1.0:1)] [com.google.fire
+base.firestore.util.ThrottledForwardingExecutor.lambda$execute$0$com-google-fir
+ebase-firestore-util-ThrottledForwardingExecutor(ThrottledForwardingExecutor.ja
+va:54)] [com.google.firebase.firestore.util.ThrottledForwardingExecutor$$Extern
+alSyntheticLambda0.run(D8$$SyntheticClass:0)] [java.util.concurrent.ThreadPoolE
+xecutor.runWorker(ThreadPoolExecutor.java:1100)] [java.util.concurrent.ThreadPo
+olExecutor$Worker.run(ThreadPoolExecutor.java:624)] 
+[java.lang.Thread.run(Thread.java:1572)]
+logs\taameem_log_dump.txt:18147:07-02 13:22:15.718 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:18148:07-02 13:22:15.718 W/Firestore(22198): 
+(25.1.4) [OnlineStateTracker]: Could not reach Cloud Firestore backend. 
+Connection failed 1 times. Most recent error: Status{code=PERMISSION_DENIED, 
+description=Cloud Firestore API has not been used in project taameem-3f949 
+before or it is disabled. Enable it by visiting https://console.developers.goog
+le.com/apis/api/firestore.googleapis.com/overview?project=taameem-3f949 then 
+retry. If you enabled this API recently, wait a few minutes for the action to 
+propagate to our systems and retry., cause=null}
+logs\taameem_log_dump.txt:18149:07-02 13:22:15.718 W/Firestore(22198): This 
+typically indicates that your device does not have a healthy Internet 
+connection at the moment. The client will operate in offline mode until it is 
+able to successfully connect to the backend.
+logs\taameem_log_dump.txt:18163:07-02 13:22:16.135 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:18179:07-02 13:22:17.158 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:18189:07-02 13:22:18.032 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:18339:07-02 13:22:20.940 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:18634:07-02 13:22:23.717 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:18944:07-02 13:22:31.024 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:19430:07-02 13:22:38.245 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:21491:07-02 13:22:50.851 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:34777:07-02 13:23:13.578 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:37187:07-02 13:23:36.006 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:57644:07-02 13:24:26.254 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=UNAVAILABLE, description=Unable to resolve host 
+firestore.googleapis.com, cause=java.lang.RuntimeException: 
+java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:57645:07-02 13:24:26.254 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+logs\taameem_log_dump.txt:57646:07-02 13:24:26.254 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+logs\taameem_log_dump.txt:57647:07-02 13:24:26.254 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+logs\taameem_log_dump.txt:57648:07-02 13:24:26.254 W/Firestore(22198): 	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:57649:07-02 13:24:26.254 W/Firestore(22198): 	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:57650:07-02 13:24:26.254 W/Firestore(22198): 	at 
+java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:57651:07-02 13:24:26.254 W/Firestore(22198): Caused 
+by: java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:57652:07-02 13:24:26.254 W/Firestore(22198): 	at 
+java.net.Inet6AddressImpl.lookupHostByName(Inet6AddressImpl.java:156)
+logs\taameem_log_dump.txt:57653:07-02 13:24:26.254 W/Firestore(22198): 	at 
+java.net.Inet6AddressImpl.lookupAllHostAddr(Inet6AddressImpl.java:103)
+logs\taameem_log_dump.txt:57654:07-02 13:24:26.254 W/Firestore(22198): 	at 
+java.net.InetAddress.getAllByName(InetAddress.java:1152)
+logs\taameem_log_dump.txt:57655:07-02 13:24:26.254 W/Firestore(22198): 	at io.g
+rpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.
+java:632)
+logs\taameem_log_dump.txt:57656:07-02 13:24:26.254 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+logs\taameem_log_dump.txt:57657:07-02 13:24:26.254 W/Firestore(22198): 	... 5 
+more
+logs\taameem_log_dump.txt:57658:07-02 13:24:26.254 W/Firestore(22198): Caused 
+by: android.system.GaiException: android_getaddrinfo failed: EAI_NODATA (No 
+address associated with hostname)
+logs\taameem_log_dump.txt:57659:07-02 13:24:26.254 W/Firestore(22198): 	at 
+libcore.io.Linux.android_getaddrinfo(Native Method)
+logs\taameem_log_dump.txt:57660:07-02 13:24:26.254 W/Firestore(22198): 	at 
+libcore.io.ForwardingOs.android_getaddrinfo(ForwardingOs.java:134)
+logs\taameem_log_dump.txt:57661:07-02 13:24:26.254 W/Firestore(22198): 	at 
+libcore.io.BlockGuardOs.android_getaddrinfo(BlockGuardOs.java:222)
+logs\taameem_log_dump.txt:57662:07-02 13:24:26.254 W/Firestore(22198): 	at 
+libcore.io.ForwardingOs.android_getaddrinfo(ForwardingOs.java:134)
+logs\taameem_log_dump.txt:57663:07-02 13:24:26.254 W/Firestore(22198): 	at 
+java.net.Inet6AddressImpl.lookupHostByName(Inet6AddressImpl.java:135)
+logs\taameem_log_dump.txt:57664:07-02 13:24:26.254 W/Firestore(22198): 	... 9 
+more
+logs\taameem_log_dump.txt:57665:07-02 13:24:26.254 W/Firestore(22198): }.
+logs\taameem_log_dump.txt:63750:07-02 13:24:41.409 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:63949:07-02 13:24:41.748 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:65020:07-02 13:24:43.173 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:66104:07-02 13:24:45.116 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:66855:07-02 13:24:47.291 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:66994:07-02 13:24:51.792 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:67203:07-02 13:24:55.465 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:67263:07-02 13:24:59.973 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:67769:07-02 13:25:07.037 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:68618:07-02 13:25:29.765 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:69333:07-02 13:25:43.389 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:84031:07-02 13:27:15.158 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:84061:07-02 13:27:15.550 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:84073:07-02 13:27:16.367 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:84109:07-02 13:27:18.110 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:84173:07-02 13:27:19.847 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:84229:07-02 13:27:23.025 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:84329:07-02 13:27:26.502 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:84561:07-02 13:27:37.357 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:84836:07-02 13:27:53.537 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:85220:07-02 13:28:14.226 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:85587:07-02 13:28:36.245 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:86577:07-02 13:29:32.071 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:88227:07-02 13:30:28.777 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:96487:07-02 13:31:43.230 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:105800:07-02 13:32:07.686 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=UNAVAILABLE, description=Unable to resolve host 
+firestore.googleapis.com, cause=java.lang.RuntimeException: 
+java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:105801:07-02 13:32:07.686 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+logs\taameem_log_dump.txt:105802:07-02 13:32:07.686 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+logs\taameem_log_dump.txt:105803:07-02 13:32:07.686 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+logs\taameem_log_dump.txt:105804:07-02 13:32:07.686 W/Firestore(22198): 	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:105805:07-02 13:32:07.686 W/Firestore(22198): 	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:105806:07-02 13:32:07.686 W/Firestore(22198): 	at 
+java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:105807:07-02 13:32:07.686 W/Firestore(22198): Caused 
+by: java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:105808:07-02 13:32:07.686 W/Firestore(22198): 	at 
+java.net.Inet6AddressImpl.lookupHostByName(Inet6AddressImpl.java:156)
+logs\taameem_log_dump.txt:105809:07-02 13:32:07.686 W/Firestore(22198): 	at 
+java.net.Inet6AddressImpl.lookupAllHostAddr(Inet6AddressImpl.java:103)
+logs\taameem_log_dump.txt:105810:07-02 13:32:07.686 W/Firestore(22198): 	at 
+java.net.InetAddress.getAllByName(InetAddress.java:1152)
+logs\taameem_log_dump.txt:105811:07-02 13:32:07.686 W/Firestore(22198): 	at io.
+grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver
+.java:632)
+logs\taameem_log_dump.txt:105812:07-02 13:32:07.686 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+logs\taameem_log_dump.txt:105813:07-02 13:32:07.686 W/Firestore(22198): 	... 5 
+more
+logs\taameem_log_dump.txt:105814:07-02 13:32:07.686 W/Firestore(22198): Caused 
+by: android.system.GaiException: android_getaddrinfo failed: EAI_NODATA (No 
+address associated with hostname)
+logs\taameem_log_dump.txt:105815:07-02 13:32:07.686 W/Firestore(22198): 	at 
+libcore.io.Linux.android_getaddrinfo(Native Method)
+logs\taameem_log_dump.txt:105816:07-02 13:32:07.686 W/Firestore(22198): 	at 
+libcore.io.ForwardingOs.android_getaddrinfo(ForwardingOs.java:134)
+logs\taameem_log_dump.txt:105817:07-02 13:32:07.686 W/Firestore(22198): 	at 
+libcore.io.BlockGuardOs.android_getaddrinfo(BlockGuardOs.java:222)
+logs\taameem_log_dump.txt:105818:07-02 13:32:07.686 W/Firestore(22198): 	at 
+libcore.io.ForwardingOs.android_getaddrinfo(ForwardingOs.java:134)
+logs\taameem_log_dump.txt:105819:07-02 13:32:07.686 W/Firestore(22198): 	at 
+java.net.Inet6AddressImpl.lookupHostByName(Inet6AddressImpl.java:135)
+logs\taameem_log_dump.txt:105820:07-02 13:32:07.686 W/Firestore(22198): 	... 9 
+more
+logs\taameem_log_dump.txt:105821:07-02 13:32:07.686 W/Firestore(22198): }.
+logs\taameem_log_dump.txt:123144:07-02 13:33:01.728 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=UNAVAILABLE, description=Unable to resolve host 
+firestore.googleapis.com, cause=java.lang.RuntimeException: 
+java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:123145:07-02 13:33:01.728 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+logs\taameem_log_dump.txt:123146:07-02 13:33:01.728 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+logs\taameem_log_dump.txt:123147:07-02 13:33:01.728 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+logs\taameem_log_dump.txt:123148:07-02 13:33:01.728 W/Firestore(22198): 	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:123149:07-02 13:33:01.728 W/Firestore(22198): 	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:123150:07-02 13:33:01.728 W/Firestore(22198): 	at 
+java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:123151:07-02 13:33:01.728 W/Firestore(22198): Caused 
+by: java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:123152:07-02 13:33:01.728 W/Firestore(22198): 	at 
+java.net.Inet6AddressImpl.lookupHostByName(Inet6AddressImpl.java:156)
+logs\taameem_log_dump.txt:123153:07-02 13:33:01.728 W/Firestore(22198): 	at 
+java.net.Inet6AddressImpl.lookupAllHostAddr(Inet6AddressImpl.java:103)
+logs\taameem_log_dump.txt:123154:07-02 13:33:01.728 W/Firestore(22198): 	at 
+java.net.InetAddress.getAllByName(InetAddress.java:1152)
+logs\taameem_log_dump.txt:123155:07-02 13:33:01.728 W/Firestore(22198): 	at io.
+grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver
+.java:632)
+logs\taameem_log_dump.txt:123156:07-02 13:33:01.728 W/Firestore(22198): 	at 
+io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+logs\taameem_log_dump.txt:123157:07-02 13:33:01.728 W/Firestore(22198): 	... 5 
+more
+logs\taameem_log_dump.txt:123158:07-02 13:33:01.728 W/Firestore(22198): Caused 
+by: android.system.GaiException: android_getaddrinfo failed: EAI_NODATA (No 
+address associated with hostname)
+logs\taameem_log_dump.txt:123159:07-02 13:33:01.728 W/Firestore(22198): 	at 
+libcore.io.Linux.android_getaddrinfo(Native Method)
+logs\taameem_log_dump.txt:123160:07-02 13:33:01.728 W/Firestore(22198): 	at 
+libcore.io.ForwardingOs.android_getaddrinfo(ForwardingOs.java:134)
+logs\taameem_log_dump.txt:123161:07-02 13:33:01.728 W/Firestore(22198): 	at 
+libcore.io.BlockGuardOs.android_getaddrinfo(BlockGuardOs.java:222)
+logs\taameem_log_dump.txt:123162:07-02 13:33:01.728 W/Firestore(22198): 	at 
+libcore.io.ForwardingOs.android_getaddrinfo(ForwardingOs.java:134)
+logs\taameem_log_dump.txt:123163:07-02 13:33:01.728 W/Firestore(22198): 	at 
+java.net.Inet6AddressImpl.lookupHostByName(Inet6AddressImpl.java:135)
+logs\taameem_log_dump.txt:123164:07-02 13:33:01.728 W/Firestore(22198): 	... 9 
+more
+logs\taameem_log_dump.txt:123165:07-02 13:33:01.728 W/Firestore(22198): }.
+logs\taameem_log_dump.txt:124582:07-02 13:33:02.584 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:124650:07-02 13:33:02.992 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:125281:07-02 13:33:03.912 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:125344:07-02 13:33:04.935 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:125473:07-02 13:33:06.168 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:125689:07-02 13:33:11.083 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:125954:07-02 13:33:18.459 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:126139:07-02 13:33:29.017 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:126386:07-02 13:33:43.649 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:127689:07-02 13:33:59.934 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:128499:07-02 13:34:28.496 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:128825:07-02 13:34:33.753 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:128833:07-02 13:34:34.076 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:129068:07-02 13:34:35.567 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:129350:07-02 13:34:36.850 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:129372:07-02 13:34:38.151 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:129609:07-02 13:34:42.447 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:129737:07-02 13:34:47.769 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:132706:07-02 13:34:55.654 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:132864:07-02 13:34:56.367 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:135669:07-02 13:35:08.636 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:137531:07-02 13:35:22.776 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:137978:07-02 13:35:47.362 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:138391:07-02 13:36:03.134 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:138695:07-02 13:36:21.262 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:151103:07-02 13:37:19.811 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:153402:07-02 13:37:29.031 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:154071:07-02 13:38:01.088 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+logs\taameem_log_dump.txt:154721:07-02 13:38:29.960 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=PERMISSION_DENIED, description=Cloud Firestore API has not been 
+used in project taameem-3f949 before or it is disabled. Enable it by visiting h
+ttps://console.developers.google.com/apis/api/firestore.googleapis.com/overview
+?project=taameem-3f949 then retry. If you enabled this API recently, wait a 
+few minutes for the action to propagate to our systems and retry., cause=null}.
+
+

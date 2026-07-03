@@ -1,0 +1,91 @@
+﻿
+logs\taameem_log_dump.txt:745:07-02 13:16:55.293 I/flutter (22198): 
+[IMPORTANT:flutter/shell/platform/android/android_context_vk_impeller.cc(62)] 
+Using the Impeller rendering backend (Vulkan).
+logs\taameem_log_dump.txt:750:07-02 13:16:55.389 I/flutter (22198): The Dart 
+VM service is listening on http://127.0.0.1:42479/S9x28Zb6pGg=/
+logs\taameem_log_dump.txt:11379:07-02 13:19:52.883 I/adbd    ( 4752): adbd 
+service requested 'shell,v2,TERM=xterm-256color:export ANDROID_LOG_TAGS=''; 
+exec logcat '-v' 'time' 'Firebase:V' 'Flutter:V' 'Dart:V' '*:S''
+logs\taameem_log_dump.txt:18144:07-02 13:22:15.477 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7033.png
+logs\taameem_log_dump.txt:18145:07-02 13:22:15.507 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7034.png
+logs\taameem_log_dump.txt:18146:07-02 13:22:15.659 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7034.png
+logs\taameem_log_dump.txt:18918:07-02 13:22:30.273 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7033.png
+logs\taameem_log_dump.txt:18919:07-02 13:22:30.326 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7034.png
+logs\taameem_log_dump.txt:18920:07-02 13:22:30.327 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7034.png
+logs\taameem_log_dump.txt:19306:07-02 13:22:37.097 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7033.png
+logs\taameem_log_dump.txt:19307:07-02 13:22:37.099 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7034.png
+logs\taameem_log_dump.txt:19308:07-02 13:22:37.100 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7034.png
+logs\taameem_log_dump.txt:68351:07-02 13:25:19.531 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7033.png
+logs\taameem_log_dump.txt:68353:07-02 13:25:19.570 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7034.png
+logs\taameem_log_dump.txt:128821:07-02 13:34:33.600 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7033.png
+logs\taameem_log_dump.txt:128822:07-02 13:34:33.611 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7033.png
+logs\taameem_log_dump.txt:128823:07-02 13:34:33.624 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7034.png
+logs\taameem_log_dump.txt:128824:07-02 13:34:33.728 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7034.png
+logs\taameem_log_dump.txt:137060:07-02 13:35:14.378 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7033.png
+logs\taameem_log_dump.txt:137061:07-02 13:35:14.379 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7033.png
+logs\taameem_log_dump.txt:137062:07-02 13:35:14.381 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7034.png
+logs\taameem_log_dump.txt:137063:07-02 13:35:14.383 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7034.png
+logs\taameem_log_dump.txt:137338:07-02 13:35:15.461 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10319/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10319/7033.png
+
+

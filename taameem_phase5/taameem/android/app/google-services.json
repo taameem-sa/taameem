@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "279973020282",
+    "project_id": "taameem-3f949",
+    "storage_bucket": "taameem-3f949.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279973020282:android:d7ff6df5fe89429e0af1c3",
+        "android_client_info": {
+          "package_name": "taameem.first"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwsTo00fJ90LVU4c-hAJvMjy1Nry2jeig"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

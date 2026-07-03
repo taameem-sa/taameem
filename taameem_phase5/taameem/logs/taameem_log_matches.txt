@@ -1,0 +1,2073 @@
+﻿
+logs\taameem_log_dump.txt:487:07-02 13:16:54.725 I/FirebaseApp(22198): Device 
+unlocked: initializing all Firebase APIs for app [DEFAULT]
+logs\taameem_log_dump.txt:488:07-02 13:16:54.739 
+I/FirebaseInitProvider(22198): FirebaseApp initialization successful
+logs\taameem_log_dump.txt:1246:07-02 13:16:57.559 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:2841:07-02 13:17:52.183 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:2842:07-02 13:17:52.185 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160743]
+logs\taameem_log_dump.txt:2843:07-02 13:17:52.185 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:4966:07-02 13:18:52.234 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:4967:07-02 13:18:52.236 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160742]
+logs\taameem_log_dump.txt:4968:07-02 13:18:52.236 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:5217:07-02 13:18:59.265 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:5909:07-02 13:18:59.592 W/System.err(22400): 
+java.lang.NumberFormatException: For input string: ""
+logs\taameem_log_dump.txt:7946:07-02 13:19:04.275 E/FlexPanelStartController( 
+3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:8314:07-02 13:19:06.037 
+E/BluetoothPowerStatsCollector( 2476): 
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 11
+logs\taameem_log_dump.txt:8325:07-02 13:19:06.037 
+E/BluetoothPowerStatsCollector( 2476): Caused by: java.lang.RuntimeException: 
+error: 11
+logs\taameem_log_dump.txt:10758:07-02 13:19:43.557 E/FlexPanelStartController( 
+3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:11358:07-02 13:19:52.249 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:11359:07-02 13:19:52.251 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160741]
+logs\taameem_log_dump.txt:11360:07-02 13:19:52.251 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:11379:07-02 13:19:52.883 I/adbd    ( 4752): adbd 
+service requested 'shell,v2,TERM=xterm-256color:export ANDROID_LOG_TAGS=''; 
+exec logcat '-v' 'time' 'Firebase:V' 'Flutter:V' 'Dart:V' '*:S''
+logs\taameem_log_dump.txt:13232:07-02 13:20:52.351 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:13233:07-02 13:20:52.353 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160741]
+logs\taameem_log_dump.txt:13234:07-02 13:20:52.353 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:13693:07-02 13:21:05.663 W/ImapStore(16376): 
+mExceptionType=5 msg=com.samsung.android.emailcommon.basic.exception.Authentica
+tionFailedException: Account already on AuthHold!!!!
+logs\taameem_log_dump.txt:13698:07-02 13:21:05.663 W/ImapStore(16376): 	at com.
+samsung.android.email.sync.legacy.utility.LegacySyncUtil.notifyAuthenticationFa
+iledException(SourceFile:80)
+logs\taameem_log_dump.txt:13699:07-02 13:21:05.663 W/ImapStore(16376): 	at com.
+samsung.android.email.sync.legacy.imap.ImapSyncUtil.handleMessagingException(So
+urceFile:64)
+logs\taameem_log_dump.txt:13706:07-02 13:21:05.664 W/ImapStore(16376): 
+mExceptionType=5 msg=com.samsung.android.emailcommon.basic.exception.Authentica
+tionFailedException: Account already on AuthHold!!!!
+logs\taameem_log_dump.txt:13711:07-02 13:21:05.664 W/ImapStore(16376): 	at com.
+samsung.android.email.sync.legacy.utility.LegacySyncUtil.notifyAuthenticationFa
+iledException(SourceFile:80)
+logs\taameem_log_dump.txt:13712:07-02 13:21:05.664 W/ImapStore(16376): 	at com.
+samsung.android.email.sync.legacy.imap.ImapSyncUtil.handleMessagingException(So
+urceFile:64)
+logs\taameem_log_dump.txt:14587:07-02 13:21:52.441 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:14588:07-02 13:21:52.442 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160739]
+logs\taameem_log_dump.txt:14589:07-02 13:21:52.443 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:17497:07-02 13:22:13.507 E/FlexPanelStartController( 
+3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:17722:07-02 13:22:14.855 
+D/ConnectivityManager(22198): StackLog: [android.net.ConnectivityManager.sendRe
+questForNetwork(ConnectivityManager.java:4744)] [android.net.ConnectivityManage
+r.registerDefaultNetworkCallbackForUid(ConnectivityManager.java:5469)] [android
+.net.ConnectivityManager.registerDefaultNetworkCallback(ConnectivityManager.jav
+a:5436)] [android.net.ConnectivityManager.registerDefaultNetworkCallback(Connec
+tivityManager.java:5410)] [com.google.firebase.firestore.remote.AndroidConnecti
+vityMonitor.configureNetworkMonitoring(AndroidConnectivityMonitor.java:87)] [co
+m.google.firebase.firestore.remote.AndroidConnectivityMonitor.<init>(AndroidCon
+nectivityMonitor.java:64)] [com.google.firebase.firestore.remote.RemoteComponen
+etProvider.createConnectivityMonitor(RemoteComponenetProvider.java:94)] [com.go
+ogle.firebase.firestore.remote.RemoteComponenetProvider.initialize(RemoteCompon
+enetProvider.java:41)] [com.google.firebase.firestore.core.ComponentProvider.in
+itialize(ComponentProvider.java:158)] [com.google.firebase.firestore.core.Fires
+toreClient.initialize(FirestoreClient.java:284)] [com.google.firebase.firestore
+.core.FirestoreClient.lambda$new$0$com-google-firebase-firestore-core-Firestore
+Client(FirestoreClient.java:109)] [com.google.firebase.firestore.core.Firestore
+Client$$ExternalSyntheticLambda19.run(D8$$SyntheticClass:0)] [com.google.fireba
+se.firestore.util.AsyncQueue.lambda$enqueue$2(AsyncQueue.java:445)] [com.google
+.firebase.firestore.util.AsyncQueue$$ExternalSyntheticLambda4.call(D8$$Syntheti
+cClass:0)] [com.google.firebase.firestore.util.AsyncQueue$SynchronizedShutdownA
+wareExecutor.lambda$executeAndReportResult$1(AsyncQueue.java:330)] [com.google.
+firebase.firestore.util.AsyncQueue$SynchronizedShutdownAwareExecutor$$ExternalS
+yntheticLambda2.run(D8$$SyntheticClass:0)] 
+[java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:520)] 
+[java.util.concurrent.FutureTask.run(FutureTask.java:328)] [java.util.concurren
+t.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecut
+or.java:323)] [java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExec
+utor.java:1100)] [java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPool
+Executor.java:624)] [com.google.firebase.firestore.util.AsyncQueue$Synchronized
+ShutdownAwareExecutor$DelayedStartFactory.run(AsyncQueue.java:235)] 
+[java.lang.Thread.run(Thread.java:1572)]
+logs\taameem_log_dump.txt:17814:07-02 13:22:14.979 E/GoogleApiManager(22198): 
+java.lang.SecurityException: Unknown calling package name 
+'com.google.android.gms'.
+logs\taameem_log_dump.txt:17815:07-02 13:22:14.979 E/GoogleApiManager(22198): 	
+at android.os.Parcel.createExceptionOrNull(Parcel.java:3388)
+logs\taameem_log_dump.txt:17816:07-02 13:22:14.979 E/GoogleApiManager(22198): 	
+at android.os.Parcel.createException(Parcel.java:3372)
+logs\taameem_log_dump.txt:17817:07-02 13:22:14.979 E/GoogleApiManager(22198): 	
+at android.os.Parcel.readException(Parcel.java:3355)
+logs\taameem_log_dump.txt:17818:07-02 13:22:14.979 E/GoogleApiManager(22198): 	
+at android.os.Parcel.readException(Parcel.java:3297)
+logs\taameem_log_dump.txt:17879:07-02 13:22:14.999 W/FlagStore(22198): 
+java.util.concurrent.ExecutionException: goux: 17: 17: API: Phenotype.API is 
+not available on this device. Connection failed with: 
+ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, 
+clientMethodKey=null}
+logs\taameem_log_dump.txt:17944:07-02 13:22:15.017 
+D/ConnectivityManager(22198): StackLog: [android.net.ConnectivityManager.sendRe
+questForNetwork(ConnectivityManager.java:4744)] [android.net.ConnectivityManage
+r.registerDefaultNetworkCallbackForUid(ConnectivityManager.java:5469)] [android
+.net.ConnectivityManager.registerDefaultNetworkCallback(ConnectivityManager.jav
+a:5436)] [android.net.ConnectivityManager.registerDefaultNetworkCallback(Connec
+tivityManager.java:5410)] [io.grpc.android.AndroidChannelBuilder$AndroidChannel
+.configureNetworkMonitoring(AndroidChannelBuilder.java:217)] [io.grpc.android.A
+ndroidChannelBuilder$AndroidChannel.<init>(AndroidChannelBuilder.java:198)] 
+[io.grpc.android.AndroidChannelBuilder.build(AndroidChannelBuilder.java:169)] [
+com.google.firebase.firestore.remote.GrpcCallProvider.initChannel(GrpcCallProvi
+der.java:116)] [com.google.firebase.firestore.remote.GrpcCallProvider.lambda$in
+itChannelTask$6$com-google-firebase-firestore-remote-GrpcCallProvider(GrpcCallP
+rovider.java:242)] [com.google.firebase.firestore.remote.GrpcCallProvider$$Exte
+rnalSyntheticLambda4.call(D8$$SyntheticClass:0)] [com.google.android.gms.tasks.
+zzz.run(com.google.android.gms:play-services-tasks@@18.1.0:1)] [com.google.fire
+base.firestore.util.ThrottledForwardingExecutor.lambda$execute$0$com-google-fir
+ebase-firestore-util-ThrottledForwardingExecutor(ThrottledForwardingExecutor.ja
+va:54)] [com.google.firebase.firestore.util.ThrottledForwardingExecutor$$Extern
+alSyntheticLambda0.run(D8$$SyntheticClass:0)] [java.util.concurrent.ThreadPoolE
+xecutor.runWorker(ThreadPoolExecutor.java:1100)] [java.util.concurrent.ThreadPo
+olExecutor$Worker.run(ThreadPoolExecutor.java:624)] 
+[java.lang.Thread.run(Thread.java:1572)]
+logs\taameem_log_dump.txt:18144:07-02 13:22:15.477 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7033.png
+logs\taameem_log_dump.txt:18145:07-02 13:22:15.507 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7034.png
+logs\taameem_log_dump.txt:18146:07-02 13:22:15.659 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7034.png
+logs\taameem_log_dump.txt:18679:07-02 13:22:24.955 E/GoogleApiManager(22198): 
+java.lang.SecurityException: Unknown calling package name 
+'com.google.android.gms'.
+logs\taameem_log_dump.txt:18680:07-02 13:22:24.955 E/GoogleApiManager(22198): 	
+at android.os.Parcel.createExceptionOrNull(Parcel.java:3388)
+logs\taameem_log_dump.txt:18681:07-02 13:22:24.955 E/GoogleApiManager(22198): 	
+at android.os.Parcel.createException(Parcel.java:3372)
+logs\taameem_log_dump.txt:18682:07-02 13:22:24.955 E/GoogleApiManager(22198): 	
+at android.os.Parcel.readException(Parcel.java:3355)
+logs\taameem_log_dump.txt:18683:07-02 13:22:24.955 E/GoogleApiManager(22198): 	
+at android.os.Parcel.readException(Parcel.java:3297)
+logs\taameem_log_dump.txt:18918:07-02 13:22:30.273 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7033.png
+logs\taameem_log_dump.txt:18919:07-02 13:22:30.326 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7034.png
+logs\taameem_log_dump.txt:18920:07-02 13:22:30.327 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7034.png
+logs\taameem_log_dump.txt:19306:07-02 13:22:37.097 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7033.png
+logs\taameem_log_dump.txt:19307:07-02 13:22:37.099 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7034.png
+logs\taameem_log_dump.txt:19308:07-02 13:22:37.100 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7034.png
+logs\taameem_log_dump.txt:21538:07-02 13:22:50.898 W/System.err(28215): 
+android.content.res.Resources$NotFoundException: String resource ID #0x0
+logs\taameem_log_dump.txt:21568:07-02 13:22:50.919 I/Screenshot(28215): 
+setScreenshotMediaData:  volumeName= external_primary relativePath= 
+DCIM/Screenshots mImageFilePath= /storage/emulated/0/DCIM/Screenshots/Screensho
+t_┘ت┘ب┘ت┘خ┘ب┘د┘ب┘ت_┘ة┘ث┘ت┘ت┘ح┘ب.jpg mImageDisplayName= 
+Screenshot_┘ت┘ب┘ت┘خ┘ب┘د┘ب┘ت_┘ة┘ث┘ت┘ت┘ح┘ب mImageFileName= 
+Screenshot_┘ت┘ب┘ت┘خ┘ب┘د┘ب┘ت_┘ة┘ث┘ت┘ت┘ح┘ب.jpg imageTime= 1782987770895 
+dateSeconds $=dateSeconds mimeType= image/jpeg imageWidth= 1080 imageHeight= 
+2340 size= 0
+logs\taameem_log_dump.txt:22089:07-02 13:22:51.361 I/FirebaseApp(28301): 
+Device unlocked: initializing all Firebase APIs for app [DEFAULT]
+logs\taameem_log_dump.txt:22090:07-02 13:22:51.363 
+I/FirebaseInitProvider(28301): FirebaseApp initialization successful
+logs\taameem_log_dump.txt:22100:07-02 13:22:51.370 I/[SCPMV2][SmpUtil](28301): 
+Firebase init
+logs\taameem_log_dump.txt:22345:07-02 13:22:51.516 
+E/[SmartCapture]_DeviceUtils(28261): java.lang.NoSuchMethodException: Could 
+not find android.view.Display.getRealSize() method
+logs\taameem_log_dump.txt:22473:07-02 13:22:51.575 
+I/[SmartCapture]_MainUiViewForStandAlone(28261): onCreate : 1782987770601  /sto
+rage/emulated/0/DCIM/Screenshots/Screenshot_┘ت┘ب┘ت┘خ┘ب┘د┘ب┘ت_┘ة┘ث┘ت┘ت┘ح┘ب.jpg
+logs\taameem_log_dump.txt:22595:07-02 13:22:51.704 
+E/[SmartCapture]_DeviceUtils(28261): java.lang.NoSuchMethodException: Could 
+not find android.view.Display.getRealSize() method
+logs\taameem_log_dump.txt:22614:07-02 13:22:51.732 
+E/[SmartCapture]_ExternalEventDetector(28261): initCoverManager : 
+e=com.samsung.android.sdk.SsdkUnsupportedException: This device is not 
+supported Scover!!!
+logs\taameem_log_dump.txt:22632:07-02 13:22:51.738 
+E/[SmartCapture]_DeviceUtils(28261): java.lang.NoSuchMethodException: Could 
+not find android.view.Display.getRealSize() method
+logs\taameem_log_dump.txt:22656:07-02 13:22:51.773 I/MediaProvider( 5167): 
+Invalidating LocalCallingIdentity cache for package com.android.systemui. 
+Reason: owned_database_row_deleted:/storage/emulated/0/DCIM/Screenshots/thumbna
+il_Screenshot_┘ت┘ب┘ت┘خ┘ب┘د┘ب┘ت_┘ة┘ث┘ت┘ت┘ح┘ب.jpg
+logs\taameem_log_dump.txt:23114:07-02 13:22:52.543 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:23121:07-02 13:22:52.545 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160729]
+logs\taameem_log_dump.txt:23122:07-02 13:22:52.545 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:23205:07-02 13:22:52.661 I/FirebaseApp(28422): 
+Device unlocked: initializing all Firebase APIs for app [DEFAULT]
+logs\taameem_log_dump.txt:23238:07-02 13:22:52.669 
+I/FirebaseInitProvider(28422): FirebaseApp initialization successful
+logs\taameem_log_dump.txt:23273:07-02 13:22:52.730 E/FeatureClassSet(28422): 
+[#CMH#] Package not found excpetion: 
+android.content.pm.PackageManager$NameNotFoundException: 
+com.samsung.android.scloud (com.samsung.android.scloud)
+logs\taameem_log_dump.txt:23495:07-02 13:22:52.981 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:23728:07-02 13:22:53.225 I/SSS@search user 0(12847): 
+(IndexManager) getIndexStorage(): indexName com.google.android.providers.media
+logs\taameem_log_dump.txt:23750:07-02 13:22:53.260 I/SSS@search user 0(12847): 
+(IndexManager) getIndexStorage(): indexName com.google.android.providers.media
+logs\taameem_log_dump.txt:23824:07-02 13:22:53.397 I/SSS@search user 0(12847): 
+(IndexManager) [pool-30-thread-1] entering in commitIndexStorage():  
+logs\taameem_log_dump.txt:24044:07-02 13:22:53.573 I/SSS@search user 0(12847): 
+(IndexManager) [pool-30-thread-1] leaving from commitIndexStorage():  
+logs\taameem_log_dump.txt:24098:07-02 13:22:53.914 
+E/BluetoothPowerStatsCollector( 2476): 
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 11
+logs\taameem_log_dump.txt:24109:07-02 13:22:53.914 
+E/BluetoothPowerStatsCollector( 2476): Caused by: java.lang.RuntimeException: 
+error: 11
+logs\taameem_log_dump.txt:24161:07-02 13:22:54.048 
+W/PhFlagUpdateRegistry(28261): java.util.concurrent.ExecutionException: 
+java.lang.SecurityException: GoogleCertificatesRslt: not allowed: 
+pkg=com.samsung.android.app.smartcapture, 
+sha256=[34df0e7a9f1cf1892e45c056b4973cd81ccf148a4050d11aea4ac5a65f900a42], 
+atk=false, ver=262334035.true (go/gsrlt)
+logs\taameem_log_dump.txt:24173:07-02 13:22:54.048 
+W/PhFlagUpdateRegistry(28261): Caused by: java.lang.SecurityException: 
+GoogleCertificatesRslt: not allowed: pkg=com.samsung.android.app.smartcapture, 
+sha256=[34df0e7a9f1cf1892e45c056b4973cd81ccf148a4050d11aea4ac5a65f900a42], 
+atk=false, ver=262334035.true (go/gsrlt)
+logs\taameem_log_dump.txt:24174:07-02 13:22:54.048 
+W/PhFlagUpdateRegistry(28261): 	at 
+android.os.Parcel.createExceptionOrNull(Parcel.java:3388)
+logs\taameem_log_dump.txt:24175:07-02 13:22:54.048 
+W/PhFlagUpdateRegistry(28261): 	at 
+android.os.Parcel.createException(Parcel.java:3372)
+logs\taameem_log_dump.txt:24176:07-02 13:22:54.048 
+W/PhFlagUpdateRegistry(28261): 	at 
+android.os.Parcel.readException(Parcel.java:3355)
+logs\taameem_log_dump.txt:24177:07-02 13:22:54.048 
+W/PhFlagUpdateRegistry(28261): 	at 
+android.os.Parcel.readException(Parcel.java:3297)
+logs\taameem_log_dump.txt:24230:07-02 13:22:54.138 
+E/BluetoothPowerStatsCollector( 2476): 
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 11
+logs\taameem_log_dump.txt:24241:07-02 13:22:54.138 
+E/BluetoothPowerStatsCollector( 2476): Caused by: java.lang.RuntimeException: 
+error: 11
+logs\taameem_log_dump.txt:24359:07-02 13:22:54.507 
+W/PhFlagUpdateRegistry(28470): java.util.concurrent.ExecutionException: 
+java.lang.SecurityException: GoogleCertificatesRslt: not allowed: 
+pkg=com.samsung.android.app.smartcapture, 
+sha256=[34df0e7a9f1cf1892e45c056b4973cd81ccf148a4050d11aea4ac5a65f900a42], 
+atk=false, ver=262334035.true (go/gsrlt)
+logs\taameem_log_dump.txt:24371:07-02 13:22:54.507 
+W/PhFlagUpdateRegistry(28470): Caused by: java.lang.SecurityException: 
+GoogleCertificatesRslt: not allowed: pkg=com.samsung.android.app.smartcapture, 
+sha256=[34df0e7a9f1cf1892e45c056b4973cd81ccf148a4050d11aea4ac5a65f900a42], 
+atk=false, ver=262334035.true (go/gsrlt)
+logs\taameem_log_dump.txt:24372:07-02 13:22:54.507 
+W/PhFlagUpdateRegistry(28470): 	at 
+android.os.Parcel.createExceptionOrNull(Parcel.java:3388)
+logs\taameem_log_dump.txt:24373:07-02 13:22:54.507 
+W/PhFlagUpdateRegistry(28470): 	at 
+android.os.Parcel.createException(Parcel.java:3372)
+logs\taameem_log_dump.txt:24374:07-02 13:22:54.507 
+W/PhFlagUpdateRegistry(28470): 	at 
+android.os.Parcel.readException(Parcel.java:3355)
+logs\taameem_log_dump.txt:24375:07-02 13:22:54.507 
+W/PhFlagUpdateRegistry(28470): 	at 
+android.os.Parcel.readException(Parcel.java:3297)
+logs\taameem_log_dump.txt:34253:07-02 13:23:12.357 I/WM-WorkerWrapper( 6551): 
+androidx.work.impl.WorkerStoppedException
+logs\taameem_log_dump.txt:37444:07-02 13:23:52.647 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:37445:07-02 13:23:52.649 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160798]
+logs\taameem_log_dump.txt:37446:07-02 13:23:52.649 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:40879:07-02 13:24:04.299 E/FlexPanelStartController( 
+3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:41115:07-02 13:24:06.183 I/vendor.rmt_storage( 
+1705): rmt_storage_connect_cb: clnt_h=0xf conn_h=0xb400006e6d6a2070
+logs\taameem_log_dump.txt:41116:07-02 13:24:06.183 I/vendor.rmt_storage( 
+1705): rmt_storage_rw_iovec_cb: /boot/modem_fs1: req_h=0xf msg_id=3: R/W 
+request received (wr_count 7)
+logs\taameem_log_dump.txt:41117:07-02 13:24:06.183 I/vendor.rmt_storage( 
+1705): wakelock acquired: 1, error no: 11
+logs\taameem_log_dump.txt:41118:07-02 13:24:06.184 I/vendor.rmt_storage( 
+1705): rmt_storage_client_thread: /boot/modem_fs1: Unblock worker thread 
+(th_id: 472399207488)
+logs\taameem_log_dump.txt:41119:07-02 13:24:06.247 I/vendor.rmt_storage( 
+1705): rmt_storage_client_thread: /boot/modem_fs1: req_h=0xf msg_id=3: Bytes 
+written = 2621440, wr_count 7
+logs\taameem_log_dump.txt:41120:07-02 13:24:06.247 I/vendor.rmt_storage( 
+1705): rmt_storage_client_thread: /boot/modem_fs1: req_h=0xf msg_id=3: Send 
+response: res=0 err=0, wr_count 7
+logs\taameem_log_dump.txt:41121:07-02 13:24:06.247 I/vendor.rmt_storage( 
+1705): rmt_storage_client_thread: /boot/modem_fs1: About to block rmt_storage 
+client thread (th_id: 472399207488) wakelock released: 1, error no: 0
+logs\taameem_log_dump.txt:41122:07-02 13:24:06.247 I/vendor.rmt_storage( 
+1705): 
+logs\taameem_log_dump.txt:41123:07-02 13:24:06.251 I/vendor.rmt_storage( 
+1705): rmt_storage_disconnect_cb: clnt_h=0xf conn_h=0xb400006e6d6a2070
+logs\taameem_log_dump.txt:41142:07-02 13:24:07.472 D/io_stats( 1059): !@ 
+Read_top(KB): roid.honeyboard:top(7723) 124 rmt_storage:normal(1705) 24 
+kworker/3:2H:/(165) 8
+logs\taameem_log_dump.txt:41143:07-02 13:24:07.472 D/io_stats( 1059): !@ 
+Write_top(KB): rmt_storage:normal(1705) 2560 system_server:normal(2476) 184 
+kworker/u16:2:/(19381) 44
+logs\taameem_log_dump.txt:42242:07-02 13:24:12.391 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:43001:07-02 13:24:13.080 W/AsyncOperation( 3999): 
+OperationException[Status{statusCode=Stale snapshot for com.google.android.libr
+aries.personalization.footprints#com.google.android.apps.maps(new 
+configuration available), resolution=null}]
+logs\taameem_log_dump.txt:43075:07-02 13:24:13.199 W/AsyncOperation( 3999): 
+OperationException[Status{statusCode=Stale snapshot for 
+com.google.android.libraries.mdi.sync#com.google.android.apps.maps(new 
+configuration available), resolution=null}]
+logs\taameem_log_dump.txt:44900:07-02 13:24:15.777 I/FirebaseApp(29473): 
+Device unlocked: initializing all Firebase APIs for app [DEFAULT]
+logs\taameem_log_dump.txt:44914:07-02 13:24:15.791 
+I/FirebaseAppCustomInitializer(29403): initialize firebase app
+logs\taameem_log_dump.txt:44916:07-02 13:24:15.799 
+I/FirebaseInitProvider(29473): FirebaseApp initialization successful
+logs\taameem_log_dump.txt:44917:07-02 13:24:15.801 I/FirebaseApp(29403): 
+Device unlocked: initializing all Firebase APIs for app [DEFAULT]
+logs\taameem_log_dump.txt:45008:07-02 13:24:15.890 
+W/DIAGMON_SDK[605082](29473): UncaughtExceptionLogging can't be enabled 
+because Configuration is null
+logs\taameem_log_dump.txt:45136:07-02 13:24:15.991 I/FA      (29473):   adb 
+shell setprop debug.firebase.analytics.app com.samsung.android.app.parentalcare
+logs\taameem_log_dump.txt:45790:07-02 13:24:16.471 
+E/TerraceSmartProtectManager(29403): error in getFeatureLevel: 
+org.json.JSONException: No value for plugin_fp_protection
+logs\taameem_log_dump.txt:45801:07-02 13:24:16.472 I/chromium(29403):          
+   "storage_clearing_interval_in_mins": 5,
+logs\taameem_log_dump.txt:46053:07-02 13:24:16.472 I/chromium(29403):          
+   "automatic_storage_access_mode": 2,
+logs\taameem_log_dump.txt:46055:07-02 13:24:16.472 I/chromium(29403):          
+   "storage_access_duration_in_days": 30,
+logs\taameem_log_dump.txt:46135:07-02 13:24:16.472 I/chromium(29403):         
+"tracker_storage_eviction": {
+logs\taameem_log_dump.txt:47102:07-02 13:24:17.033 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:47622:07-02 13:24:17.163 I/PAT     (29648): 
+StorageManager: trying to enable PAT
+logs\taameem_log_dump.txt:47631:07-02 13:24:17.173 D/StorageManagerService( 
+2476): Get PASS instance for userId0
+logs\taameem_log_dump.txt:47642:07-02 13:24:17.175 D/StorageManagerService( 
+2476): ID of Client 10187
+logs\taameem_log_dump.txt:47644:07-02 13:24:17.175 D/StorageManagerService( 
+2476): Package name of Client com.samsung.android.privateaccesstokens
+logs\taameem_log_dump.txt:47661:07-02 13:24:17.186 D/VoldNativeService(  985): 
+getPassStorage: package: com.samsung.android.privateaccesstokens, user: 0, 
+storage index: 1
+logs\taameem_log_dump.txt:47662:07-02 13:24:17.186 D/FsCrypt (  985): 
+fscrypt_get_pass_storage: package: com.samsung.android.privateaccesstokens, 
+user: 0, storege index: 1
+logs\taameem_log_dump.txt:47671:07-02 13:24:17.189 D/StorageManagerService( 
+2476): Get PASS instance for userId0
+logs\taameem_log_dump.txt:47674:07-02 13:24:17.189 D/StorageManagerService( 
+2476): ID of Client 10187
+logs\taameem_log_dump.txt:47676:07-02 13:24:17.190 D/StorageManagerService( 
+2476): Package name of Client com.samsung.android.privateaccesstokens
+logs\taameem_log_dump.txt:47678:07-02 13:24:17.190 D/VoldNativeService(  985): 
+isPassUnlocked: package: com.samsung.android.privateaccesstokens, user: 0, 
+storage index: 1
+logs\taameem_log_dump.txt:47682:07-02 13:24:17.191 D/StorageManagerService( 
+2476): Get PASS instance for userId0
+logs\taameem_log_dump.txt:47695:07-02 13:24:17.193 D/StorageManagerService( 
+2476): ID of Client 10187
+logs\taameem_log_dump.txt:47698:07-02 13:24:17.194 D/StorageManagerService( 
+2476): Package name of Client com.samsung.android.privateaccesstokens
+logs\taameem_log_dump.txt:47699:07-02 13:24:17.194 D/StorageManagerService( 
+2476): phone status : 1
+logs\taameem_log_dump.txt:47710:07-02 13:24:17.201 D/VoldNativeService(  985): 
+unlockPassStorage: package: com.samsung.android.privateaccesstokens, user: 0, 
+storage index: 1
+logs\taameem_log_dump.txt:47712:07-02 13:24:17.201 D/FsCrypt (  985): 
+fscrypt_unlock_pass_storage: package: com.samsung.android.privateaccesstokens, 
+user: 0, storege index: 1
+logs\taameem_log_dump.txt:47715:07-02 13:24:17.201 E/KeyStorage(  985): 
+retrieveKey : /data/misc_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c9f47b8a779a31181
+8f9b427752adb4a85a20bf9d4393c9/secret
+logs\taameem_log_dump.txt:47805:07-02 13:24:17.231 E/KeyStorage(  985): 
+retrieveKey success : /data/misc_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c9f47b8a7
+79a311818f9b427752adb4a85a20bf9d4393c9/secret
+logs\taameem_log_dump.txt:47818:07-02 13:24:17.235 D/KeyStorage(  985): Key 
+backup already exists : /data/sec_backup_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c
+9f47b8a779a311818f9b427752adb4a85a20bf9d4393c9/secret
+logs\taameem_log_dump.txt:47823:07-02 13:24:17.236 E/KeyStorage(  985): 
+retrieveKey : /data/misc_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c9f47b8a779a31181
+8f9b427752adb4a85a20bf9d4393c9/current
+logs\taameem_log_dump.txt:47833:07-02 13:24:17.238 E/KeyStorage(  985): 
+retrieveKey success : /data/misc_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c9f47b8a7
+79a311818f9b427752adb4a85a20bf9d4393c9/current
+logs\taameem_log_dump.txt:47837:07-02 13:24:17.239 D/KeyStorage(  985): Key 
+backup already exists : /data/sec_backup_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c
+9f47b8a779a311818f9b427752adb4a85a20bf9d4393c9/current
+logs\taameem_log_dump.txt:47845:07-02 13:24:17.242 
+D/android.hardware.security.keymint-service( 1144): 
+convertStorageKeyToEphemeral start
+logs\taameem_log_dump.txt:47916:07-02 13:24:17.261 
+D/android.hardware.security.keymint-service( 1144): 
+convertStorageKeyToEphemeralInternal: ret -62
+logs\taameem_log_dump.txt:47932:07-02 13:24:17.266 
+D/android.hardware.security.keymint-service( 1144): 
+convertStorageKeyToEphemeral start
+logs\taameem_log_dump.txt:48006:07-02 13:24:17.295 
+D/android.hardware.security.keymint-service( 1144): 
+convertStorageKeyToEphemeralInternal: ret 0
+logs\taameem_log_dump.txt:48139:07-02 13:24:17.331 D/StorageManagerService( 
+2476): Get PASS instance for userId0
+logs\taameem_log_dump.txt:48140:07-02 13:24:17.332 D/StorageManagerService( 
+2476): ID of Client 10187
+logs\taameem_log_dump.txt:48142:07-02 13:24:17.332 D/StorageManagerService( 
+2476): Package name of Client com.samsung.android.privateaccesstokens
+logs\taameem_log_dump.txt:48143:07-02 13:24:17.332 D/VoldNativeService(  985): 
+lockPassStorage: package: com.samsung.android.privateaccesstokens, user: 0, 
+storage index: 1
+logs\taameem_log_dump.txt:48144:07-02 13:24:17.332 D/FsCrypt (  985): 
+fscrypt_lock_pass_storage: package: com.samsung.android.privateaccesstokens, 
+user: 0, storege index: 1
+logs\taameem_log_dump.txt:48653:07-02 13:24:17.464 I/chromium(29403):          
+   "storage_clearing_interval_in_mins": 5,
+logs\taameem_log_dump.txt:48905:07-02 13:24:17.464 I/chromium(29403):          
+   "automatic_storage_access_mode": 2,
+logs\taameem_log_dump.txt:48907:07-02 13:24:17.464 I/chromium(29403):          
+   "storage_access_duration_in_days": 30,
+logs\taameem_log_dump.txt:48993:07-02 13:24:17.464 I/chromium(29403):         
+"tracker_storage_eviction": {
+logs\taameem_log_dump.txt:49220:07-02 13:24:17.550 
+E/BackgroundPlayCustomData(29403): java.lang.NullPointerException: Attempt to 
+invoke virtual method 'int java.lang.String.length()' on a null object 
+reference
+logs\taameem_log_dump.txt:50229:07-02 13:24:18.002 D/StorageManagerService( 
+2476): Get PASS instance for userId0
+logs\taameem_log_dump.txt:50231:07-02 13:24:18.003 D/StorageManagerService( 
+2476): ID of Client 10187
+logs\taameem_log_dump.txt:50233:07-02 13:24:18.003 D/StorageManagerService( 
+2476): Package name of Client com.samsung.android.privateaccesstokens
+logs\taameem_log_dump.txt:50239:07-02 13:24:18.003 D/VoldNativeService(  985): 
+getPassStorage: package: com.samsung.android.privateaccesstokens, user: 0, 
+storage index: 1
+logs\taameem_log_dump.txt:50241:07-02 13:24:18.003 D/FsCrypt (  985): 
+fscrypt_get_pass_storage: package: com.samsung.android.privateaccesstokens, 
+user: 0, storege index: 1
+logs\taameem_log_dump.txt:50249:07-02 13:24:18.004 D/StorageManagerService( 
+2476): Get PASS instance for userId0
+logs\taameem_log_dump.txt:50250:07-02 13:24:18.005 D/StorageManagerService( 
+2476): ID of Client 10187
+logs\taameem_log_dump.txt:50251:07-02 13:24:18.005 D/StorageManagerService( 
+2476): Package name of Client com.samsung.android.privateaccesstokens
+logs\taameem_log_dump.txt:50252:07-02 13:24:18.005 D/VoldNativeService(  985): 
+isPassUnlocked: package: com.samsung.android.privateaccesstokens, user: 0, 
+storage index: 1
+logs\taameem_log_dump.txt:50256:07-02 13:24:18.006 D/StorageManagerService( 
+2476): Get PASS instance for userId0
+logs\taameem_log_dump.txt:50257:07-02 13:24:18.006 D/StorageManagerService( 
+2476): ID of Client 10187
+logs\taameem_log_dump.txt:50259:07-02 13:24:18.006 D/StorageManagerService( 
+2476): Package name of Client com.samsung.android.privateaccesstokens
+logs\taameem_log_dump.txt:50260:07-02 13:24:18.006 D/StorageManagerService( 
+2476): phone status : 1
+logs\taameem_log_dump.txt:50269:07-02 13:24:18.007 D/VoldNativeService(  985): 
+unlockPassStorage: package: com.samsung.android.privateaccesstokens, user: 0, 
+storage index: 1
+logs\taameem_log_dump.txt:50270:07-02 13:24:18.007 D/FsCrypt (  985): 
+fscrypt_unlock_pass_storage: package: com.samsung.android.privateaccesstokens, 
+user: 0, storege index: 1
+logs\taameem_log_dump.txt:50273:07-02 13:24:18.007 E/KeyStorage(  985): 
+retrieveKey : /data/misc_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c9f47b8a779a31181
+8f9b427752adb4a85a20bf9d4393c9/secret
+logs\taameem_log_dump.txt:50295:07-02 13:24:18.016 E/KeyStorage(  985): 
+retrieveKey success : /data/misc_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c9f47b8a7
+79a311818f9b427752adb4a85a20bf9d4393c9/secret
+logs\taameem_log_dump.txt:50296:07-02 13:24:18.016 D/KeyStorage(  985): Key 
+backup already exists : /data/sec_backup_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c
+9f47b8a779a311818f9b427752adb4a85a20bf9d4393c9/secret
+logs\taameem_log_dump.txt:50302:07-02 13:24:18.016 E/KeyStorage(  985): 
+retrieveKey : /data/misc_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c9f47b8a779a31181
+8f9b427752adb4a85a20bf9d4393c9/current
+logs\taameem_log_dump.txt:50303:07-02 13:24:18.016 E/KeyStorage(  985): 
+retrieveKey success : /data/misc_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c9f47b8a7
+79a311818f9b427752adb4a85a20bf9d4393c9/current
+logs\taameem_log_dump.txt:50304:07-02 13:24:18.016 D/KeyStorage(  985): Key 
+backup already exists : /data/sec_backup_ce/0/vold/user_keys/48c6f0f3cf9ac39b3c
+9f47b8a779a311818f9b427752adb4a85a20bf9d4393c9/current
+logs\taameem_log_dump.txt:50311:07-02 13:24:18.016 
+D/android.hardware.security.keymint-service( 1144): 
+convertStorageKeyToEphemeral start
+logs\taameem_log_dump.txt:50343:07-02 13:24:18.024 
+D/android.hardware.security.keymint-service( 1144): 
+convertStorageKeyToEphemeralInternal: ret -62
+logs\taameem_log_dump.txt:50350:07-02 13:24:18.028 
+D/android.hardware.security.keymint-service( 1144): 
+convertStorageKeyToEphemeral start
+logs\taameem_log_dump.txt:50451:07-02 13:24:18.056 
+D/android.hardware.security.keymint-service( 1144): 
+convertStorageKeyToEphemeralInternal: ret 0
+logs\taameem_log_dump.txt:50526:07-02 13:24:18.093 D/StorageManagerService( 
+2476): Get PASS instance for userId0
+logs\taameem_log_dump.txt:50528:07-02 13:24:18.094 D/StorageManagerService( 
+2476): ID of Client 10187
+logs\taameem_log_dump.txt:50531:07-02 13:24:18.095 D/StorageManagerService( 
+2476): Package name of Client com.samsung.android.privateaccesstokens
+logs\taameem_log_dump.txt:50532:07-02 13:24:18.095 D/VoldNativeService(  985): 
+lockPassStorage: package: com.samsung.android.privateaccesstokens, user: 0, 
+storage index: 1
+logs\taameem_log_dump.txt:50533:07-02 13:24:18.095 D/FsCrypt (  985): 
+fscrypt_lock_pass_storage: package: com.samsung.android.privateaccesstokens, 
+user: 0, storege index: 1
+logs\taameem_log_dump.txt:52762:07-02 13:24:19.237 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:54085:07-02 13:24:21.328 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:54436:07-02 13:24:21.563 E/FlexPanelStartController( 
+3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:57644:07-02 13:24:26.254 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=UNAVAILABLE, description=Unable to resolve host 
+firestore.googleapis.com, cause=java.lang.RuntimeException: 
+java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:57651:07-02 13:24:26.254 W/Firestore(22198): Caused 
+by: java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:57658:07-02 13:24:26.254 W/Firestore(22198): Caused 
+by: android.system.GaiException: android_getaddrinfo failed: EAI_NODATA (No 
+address associated with hostname)
+logs\taameem_log_dump.txt:57985:07-02 13:24:26.479 E/FlexPanelStartController( 
+3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:58283:07-02 13:24:27.414 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:58401:07-02 13:24:27.480 
+I/ExtNavHandlerConfigManager(29403): [CN] [checkDeepLinkBlockList] no 
+exceptions in config
+logs\taameem_log_dump.txt:60662:07-02 13:24:39.095 
+E/ObjectCaptureModel(29403):  [Object Capture] Thread Exception=Attempt to 
+invoke interface method 'void com.samsung.android.app.sdk.deepsky.objectcapture
+.base.ObjectCapture.release()' on a null object reference
+logs\taameem_log_dump.txt:60774:07-02 13:24:39.138 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:61352:07-02 13:24:39.308 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:61696:07-02 13:24:40.332 D/MediaProvider( 5167): 
+Identical paths /storage/emulated/0/Download/.pending-1783592680-934965961aade9
+e811bd86f017d42f02.jpg; not moving
+logs\taameem_log_dump.txt:62277:07-02 13:24:40.555 D/MediaProvider( 5167): 
+Identical paths 
+/storage/emulated/0/Download/934965961aade9e811bd86f017d42f02.jpg; not moving
+logs\taameem_log_dump.txt:62375:07-02 13:24:40.641 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:62554:07-02 13:24:40.708 W/Bundle  ( 2476): Attempt 
+to cast generated internal exception:
+logs\taameem_log_dump.txt:62555:07-02 13:24:40.708 W/Bundle  ( 2476): 
+java.lang.ClassCastException: java.lang.Boolean cannot be cast to 
+java.lang.Integer
+logs\taameem_log_dump.txt:63252:07-02 13:24:40.971 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:63416:07-02 13:24:41.002 I/MyFiles (30176): 
+[0008/KnoxManager         ] isSupportExternalStorage() ] true
+logs\taameem_log_dump.txt:63489:07-02 13:24:41.035 I/MyFiles (30176): 
+[0026/PackageCheckUtils   ] isPackageInstalled() ] packageName : 
+com.samsung.android.hwresourceshare.storage is installed. , versionCode : 
+130000033, minVersionCode: 0
+logs\taameem_log_dump.txt:63548:07-02 13:24:41.101 E/MyFiles (30176): 
+[0045/StoragePathUtils    ] getDomainType() ] return DomainType.UNKNOWN - path 
+:  #G$E18FBDpb4bV6K6Rg3h8FdNvPFHR7LxVUy1rVtLtfFVUqHxWVu3tlhHovBXQ7K3UQ2ekXF9lY1
+9dJQ= 
+logs\taameem_log_dump.txt:63549:07-02 13:24:41.102 E/MyFiles (30176): 
+[0046/StoragePathUtils    ] getDomainType() ] return DomainType.UNKNOWN - path 
+:  #G$E18FBDpb4bV6K6Rg3h8FdNvPFHR7LxVUy1rVtLtfFVUqHxWVu3tlhHovBXQ7K3UQ2ekXF9lY1
+9dJQ= 
+logs\taameem_log_dump.txt:63825:07-02 13:24:41.531 
+E/si__DesktopModeUtils(29403): isLeavingDesktopMode() FallbackException 
+Instance is null
+logs\taameem_log_dump.txt:63939:07-02 13:24:41.718 I/FirebaseApp(30266): 
+Device unlocked: initializing all Firebase APIs for app [DEFAULT]
+logs\taameem_log_dump.txt:63940:07-02 13:24:41.728 
+I/FirebaseInitProvider(30266): FirebaseApp initialization successful
+logs\taameem_log_dump.txt:64013:07-02 13:24:41.870 W/AsyncOperation( 3999): 
+OperationException[Status{statusCode=Stale snapshot for 
+com.google.android.gms.measurement#com.samsung.android.fmm(new configuration 
+available), resolution=null}]
+logs\taameem_log_dump.txt:64028:07-02 13:24:41.871 I/FA      (30266):   adb 
+shell setprop debug.firebase.analytics.app com.samsung.android.fmm
+logs\taameem_log_dump.txt:64725:07-02 13:24:43.098 
+W/PhotopickerUserMonitor(30343): 
+android.content.res.Resources$NotFoundException: No badge found for this user.
+logs\taameem_log_dump.txt:64782:07-02 13:24:43.100 
+W/PhotopickerUserMonitor(30343): 
+android.content.res.Resources$NotFoundException: No badge found for this user.
+logs\taameem_log_dump.txt:64821:07-02 13:24:43.101 
+W/PhotopickerUserMonitor(30343): 
+android.content.res.Resources$NotFoundException: No badge found for this user.
+logs\taameem_log_dump.txt:64877:07-02 13:24:43.118 E/PhotoPickerProvider( 
+5167): java.lang.IllegalStateException: Service not connected
+logs\taameem_log_dump.txt:65462:07-02 13:24:43.321 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:66213:07-02 13:24:46.104 E/ContentProviderHelper( 
+2476): java.lang.IllegalStateException: Unable to check Uri permission because 
+caller is holding WM lock; assuming permission denied
+logs\taameem_log_dump.txt:66228:07-02 13:24:46.104 E/ContentProviderHelper( 
+2476): java.lang.IllegalStateException: Unable to check Uri permission because 
+caller is holding WM lock; assuming permission denied
+logs\taameem_log_dump.txt:66423:07-02 13:24:46.218 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:67085:07-02 13:24:52.751 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:67086:07-02 13:24:52.753 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160653]
+logs\taameem_log_dump.txt:67087:07-02 13:24:52.753 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:67283:07-02 13:25:00.052 
+E/BluetoothPowerStatsCollector( 2476): 
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 11
+logs\taameem_log_dump.txt:67294:07-02 13:25:00.052 
+E/BluetoothPowerStatsCollector( 2476): Caused by: java.lang.RuntimeException: 
+error: 11
+logs\taameem_log_dump.txt:67494:07-02 13:25:02.104 E/StorageUtil(22198): error 
+getting token java.util.concurrent.ExecutionException: 
+com.google.firebase.internal.api.FirebaseNoSignedInUserException: Please sign 
+in before trying to get a token.
+logs\taameem_log_dump.txt:67495:07-02 13:25:02.104 W/StorageUtil(22198): Error 
+getting App Check token; using placeholder token instead. Error: 
+com.google.firebase.FirebaseException: No AppCheckProvider installed.
+logs\taameem_log_dump.txt:67502:07-02 13:25:02.831 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:67503:07-02 13:25:02.831 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:67504:07-02 13:25:02.831 E/StorageException(22198):  
+Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:67505:07-02 13:25:02.832 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:67506:07-02 13:25:02.832 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:67507:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:67508:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:67509:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:67510:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fire
+base-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:67511:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$S
+yntheticClass:0)
+logs\taameem_log_dump.txt:67512:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0$
+com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyExe
+cutor.java:65)
+logs\taameem_log_dump.txt:67513:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSynthetic
+Lambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:67514:07-02 13:25:02.832 E/StorageException(22198): 	
+at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:67515:07-02 13:25:02.832 E/StorageException(22198): 	
+at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:67516:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-go
+ogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:67517:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0
+.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:67518:07-02 13:25:02.832 E/StorageException(22198): 	
+at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:67519:07-02 13:25:02.832 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:67520:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkRequ
+est.java:415)
+logs\taameem_log_dump.txt:67521:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Networ
+kRequest.java:432)
+logs\taameem_log_dump.txt:67522:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Net
+workRequest.java:423)
+logs\taameem_log_dump.txt:67523:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkReq
+uest.java:265)
+logs\taameem_log_dump.txt:67524:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkReq
+uest.java:282)
+logs\taameem_log_dump.txt:67525:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpone
+ntialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:67526:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpone
+ntialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:67527:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:67528:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java:
+293)
+logs\taameem_log_dump.txt:67529:07-02 13:25:02.832 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:67530:07-02 13:25:02.832 E/StorageException(22198): 	
+... 9 more
+logs\taameem_log_dump.txt:67531:07-02 13:25:02.833 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:67532:07-02 13:25:02.833 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:67533:07-02 13:25:02.833 E/StorageException(22198):  
+Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:67534:07-02 13:25:02.833 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:67535:07-02 13:25:02.833 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:67536:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:67537:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:67538:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:67539:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fire
+base-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:67540:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$S
+yntheticClass:0)
+logs\taameem_log_dump.txt:67541:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0$
+com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyExe
+cutor.java:65)
+logs\taameem_log_dump.txt:67542:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSynthetic
+Lambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:67543:07-02 13:25:02.833 E/StorageException(22198): 	
+at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:67544:07-02 13:25:02.833 E/StorageException(22198): 	
+at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:67545:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-go
+ogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:67546:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0
+.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:67547:07-02 13:25:02.833 E/StorageException(22198): 	
+at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:67548:07-02 13:25:02.833 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:67549:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkRequ
+est.java:415)
+logs\taameem_log_dump.txt:67550:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Networ
+kRequest.java:432)
+logs\taameem_log_dump.txt:67551:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Net
+workRequest.java:423)
+logs\taameem_log_dump.txt:67552:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkReq
+uest.java:265)
+logs\taameem_log_dump.txt:67553:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkReq
+uest.java:282)
+logs\taameem_log_dump.txt:67554:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpone
+ntialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:67555:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpone
+ntialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:67556:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:67557:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java:
+293)
+logs\taameem_log_dump.txt:67558:07-02 13:25:02.833 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:67559:07-02 13:25:02.833 E/StorageException(22198): 	
+... 9 more
+logs\taameem_log_dump.txt:67561:07-02 13:25:02.857 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:67562:07-02 13:25:02.857 E/StorageException(22198): 
+The operation was cancelled.
+logs\taameem_log_dump.txt:67563:07-02 13:25:02.857 E/StorageException(22198):  
+Code: -13040 HttpResult: 0
+logs\taameem_log_dump.txt:67594:07-02 13:25:04.358 E/StorageUtil(22198): error 
+getting token java.util.concurrent.ExecutionException: 
+com.google.firebase.internal.api.FirebaseNoSignedInUserException: Please sign 
+in before trying to get a token.
+logs\taameem_log_dump.txt:67595:07-02 13:25:04.358 W/StorageUtil(22198): Error 
+getting App Check token; using placeholder token instead. Error: 
+com.google.firebase.FirebaseException: No AppCheckProvider installed.
+logs\taameem_log_dump.txt:67623:07-02 13:25:04.876 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:67624:07-02 13:25:04.876 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:67625:07-02 13:25:04.876 E/StorageException(22198):  
+Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:67626:07-02 13:25:04.879 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:67627:07-02 13:25:04.879 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:67628:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:67629:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:67630:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:67631:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fire
+base-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:67632:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$S
+yntheticClass:0)
+logs\taameem_log_dump.txt:67633:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0$
+com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyExe
+cutor.java:65)
+logs\taameem_log_dump.txt:67634:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSynthetic
+Lambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:67635:07-02 13:25:04.879 E/StorageException(22198): 	
+at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:67636:07-02 13:25:04.879 E/StorageException(22198): 	
+at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:67637:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-go
+ogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:67638:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0
+.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:67639:07-02 13:25:04.879 E/StorageException(22198): 	
+at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:67640:07-02 13:25:04.879 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:67641:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkRequ
+est.java:415)
+logs\taameem_log_dump.txt:67642:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Networ
+kRequest.java:432)
+logs\taameem_log_dump.txt:67643:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Net
+workRequest.java:423)
+logs\taameem_log_dump.txt:67644:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkReq
+uest.java:265)
+logs\taameem_log_dump.txt:67645:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkReq
+uest.java:282)
+logs\taameem_log_dump.txt:67646:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpone
+ntialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:67647:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpone
+ntialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:67648:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:67649:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java:
+293)
+logs\taameem_log_dump.txt:67650:07-02 13:25:04.879 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:67651:07-02 13:25:04.879 E/StorageException(22198): 	
+... 9 more
+logs\taameem_log_dump.txt:67652:07-02 13:25:04.879 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:67653:07-02 13:25:04.879 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:67654:07-02 13:25:04.879 E/StorageException(22198):  
+Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:67655:07-02 13:25:04.881 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:67656:07-02 13:25:04.881 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:67657:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:67658:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:67659:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:67660:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fire
+base-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:67661:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$S
+yntheticClass:0)
+logs\taameem_log_dump.txt:67662:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0$
+com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyExe
+cutor.java:65)
+logs\taameem_log_dump.txt:67663:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSynthetic
+Lambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:67664:07-02 13:25:04.881 E/StorageException(22198): 	
+at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:67665:07-02 13:25:04.881 E/StorageException(22198): 	
+at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:67666:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-go
+ogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:67667:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0
+.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:67668:07-02 13:25:04.881 E/StorageException(22198): 	
+at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:67669:07-02 13:25:04.881 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:67670:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkRequ
+est.java:415)
+logs\taameem_log_dump.txt:67671:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Networ
+kRequest.java:432)
+logs\taameem_log_dump.txt:67672:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Net
+workRequest.java:423)
+logs\taameem_log_dump.txt:67673:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkReq
+uest.java:265)
+logs\taameem_log_dump.txt:67674:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkReq
+uest.java:282)
+logs\taameem_log_dump.txt:67675:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpone
+ntialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:67676:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpone
+ntialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:67677:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:67678:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java:
+293)
+logs\taameem_log_dump.txt:67679:07-02 13:25:04.881 E/StorageException(22198): 	
+at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:67680:07-02 13:25:04.881 E/StorageException(22198): 	
+... 9 more
+logs\taameem_log_dump.txt:67681:07-02 13:25:04.886 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:67682:07-02 13:25:04.886 E/StorageException(22198): 
+The operation was cancelled.
+logs\taameem_log_dump.txt:67683:07-02 13:25:04.886 E/StorageException(22198):  
+Code: -13040 HttpResult: 0
+logs\taameem_log_dump.txt:68351:07-02 13:25:19.531 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7033.png
+logs\taameem_log_dump.txt:68353:07-02 13:25:19.570 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7034.png
+logs\taameem_log_dump.txt:69697:07-02 13:25:52.822 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:69698:07-02 13:25:52.822 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160650]
+logs\taameem_log_dump.txt:69699:07-02 13:25:52.822 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:70761:07-02 13:26:29.129 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:79268:07-02 13:26:52.832 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:79269:07-02 13:26:52.833 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160649]
+logs\taameem_log_dump.txt:79270:07-02 13:26:52.833 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:83524:07-02 13:27:06.698 E/FlexPanelStartController( 
+3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:84809:07-02 13:27:52.936 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:84810:07-02 13:27:52.941 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160627]
+logs\taameem_log_dump.txt:84811:07-02 13:27:52.941 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:85800:07-02 13:28:53.040 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:85801:07-02 13:28:53.041 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160626]
+logs\taameem_log_dump.txt:85802:07-02 13:28:53.041 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:86889:07-02 13:29:53.142 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:86890:07-02 13:29:53.144 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160627]
+logs\taameem_log_dump.txt:86891:07-02 13:29:53.144 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:87082:07-02 13:30:00.930 
+E/BluetoothPowerStatsCollector( 2476): 
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 11
+logs\taameem_log_dump.txt:87093:07-02 13:30:00.930 
+E/BluetoothPowerStatsCollector( 2476): Caused by: java.lang.RuntimeException: 
+error: 11
+logs\taameem_log_dump.txt:87551:07-02 13:30:16.091 I/FirebaseApp(31439): 
+Device unlocked: initializing all Firebase APIs for app [DEFAULT]
+logs\taameem_log_dump.txt:87557:07-02 13:30:16.096 
+I/FirebaseInitProvider(31439): FirebaseApp initialization successful
+logs\taameem_log_dump.txt:87584:07-02 13:30:16.123 E/FeatureClassSet(31439): 
+[#CMH#] Package not found excpetion: 
+android.content.pm.PackageManager$NameNotFoundException: 
+com.samsung.android.scloud (com.samsung.android.scloud)
+logs\taameem_log_dump.txt:87706:07-02 13:30:16.191 W/AsyncOperation( 3999): 
+OperationException[Status{statusCode=Stale snapshot for 
+com.google.android.gms.appset#com.google.android.gms(new configuration 
+available), resolution=null}]
+logs\taameem_log_dump.txt:87760:07-02 13:30:16.272 I/WorkerUtils(31436): 
+[ClusteringService: 1.0]  For : periodic_worker_tagn.k@c5a4c10[status=SUCCESS, 
+result=[[WorkInfo{id='2d80eb88-89cc-4df3-a77d-1781865a5dee', state=RUNNING, 
+outputData=Data {}, 
+tags=[com.samsung.faceservice.worker.FaceServicePeriodicWorker, 
+periodic_worker_tag], progress=Data {}, runAttemptCount=1, generation=0, 
+constraints=Constraints{requiredNetworkType=NOT_REQUIRED, 
+requiresCharging=true, requiresDeviceIdle=false, requiresBatteryNotLow=true, 
+requiresStorageNotLow=false, contentTriggerUpdateDelayMillis=-1, 
+contentTriggerMaxDelayMillis=-1, contentUriTriggers=[], }, 
+initialDelayMillis=30000, 
+periodicityInfo=PeriodicityInfo{repeatIntervalMillis=1800000, 
+flexIntervalMillis=1800000}, nextScheduleTimeMillis=9223372036854775807}, 
+stopReason=-256]]] : X 
+logs\taameem_log_dump.txt:87773:07-02 13:30:16.304 I/WorkerUtils(31437): 
+[ClusteringService: 1.0]  For : periodic_worker_tagn.k@2c85527[status=SUCCESS, 
+result=[[WorkInfo{id='2a334c4c-eefb-4447-b197-62856deef60a', state=RUNNING, 
+outputData=Data {}, 
+tags=[com.samsung.faceservice.worker.FaceServicePeriodicWorker, 
+periodic_worker_tag], progress=Data {}, runAttemptCount=1, generation=0, 
+constraints=Constraints{requiredNetworkType=NOT_REQUIRED, 
+requiresCharging=true, requiresDeviceIdle=false, requiresBatteryNotLow=true, 
+requiresStorageNotLow=false, contentTriggerUpdateDelayMillis=-1, 
+contentTriggerMaxDelayMillis=-1, contentUriTriggers=[], }, 
+initialDelayMillis=30000, 
+periodicityInfo=PeriodicityInfo{repeatIntervalMillis=1800000, 
+flexIntervalMillis=1800000}, nextScheduleTimeMillis=9223372036854775807}, 
+stopReason=-256]]] : X 
+logs\taameem_log_dump.txt:88631:07-02 13:30:53.242 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:88632:07-02 13:30:53.244 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160623]
+logs\taameem_log_dump.txt:88633:07-02 13:30:53.244 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:97974:07-02 13:31:47.775 E/FlexPanelStartController( 
+3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:98614:07-02 13:31:51.986 
+W/PhotopickerUserMonitor(30343): 
+android.content.res.Resources$NotFoundException: No badge found for this user.
+logs\taameem_log_dump.txt:98653:07-02 13:31:51.986 
+W/PhotopickerUserMonitor(30343): 
+android.content.res.Resources$NotFoundException: No badge found for this user.
+logs\taameem_log_dump.txt:98692:07-02 13:31:51.988 
+W/PhotopickerUserMonitor(30343): 
+android.content.res.Resources$NotFoundException: No badge found for this user.
+logs\taameem_log_dump.txt:98746:07-02 13:31:52.002 E/PhotoPickerProvider( 
+5167): java.lang.IllegalStateException: Service not connected
+logs\taameem_log_dump.txt:99303:07-02 13:31:52.186 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:99823:07-02 13:31:53.342 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:99824:07-02 13:31:53.344 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160631]
+logs\taameem_log_dump.txt:99825:07-02 13:31:53.344 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:102506:07-02 13:32:01.875 W/Bundle  ( 2476): Attempt 
+to cast generated internal exception:
+logs\taameem_log_dump.txt:102507:07-02 13:32:01.875 W/Bundle  ( 2476): 
+java.lang.ClassCastException: java.lang.Boolean cannot be cast to 
+java.lang.Integer
+logs\taameem_log_dump.txt:104145:07-02 13:32:02.830 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:105800:07-02 13:32:07.686 W/Firestore(22198): 
+(25.1.4) [WatchStream]: (a59fd94) Stream closed with status: 
+Status{code=UNAVAILABLE, description=Unable to resolve host 
+firestore.googleapis.com, cause=java.lang.RuntimeException: 
+java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:105807:07-02 13:32:07.686 W/Firestore(22198): Caused 
+by: java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:105814:07-02 13:32:07.686 W/Firestore(22198): Caused 
+by: android.system.GaiException: android_getaddrinfo failed: EAI_NODATA (No 
+address associated with hostname)
+logs\taameem_log_dump.txt:107772:07-02 13:32:12.878 
+E/FlexPanelStartController( 3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:111897:07-02 13:32:22.650 
+E/FlexPanelStartController( 3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:115548:07-02 13:32:33.730 
+E/FlexPanelStartController( 3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:117706:07-02 13:32:43.741 
+I/ExtNavHandlerConfigManager(29403): [CN] [checkDeepLinkBlockList] no 
+exceptions in config
+logs\taameem_log_dump.txt:119137:07-02 13:32:53.434 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:119138:07-02 13:32:53.437 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160188]
+logs\taameem_log_dump.txt:119139:07-02 13:32:53.437 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:120415:07-02 13:32:58.391 
+E/ObjectCaptureModel(29403):  [Object Capture] Thread Exception=Attempt to 
+invoke interface method 'void com.samsung.android.app.sdk.deepsky.objectcapture
+.base.ObjectCapture.release()' on a null object reference
+logs\taameem_log_dump.txt:120518:07-02 13:32:58.445 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:121059:07-02 13:32:59.068 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:121363:07-02 13:32:59.907 D/MediaProvider( 5167): 
+Identical paths /storage/emulated/0/Download/.pending-1783593179-7dcdbb4c-2483-
+4ac9-8572-254662874c2b.jpg; not moving
+logs\taameem_log_dump.txt:121987:07-02 13:33:00.127 D/MediaProvider( 5167): 
+Identical paths 
+/storage/emulated/0/Download/7dcdbb4c-2483-4ac9-8572-254662874c2b.jpg; not 
+moving
+logs\taameem_log_dump.txt:122168:07-02 13:33:00.231 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:122344:07-02 13:33:00.773 
+E/BluetoothPowerStatsCollector( 2476): 
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 11
+logs\taameem_log_dump.txt:122355:07-02 13:33:00.773 
+E/BluetoothPowerStatsCollector( 2476): Caused by: java.lang.RuntimeException: 
+error: 11
+logs\taameem_log_dump.txt:122415:07-02 13:33:00.851 
+E/BluetoothPowerStatsCollector( 2476): 
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 11
+logs\taameem_log_dump.txt:122426:07-02 13:33:00.851 
+E/BluetoothPowerStatsCollector( 2476): Caused by: java.lang.RuntimeException: 
+error: 11
+logs\taameem_log_dump.txt:122719:07-02 13:33:01.627 W/Bundle  ( 2476): Attempt 
+to cast generated internal exception:
+logs\taameem_log_dump.txt:122720:07-02 13:33:01.627 W/Bundle  ( 2476): 
+java.lang.ClassCastException: java.lang.Boolean cannot be cast to 
+java.lang.Integer
+logs\taameem_log_dump.txt:123144:07-02 13:33:01.728 W/Firestore(22198): 
+(25.1.4) [WriteStream]: (11161df) Stream closed with status: 
+Status{code=UNAVAILABLE, description=Unable to resolve host 
+firestore.googleapis.com, cause=java.lang.RuntimeException: 
+java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:123151:07-02 13:33:01.728 W/Firestore(22198): Caused 
+by: java.net.UnknownHostException: Unable to resolve host 
+"firestore.googleapis.com": No address associated with hostname
+logs\taameem_log_dump.txt:123158:07-02 13:33:01.728 W/Firestore(22198): Caused 
+by: android.system.GaiException: android_getaddrinfo failed: EAI_NODATA (No 
+address associated with hostname)
+logs\taameem_log_dump.txt:123644:07-02 13:33:01.818 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:124384:07-02 13:33:02.331 
+E/si__DesktopModeUtils(29403): isLeavingDesktopMode() FallbackException 
+Instance is null
+logs\taameem_log_dump.txt:124691:07-02 13:33:03.461 E/ContentProviderHelper( 
+2476): java.lang.IllegalStateException: Unable to check Uri permission because 
+caller is holding WM lock; assuming permission denied
+logs\taameem_log_dump.txt:124706:07-02 13:33:03.461 E/ContentProviderHelper( 
+2476): java.lang.IllegalStateException: Unable to check Uri permission because 
+caller is holding WM lock; assuming permission denied
+logs\taameem_log_dump.txt:124902:07-02 13:33:03.526 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:125349:07-02 13:33:04.949 E/StorageUtil(22198): 
+error getting token java.util.concurrent.ExecutionException: 
+com.google.firebase.internal.api.FirebaseNoSignedInUserException: Please sign 
+in before trying to get a token.
+logs\taameem_log_dump.txt:125350:07-02 13:33:04.950 W/StorageUtil(22198): 
+Error getting App Check token; using placeholder token instead. Error: 
+com.google.firebase.FirebaseException: No AppCheckProvider installed.
+logs\taameem_log_dump.txt:125361:07-02 13:33:05.653 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:125362:07-02 13:33:05.653 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:125363:07-02 13:33:05.653 E/StorageException(22198): 
+ Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:125364:07-02 13:33:05.655 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:125365:07-02 13:33:05.655 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:125366:07-02 13:33:05.655 E/StorageException(22198): 
+	at 
+com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:125367:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:125368:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:125369:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fir
+ebase-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:125370:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$
+SyntheticClass:0)
+logs\taameem_log_dump.txt:125371:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0
+$com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyEx
+ecutor.java:65)
+logs\taameem_log_dump.txt:125372:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSyntheti
+cLambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125373:07-02 13:33:05.655 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:125374:07-02 13:33:05.655 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:125375:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-g
+oogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:125376:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda
+0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125377:07-02 13:33:05.655 E/StorageException(22198): 
+	at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:125378:07-02 13:33:05.655 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:125379:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkReq
+uest.java:415)
+logs\taameem_log_dump.txt:125380:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Netwo
+rkRequest.java:432)
+logs\taameem_log_dump.txt:125381:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Ne
+tworkRequest.java:423)
+logs\taameem_log_dump.txt:125382:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:265)
+logs\taameem_log_dump.txt:125383:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:282)
+logs\taameem_log_dump.txt:125384:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:125385:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:125386:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:125387:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java
+:293)
+logs\taameem_log_dump.txt:125388:07-02 13:33:05.655 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:125389:07-02 13:33:05.655 E/StorageException(22198): 
+	... 9 more
+logs\taameem_log_dump.txt:125390:07-02 13:33:05.656 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:125391:07-02 13:33:05.656 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:125392:07-02 13:33:05.656 E/StorageException(22198): 
+ Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:125393:07-02 13:33:05.658 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:125394:07-02 13:33:05.658 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:125395:07-02 13:33:05.658 E/StorageException(22198): 
+	at 
+com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:125396:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:125397:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:125398:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fir
+ebase-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:125399:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$
+SyntheticClass:0)
+logs\taameem_log_dump.txt:125400:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0
+$com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyEx
+ecutor.java:65)
+logs\taameem_log_dump.txt:125401:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSyntheti
+cLambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125402:07-02 13:33:05.658 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:125403:07-02 13:33:05.658 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:125404:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-g
+oogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:125405:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda
+0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125406:07-02 13:33:05.658 E/StorageException(22198): 
+	at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:125407:07-02 13:33:05.658 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:125408:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkReq
+uest.java:415)
+logs\taameem_log_dump.txt:125409:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Netwo
+rkRequest.java:432)
+logs\taameem_log_dump.txt:125410:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Ne
+tworkRequest.java:423)
+logs\taameem_log_dump.txt:125411:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:265)
+logs\taameem_log_dump.txt:125412:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:282)
+logs\taameem_log_dump.txt:125413:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:125414:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:125415:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:125416:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java
+:293)
+logs\taameem_log_dump.txt:125417:07-02 13:33:05.658 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:125418:07-02 13:33:05.658 E/StorageException(22198): 
+	... 9 more
+logs\taameem_log_dump.txt:125421:07-02 13:33:05.666 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:125422:07-02 13:33:05.666 E/StorageException(22198): 
+The operation was cancelled.
+logs\taameem_log_dump.txt:125423:07-02 13:33:05.666 E/StorageException(22198): 
+ Code: -13040 HttpResult: 0
+logs\taameem_log_dump.txt:125570:07-02 13:33:07.886 E/StorageUtil(22198): 
+error getting token java.util.concurrent.ExecutionException: 
+com.google.firebase.internal.api.FirebaseNoSignedInUserException: Please sign 
+in before trying to get a token.
+logs\taameem_log_dump.txt:125571:07-02 13:33:07.890 W/StorageUtil(22198): 
+Error getting App Check token; using placeholder token instead. Error: 
+com.google.firebase.FirebaseException: No AppCheckProvider installed.
+logs\taameem_log_dump.txt:125578:07-02 13:33:08.312 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:125579:07-02 13:33:08.312 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:125580:07-02 13:33:08.312 E/StorageException(22198): 
+ Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:125581:07-02 13:33:08.312 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:125582:07-02 13:33:08.312 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:125583:07-02 13:33:08.312 E/StorageException(22198): 
+	at 
+com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:125584:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:125585:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:125586:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fir
+ebase-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:125587:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$
+SyntheticClass:0)
+logs\taameem_log_dump.txt:125588:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0
+$com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyEx
+ecutor.java:65)
+logs\taameem_log_dump.txt:125589:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSyntheti
+cLambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125590:07-02 13:33:08.312 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:125591:07-02 13:33:08.312 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:125592:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-g
+oogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:125593:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda
+0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125594:07-02 13:33:08.312 E/StorageException(22198): 
+	at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:125595:07-02 13:33:08.312 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:125596:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkReq
+uest.java:415)
+logs\taameem_log_dump.txt:125597:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Netwo
+rkRequest.java:432)
+logs\taameem_log_dump.txt:125598:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Ne
+tworkRequest.java:423)
+logs\taameem_log_dump.txt:125599:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:265)
+logs\taameem_log_dump.txt:125600:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:282)
+logs\taameem_log_dump.txt:125601:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:125602:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:125603:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:125604:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java
+:293)
+logs\taameem_log_dump.txt:125605:07-02 13:33:08.312 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:125606:07-02 13:33:08.312 E/StorageException(22198): 
+	... 9 more
+logs\taameem_log_dump.txt:125607:07-02 13:33:08.312 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:125608:07-02 13:33:08.312 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:125609:07-02 13:33:08.312 E/StorageException(22198): 
+ Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:125610:07-02 13:33:08.313 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:125611:07-02 13:33:08.313 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:125612:07-02 13:33:08.313 E/StorageException(22198): 
+	at 
+com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:125613:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:125614:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:125615:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fir
+ebase-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:125616:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$
+SyntheticClass:0)
+logs\taameem_log_dump.txt:125617:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0
+$com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyEx
+ecutor.java:65)
+logs\taameem_log_dump.txt:125618:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSyntheti
+cLambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125619:07-02 13:33:08.313 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:125620:07-02 13:33:08.313 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:125621:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-g
+oogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:125622:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda
+0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125623:07-02 13:33:08.313 E/StorageException(22198): 
+	at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:125624:07-02 13:33:08.313 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:125625:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkReq
+uest.java:415)
+logs\taameem_log_dump.txt:125626:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Netwo
+rkRequest.java:432)
+logs\taameem_log_dump.txt:125627:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Ne
+tworkRequest.java:423)
+logs\taameem_log_dump.txt:125628:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:265)
+logs\taameem_log_dump.txt:125629:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:282)
+logs\taameem_log_dump.txt:125630:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:125631:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:125632:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:125633:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java
+:293)
+logs\taameem_log_dump.txt:125634:07-02 13:33:08.313 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:125635:07-02 13:33:08.313 E/StorageException(22198): 
+	... 9 more
+logs\taameem_log_dump.txt:125636:07-02 13:33:08.315 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:125637:07-02 13:33:08.315 E/StorageException(22198): 
+The operation was cancelled.
+logs\taameem_log_dump.txt:125638:07-02 13:33:08.315 E/StorageException(22198): 
+ Code: -13040 HttpResult: 0
+logs\taameem_log_dump.txt:125809:07-02 13:33:16.385 E/StorageUtil(22198): 
+error getting token java.util.concurrent.ExecutionException: 
+com.google.firebase.internal.api.FirebaseNoSignedInUserException: Please sign 
+in before trying to get a token.
+logs\taameem_log_dump.txt:125810:07-02 13:33:16.385 W/StorageUtil(22198): 
+Error getting App Check token; using placeholder token instead. Error: 
+com.google.firebase.FirebaseException: No AppCheckProvider installed.
+logs\taameem_log_dump.txt:125835:07-02 13:33:16.811 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:125836:07-02 13:33:16.811 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:125837:07-02 13:33:16.811 E/StorageException(22198): 
+ Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:125838:07-02 13:33:16.811 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:125839:07-02 13:33:16.811 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:125840:07-02 13:33:16.811 E/StorageException(22198): 
+	at 
+com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:125841:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:125842:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:125843:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fir
+ebase-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:125844:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$
+SyntheticClass:0)
+logs\taameem_log_dump.txt:125845:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0
+$com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyEx
+ecutor.java:65)
+logs\taameem_log_dump.txt:125846:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSyntheti
+cLambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125847:07-02 13:33:16.811 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:125848:07-02 13:33:16.811 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:125849:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-g
+oogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:125850:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda
+0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125851:07-02 13:33:16.811 E/StorageException(22198): 
+	at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:125852:07-02 13:33:16.811 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:125853:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkReq
+uest.java:415)
+logs\taameem_log_dump.txt:125854:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Netwo
+rkRequest.java:432)
+logs\taameem_log_dump.txt:125855:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Ne
+tworkRequest.java:423)
+logs\taameem_log_dump.txt:125856:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:265)
+logs\taameem_log_dump.txt:125857:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:282)
+logs\taameem_log_dump.txt:125858:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:125859:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:125860:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:125861:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java
+:293)
+logs\taameem_log_dump.txt:125862:07-02 13:33:16.811 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:125863:07-02 13:33:16.811 E/StorageException(22198): 
+	... 9 more
+logs\taameem_log_dump.txt:125864:07-02 13:33:16.812 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:125865:07-02 13:33:16.812 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:125866:07-02 13:33:16.812 E/StorageException(22198): 
+ Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:125867:07-02 13:33:16.812 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:125868:07-02 13:33:16.812 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:125869:07-02 13:33:16.812 E/StorageException(22198): 
+	at 
+com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:125870:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:125871:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:125872:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fir
+ebase-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:125873:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$
+SyntheticClass:0)
+logs\taameem_log_dump.txt:125874:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0
+$com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyEx
+ecutor.java:65)
+logs\taameem_log_dump.txt:125875:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSyntheti
+cLambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125876:07-02 13:33:16.812 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:125877:07-02 13:33:16.812 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:125878:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-g
+oogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:125879:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda
+0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:125880:07-02 13:33:16.812 E/StorageException(22198): 
+	at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:125881:07-02 13:33:16.812 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:125882:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkReq
+uest.java:415)
+logs\taameem_log_dump.txt:125883:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Netwo
+rkRequest.java:432)
+logs\taameem_log_dump.txt:125884:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Ne
+tworkRequest.java:423)
+logs\taameem_log_dump.txt:125885:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:265)
+logs\taameem_log_dump.txt:125886:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:282)
+logs\taameem_log_dump.txt:125887:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:125888:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:125889:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:125890:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java
+:293)
+logs\taameem_log_dump.txt:125891:07-02 13:33:16.812 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:125892:07-02 13:33:16.812 E/StorageException(22198): 
+	... 9 more
+logs\taameem_log_dump.txt:125893:07-02 13:33:16.813 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:125894:07-02 13:33:16.813 E/StorageException(22198): 
+The operation was cancelled.
+logs\taameem_log_dump.txt:125895:07-02 13:33:16.813 E/StorageException(22198): 
+ Code: -13040 HttpResult: 0
+logs\taameem_log_dump.txt:126503:07-02 13:33:50.297 I/ActivityManager( 2476): 
+Start proc 32393:com.google.android.youtube/u0a269 for broadcast 
+{com.google.android.youtube/com.google.firebase.iid.FirebaseInstanceIdReceiver}
+logs\taameem_log_dump.txt:126537:07-02 13:33:50.714 
+E/FirebaseMessaging(32393): Default FirebaseApp has not been initialized. Skip 
+logging event to GA.
+logs\taameem_log_dump.txt:126667:07-02 13:33:52.012 E/CommandUtil(32393): 
+java.lang.IllegalStateException: Expected only one extension, saw 0
+logs\taameem_log_dump.txt:126668:07-02 13:33:52.012 E/CommandUtil(32393): 
+java.lang.IllegalStateException: Expected only one extension, saw 0
+logs\taameem_log_dump.txt:126763:07-02 13:33:52.535 W/Resources( 3725): 
+java.lang.RuntimeException
+logs\taameem_log_dump.txt:126861:07-02 13:33:52.550 W/Resources( 3725): 
+java.lang.RuntimeException
+logs\taameem_log_dump.txt:126888:07-02 13:33:52.556 W/Resources( 3725): 
+java.lang.RuntimeException
+logs\taameem_log_dump.txt:127141:07-02 13:33:52.739 
+W/ComponentDiscovery(32393): Class 
+com.google.firebase.installations.FirebaseInstallationsKtxRegistrar is not an 
+found.
+logs\taameem_log_dump.txt:127155:07-02 13:33:52.813 I/FA      (32393):   adb 
+shell setprop debug.firebase.analytics.app com.google.android.youtube
+logs\taameem_log_dump.txt:127183:07-02 13:33:53.515 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:127184:07-02 13:33:53.517 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160176]
+logs\taameem_log_dump.txt:127185:07-02 13:33:53.517 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:127569:07-02 13:33:55.731 
+W/HttpPingECatcherLogImpl(32393): java.lang.Exception
+logs\taameem_log_dump.txt:127632:07-02 13:33:57.671 W/AsyncOperation( 3999): 
+OperationException[Status{statusCode=Stale snapshot for 
+com.google.android.gms.device_performance#com.google.android.youtube(new 
+configuration available), resolution=null}]
+logs\taameem_log_dump.txt:128262:07-02 13:34:23.633 E/StorageUtil(22198): 
+error getting token java.util.concurrent.ExecutionException: 
+com.google.firebase.internal.api.FirebaseNoSignedInUserException: Please sign 
+in before trying to get a token.
+logs\taameem_log_dump.txt:128263:07-02 13:34:23.634 W/StorageUtil(22198): 
+Error getting App Check token; using placeholder token instead. Error: 
+com.google.firebase.FirebaseException: No AppCheckProvider installed.
+logs\taameem_log_dump.txt:128289:07-02 13:34:24.089 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:128290:07-02 13:34:24.089 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:128291:07-02 13:34:24.089 E/StorageException(22198): 
+ Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:128292:07-02 13:34:24.090 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:128293:07-02 13:34:24.090 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:128294:07-02 13:34:24.090 E/StorageException(22198): 
+	at 
+com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:128295:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:128296:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:128297:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fir
+ebase-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:128298:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$
+SyntheticClass:0)
+logs\taameem_log_dump.txt:128299:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0
+$com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyEx
+ecutor.java:65)
+logs\taameem_log_dump.txt:128300:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSyntheti
+cLambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:128301:07-02 13:34:24.090 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:128302:07-02 13:34:24.090 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:128303:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-g
+oogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:128304:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda
+0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:128305:07-02 13:34:24.090 E/StorageException(22198): 
+	at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:128306:07-02 13:34:24.090 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:128307:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkReq
+uest.java:415)
+logs\taameem_log_dump.txt:128308:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Netwo
+rkRequest.java:432)
+logs\taameem_log_dump.txt:128309:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Ne
+tworkRequest.java:423)
+logs\taameem_log_dump.txt:128310:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:265)
+logs\taameem_log_dump.txt:128311:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:282)
+logs\taameem_log_dump.txt:128312:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:128313:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:128314:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:128315:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java
+:293)
+logs\taameem_log_dump.txt:128316:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:128317:07-02 13:34:24.090 E/StorageException(22198): 
+	... 9 more
+logs\taameem_log_dump.txt:128318:07-02 13:34:24.090 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:128319:07-02 13:34:24.090 E/StorageException(22198): 
+Object does not exist at location.
+logs\taameem_log_dump.txt:128320:07-02 13:34:24.090 E/StorageException(22198): 
+ Code: -13010 HttpResult: 404
+logs\taameem_log_dump.txt:128321:07-02 13:34:24.090 E/StorageException(22198): 
+The server has terminated the upload session
+logs\taameem_log_dump.txt:128322:07-02 13:34:24.090 E/StorageException(22198): 
+java.io.IOException: The server has terminated the upload session
+logs\taameem_log_dump.txt:128323:07-02 13:34:24.090 E/StorageException(22198): 
+	at 
+com.google.firebase.storage.UploadTask.serverStateValid(UploadTask.java:359)
+logs\taameem_log_dump.txt:128324:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.shouldContinue(UploadTask.java:325)
+logs\taameem_log_dump.txt:128325:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:246)
+logs\taameem_log_dump.txt:128326:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask.lambda$getRunnable$7$com-google-fir
+ebase-storage-StorageTask(StorageTask.java:1078)
+logs\taameem_log_dump.txt:128327:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.StorageTask$$ExternalSyntheticLambda10.run(D8$$
+SyntheticClass:0)
+logs\taameem_log_dump.txt:128328:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor.lambda$decorate$0
+$com-google-firebase-concurrent-LimitedConcurrencyExecutor(LimitedConcurrencyEx
+ecutor.java:65)
+logs\taameem_log_dump.txt:128329:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.concurrent.LimitedConcurrencyExecutor$$ExternalSyntheti
+cLambda0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:128330:07-02 13:34:24.090 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+logs\taameem_log_dump.txt:128331:07-02 13:34:24.090 E/StorageException(22198): 
+	at 
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+logs\taameem_log_dump.txt:128332:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-g
+oogle-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+logs\taameem_log_dump.txt:128333:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda
+0.run(D8$$SyntheticClass:0)
+logs\taameem_log_dump.txt:128334:07-02 13:34:24.090 E/StorageException(22198): 
+	at java.lang.Thread.run(Thread.java:1572)
+logs\taameem_log_dump.txt:128335:07-02 13:34:24.090 E/StorageException(22198): 
+Caused by: java.io.IOException: {  "error": {    "code": 404,    "message": 
+"Not Found."  }}
+logs\taameem_log_dump.txt:128336:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseResponse(NetworkReq
+uest.java:415)
+logs\taameem_log_dump.txt:128337:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.parseErrorResponse(Netwo
+rkRequest.java:432)
+logs\taameem_log_dump.txt:128338:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.processResponseStream(Ne
+tworkRequest.java:423)
+logs\taameem_log_dump.txt:128339:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:265)
+logs\taameem_log_dump.txt:128340:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.network.NetworkRequest.performRequest(NetworkRe
+quest.java:282)
+logs\taameem_log_dump.txt:128341:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:76)
+logs\taameem_log_dump.txt:128342:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.internal.ExponentialBackoffSender.sendWithExpon
+entialBackoff(ExponentialBackoffSender.java:68)
+logs\taameem_log_dump.txt:128343:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.sendWithRetry(UploadTask.java:527)
+logs\taameem_log_dump.txt:128344:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.beginResumableUpload(UploadTask.java
+:293)
+logs\taameem_log_dump.txt:128345:07-02 13:34:24.090 E/StorageException(22198): 
+	at com.google.firebase.storage.UploadTask.run(UploadTask.java:241)
+logs\taameem_log_dump.txt:128346:07-02 13:34:24.090 E/StorageException(22198): 
+	... 9 more
+logs\taameem_log_dump.txt:128347:07-02 13:34:24.092 E/StorageException(22198): 
+StorageException has occurred.
+logs\taameem_log_dump.txt:128348:07-02 13:34:24.092 E/StorageException(22198): 
+The operation was cancelled.
+logs\taameem_log_dump.txt:128349:07-02 13:34:24.092 E/StorageException(22198): 
+ Code: -13040 HttpResult: 0
+logs\taameem_log_dump.txt:128821:07-02 13:34:33.600 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7033.png
+logs\taameem_log_dump.txt:128822:07-02 13:34:33.611 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7033.png
+logs\taameem_log_dump.txt:128823:07-02 13:34:33.624 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7034.png
+logs\taameem_log_dump.txt:128824:07-02 13:34:33.728 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7034.png
+logs\taameem_log_dump.txt:130833:07-02 13:34:51.334 E/ekej    ( 6835): 
+java.lang.IllegalArgumentException: Invalid configuration, activityLevel is 
+unknown
+logs\taameem_log_dump.txt:130875:07-02 13:34:51.354 W/FA      ( 6835): Failed 
+to retrieve Firebase Instance Id
+logs\taameem_log_dump.txt:131413:07-02 13:34:51.555 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:131930:07-02 13:34:52.382 E/ekej    ( 6835): 
+java.lang.IllegalArgumentException: Invalid configuration, activityLevel is 
+unknown
+logs\taameem_log_dump.txt:132531:07-02 13:34:53.579 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:132532:07-02 13:34:53.580 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12160179]
+logs\taameem_log_dump.txt:132533:07-02 13:34:53.580 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:132785:07-02 13:34:56.110 W/TCRefreshRunner( 6835): 
+java.util.concurrent.ExecutionException: 
+java.util.concurrent.ExecutionException: java.lang.IllegalStateException: 
+Already closed
+logs\taameem_log_dump.txt:132797:07-02 13:34:56.110 W/TCRefreshRunner( 6835): 
+Caused by: java.util.concurrent.ExecutionException: 
+java.lang.IllegalStateException: Already closed
+logs\taameem_log_dump.txt:132803:07-02 13:34:56.110 W/TCRefreshRunner( 6835): 
+Caused by: java.lang.IllegalStateException: Already closed
+logs\taameem_log_dump.txt:134329:07-02 13:35:02.692 I/Finsky  ( 3855): [72] 
+SettingNotFoundException, fall through to G.downloadBytesOverMobileMaximum
+logs\taameem_log_dump.txt:134331:07-02 13:35:02.695 I/Finsky  ( 3855): [72] 
+SettingNotFoundException, fall through to G.downloadBytesOverMobileRecommended
+logs\taameem_log_dump.txt:135739:07-02 13:35:08.700 W/FA      ( 6835): Failed 
+to retrieve Firebase Instance Id
+logs\taameem_log_dump.txt:135934:07-02 13:35:08.781 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:136406:07-02 13:35:10.718 W/FA      ( 6835): Failed 
+to retrieve Firebase Instance Id
+logs\taameem_log_dump.txt:136667:07-02 13:35:13.005 I/Finsky:background( 
+4382): [68] SettingNotFoundException, fall through to 
+G.downloadBytesOverMobileMaximum
+logs\taameem_log_dump.txt:136669:07-02 13:35:13.006 I/Finsky:background( 
+4382): [68] SettingNotFoundException, fall through to 
+G.downloadBytesOverMobileRecommended
+logs\taameem_log_dump.txt:137060:07-02 13:35:14.378 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10315/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10315/7033.png
+logs\taameem_log_dump.txt:137061:07-02 13:35:14.379 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7033.png
+logs\taameem_log_dump.txt:137062:07-02 13:35:14.381 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10316/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10316/7034.png
+logs\taameem_log_dump.txt:137063:07-02 13:35:14.383 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10318/7034.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10318/7034.png
+logs\taameem_log_dump.txt:137338:07-02 13:35:15.461 I/flutter (22198): 
+ClientException: Request to https://tile.openstreetmap.org/14/10319/7033.png 
+failed with status 404: Not Found., 
+uri=https://tile.openstreetmap.org/14/10319/7033.png
+logs\taameem_log_dump.txt:137567:07-02 13:35:25.159 W/ProcessCpuTracker( 
+2476): Failed to stat(/proc/6687): android.system.ErrnoException: stat failed: 
+ENOENT (No such file or directory)
+logs\taameem_log_dump.txt:138102:07-02 13:35:53.678 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:138103:07-02 13:35:53.681 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12159982]
+logs\taameem_log_dump.txt:138104:07-02 13:35:53.681 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:138245:07-02 13:36:00.096 
+E/BluetoothPowerStatsCollector( 2476): 
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: error: 11
+logs\taameem_log_dump.txt:138256:07-02 13:36:00.096 
+E/BluetoothPowerStatsCollector( 2476): Caused by: java.lang.RuntimeException: 
+error: 11
+logs\taameem_log_dump.txt:139036:07-02 13:36:32.880 I/WM-WorkerWrapper( 6760): 
+androidx.work.impl.WorkerStoppedException
+logs\taameem_log_dump.txt:139097:07-02 13:36:34.144 W/ImapStore(16376): 
+mExceptionType=5 msg=com.samsung.android.emailcommon.basic.exception.Authentica
+tionFailedException: Account already on AuthHold!!!!
+logs\taameem_log_dump.txt:139102:07-02 13:36:34.144 W/ImapStore(16376): 	at com
+.samsung.android.email.sync.legacy.utility.LegacySyncUtil.notifyAuthenticationF
+ailedException(SourceFile:80)
+logs\taameem_log_dump.txt:139103:07-02 13:36:34.144 W/ImapStore(16376): 	at com
+.samsung.android.email.sync.legacy.imap.ImapSyncUtil.handleMessagingException(S
+ourceFile:64)
+logs\taameem_log_dump.txt:139111:07-02 13:36:34.153 W/ImapStore(16376): 
+mExceptionType=5 msg=com.samsung.android.emailcommon.basic.exception.Authentica
+tionFailedException: Account already on AuthHold!!!!
+logs\taameem_log_dump.txt:139116:07-02 13:36:34.153 W/ImapStore(16376): 	at com
+.samsung.android.email.sync.legacy.utility.LegacySyncUtil.notifyAuthenticationF
+ailedException(SourceFile:80)
+logs\taameem_log_dump.txt:139117:07-02 13:36:34.153 W/ImapStore(16376): 	at com
+.samsung.android.email.sync.legacy.imap.ImapSyncUtil.handleMessagingException(S
+ourceFile:64)
+logs\taameem_log_dump.txt:139511:07-02 13:36:40.503 W/HBD     ( 7723): 
+java.lang.Exception
+logs\taameem_log_dump.txt:143131:07-02 13:36:53.782 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:143139:07-02 13:36:53.783 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12159981]
+logs\taameem_log_dump.txt:143141:07-02 13:36:53.783 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+logs\taameem_log_dump.txt:153214:07-02 13:37:28.512 
+E/FlexPanelStartController( 3725): java.lang.NullPointerException
+logs\taameem_log_dump.txt:153936:07-02 13:37:53.885 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts(/data) oldLevel:0, 
+newLevel:0, seq:1
+logs\taameem_log_dump.txt:153937:07-02 13:37:53.886 
+D/DeviceStorageMonitorService( 2476): Available File Node Number is [12159980]
+logs\taameem_log_dump.txt:153938:07-02 13:37:53.887 
+W/DeviceStorageMonitorService( 2476): updateBroadcasts_filenode(/data) 
+fn_oldLevel:0, fn_newLevel:0, seq:1
+
+

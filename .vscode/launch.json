@@ -1,0 +1,108 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "taameem",
+            "cwd": "المرحلة الأولى من التاميمtaameem_phase1 (2)\\taameem",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "taameem (profile mode)",
+            "cwd": "المرحلة الأولى من التاميمtaameem_phase1 (2)\\taameem",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "taameem (release mode)",
+            "cwd": "المرحلة الأولى من التاميمtaameem_phase1 (2)\\taameem",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "taameem",
+            "cwd": "المرحلة الثالثة من التاميمtaameem_phase3\\taameem",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "taameem (profile mode)",
+            "cwd": "المرحلة الثالثة من التاميمtaameem_phase3\\taameem",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "taameem (release mode)",
+            "cwd": "المرحلة الثالثة من التاميمtaameem_phase3\\taameem",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "taameem",
+            "cwd": "المرحلة الثانية من التاميمtaameem_phase2\\taameem",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "taameem (profile mode)",
+            "cwd": "المرحلة الثانية من التاميمtaameem_phase2\\taameem",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "taameem (release mode)",
+            "cwd": "المرحلة الثانية من التاميمtaameem_phase2\\taameem",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "taameem",
+            "cwd": "المرحلة الخامسة من التاميمtaameem_phase5_FINAL\\taameem",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "taameem (profile mode)",
+            "cwd": "المرحلة الخامسة من التاميمtaameem_phase5_FINAL\\taameem",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "taameem (release mode)",
+            "cwd": "المرحلة الخامسة من التاميمtaameem_phase5_FINAL\\taameem",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "taameem",
+            "cwd": "المرحلة الرابعة من التاميمtaameem_phase4\\taameem",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "taameem (profile mode)",
+            "cwd": "المرحلة الرابعة من التاميمtaameem_phase4\\taameem",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "taameem (release mode)",
+            "cwd": "المرحلة الرابعة من التاميمtaameem_phase4\\taameem",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
