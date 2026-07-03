@@ -27,7 +27,7 @@ class AiService {
   static const String _modelSonnet = 'claude-sonnet-4-6';
 
   // *** ضع مفتاح API هنا مؤقتاً للاختبار فقط ***
-  static const String _apiKey = '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';
+  static const String _apiKey = '';
 
   // ────────────────────────────────────────────────────────────────────────
   //  System Prompt — هوية تعميم الكاملة
