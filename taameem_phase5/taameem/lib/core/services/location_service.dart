@@ -25,6 +25,23 @@ class LocationService {
     }
   }
 
+  // ─── الحصول على موقع حقيقي فقط (بدون fallback) ───────────────────────────
+  Future<LatLng?> getPreciseLocation() async {
+    try {
+      final permission = await _checkPermission();
+      if (!permission) return null;
+
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 10),
+      );
+
+      return LatLng(position.latitude, position.longitude);
+    } catch (_) {
+      return null;
+    }
+  }
+
   // ─── التحقق من الأذونات وطلبها ────────────────────────────────────────────
   Future<bool> _checkPermission() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();

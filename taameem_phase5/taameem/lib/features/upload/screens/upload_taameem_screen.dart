@@ -9,9 +9,11 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/models/taameem_model.dart';
 import '../../../core/services/firestore_service.dart';
 import '../../../core/services/location_service.dart';
+import '../../../core/services/matching_service.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/widgets/animated_background.dart';
 import '../../../core/widgets/glass_card.dart';
+import 'map_location_picker.dart';
 import '../widgets/category_selector_widget.dart';
 import '../widgets/image_picker_widget.dart';
 
@@ -50,11 +52,31 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
   }
 
   Future<void> _fetchLocation() async {
-    final loc = await LocationService.instance.getCurrentLocation();
+    final loc = await LocationService.instance.getPreciseLocation();
     if (mounted) {
       setState(() {
         _location = loc;
-        _locationText = 'تم تحديد موقعك تلقائياً';
+        _locationText = loc != null
+            ? 'تم تحديد موقعك تلقائياً'
+            : 'تعذر تحديد موقعك تلقائياً. استخدم التحديد اليدوي على الخريطة.';
+      });
+    }
+  }
+
+  Future<void> _pickLocationManually() async {
+    final result = await Navigator.push<LatLng>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MapLocationPicker(
+          initialLocation: _location ?? LocationService.defaultLocation,
+        ),
+      ),
+    );
+    if (result != null && mounted) {
+      setState(() {
+        _location = result;
+        _locationText =
+            'تم تحديد الموقع يدوياً (${result.latitude.toStringAsFixed(4)}, ${result.longitude.toStringAsFixed(4)})';
       });
     }
   }
@@ -77,10 +99,14 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
 
   bool get _canProceed {
     switch (_currentStep) {
-      case 0: return _selectedType != null;
-      case 1: return _titleController.text.trim().isNotEmpty;
-      case 2: return _location != null;
-      default: return true;
+      case 0:
+        return _selectedType != null;
+      case 1:
+        return _titleController.text.trim().isNotEmpty;
+      case 2:
+        return _location != null;
+      default:
+        return true;
     }
   }
 
@@ -135,7 +161,31 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
       );
 
       // رفع في Firestore
-      await FirestoreService.instance.uploadTaameem(taameem);
+      final uploadedId = await FirestoreService.instance.uploadTaameem(taameem);
+
+      final publishedTaameem = TaameemModel(
+        id: uploadedId,
+        userId: taameem.userId,
+        userPhone: taameem.userPhone,
+        type: taameem.type,
+        title: taameem.title,
+        description: taameem.description,
+        latitude: taameem.latitude,
+        longitude: taameem.longitude,
+        imageUrls: taameem.imageUrls,
+        createdAt: taameem.createdAt,
+        expiresAt: taameem.expiresAt,
+        status: taameem.status,
+        city: taameem.city,
+        neighborhood: taameem.neighborhood,
+        viewCount: taameem.viewCount,
+      );
+
+      final matches =
+          await MatchingService.instance.findMatches(publishedTaameem);
+      for (final match in matches.take(5)) {
+        await MatchingService.instance.saveMatch(uploadedId, match.id);
+      }
 
       if (!mounted) return;
 
@@ -264,7 +314,12 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
 
   // ─── رأس الصفحة ────────────────────────────────────────────────────────────
   Widget _buildHeader() {
-    final titles = ['اختر نوع التعميم', 'التفاصيل', 'الموقع والصور', 'مراجعة ونشر'];
+    final titles = [
+      'اختر نوع التعميم',
+      'التفاصيل',
+      'الموقع والصور',
+      'مراجعة ونشر'
+    ];
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       child: Row(
@@ -333,11 +388,16 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
   // ─── محتوى الخطوة الحالية ──────────────────────────────────────────────────
   Widget _buildCurrentStep() {
     switch (_currentStep) {
-      case 0: return _buildStepType();
-      case 1: return _buildStepDetails();
-      case 2: return _buildStepLocationAndMedia();
-      case 3: return _buildStepReview();
-      default: return const SizedBox.shrink();
+      case 0:
+        return _buildStepType();
+      case 1:
+        return _buildStepDetails();
+      case 2:
+        return _buildStepLocationAndMedia();
+      case 3:
+        return _buildStepReview();
+      default:
+        return const SizedBox.shrink();
     }
   }
 
@@ -380,10 +440,12 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
             const SizedBox(height: 8),
             TextFormField(
               controller: _titleController,
-              style: GoogleFonts.cairo(fontSize: 15, color: AppColors.nearBlack),
+              style:
+                  GoogleFonts.cairo(fontSize: 15, color: AppColors.nearBlack),
               decoration: InputDecoration(
                 hintText: 'مثال: سيارة كامري بيضاء مسروقة',
-                hintStyle: GoogleFonts.cairo(color: AppColors.grey, fontSize: 13),
+                hintStyle:
+                    GoogleFonts.cairo(color: AppColors.grey, fontSize: 13),
                 filled: true,
                 fillColor: AppColors.warmBeige,
                 border: OutlineInputBorder(
@@ -396,23 +458,25 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(color: AppColors.emerald, width: 1.5),
+                  borderSide:
+                      const BorderSide(color: AppColors.emerald, width: 1.5),
                 ),
               ),
               maxLength: 80,
               onChanged: (_) => setState(() {}),
             ),
-
             const SizedBox(height: 16),
-
             _fieldLabel('الوصف التفصيلي'),
             const SizedBox(height: 8),
             TextFormField(
               controller: _descController,
-              style: GoogleFonts.cairo(fontSize: 14, color: AppColors.nearBlack),
+              style:
+                  GoogleFonts.cairo(fontSize: 14, color: AppColors.nearBlack),
               decoration: InputDecoration(
-                hintText: 'أضف أي تفاصيل مفيدة: اللون، العلامات المميزة، آخر مكان...',
-                hintStyle: GoogleFonts.cairo(color: AppColors.grey, fontSize: 12),
+                hintText:
+                    'أضف أي تفاصيل مفيدة: اللون، العلامات المميزة، آخر مكان...',
+                hintStyle:
+                    GoogleFonts.cairo(color: AppColors.grey, fontSize: 12),
                 filled: true,
                 fillColor: AppColors.warmBeige,
                 border: OutlineInputBorder(
@@ -425,7 +489,8 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(color: AppColors.emerald, width: 1.5),
+                  borderSide:
+                      const BorderSide(color: AppColors.emerald, width: 1.5),
                 ),
                 contentPadding: const EdgeInsets.all(16),
               ),
@@ -450,61 +515,92 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
             children: [
               _fieldLabel('الموقع الجغرافي'),
               const SizedBox(height: 12),
-              GestureDetector(
-                onTap: _fetchLocation,
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: _location != null
-                        ? AppColors.emerald.withValues(alpha: 0.08)
-                        : AppColors.warmBeige,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: _location != null
-                          ? AppColors.emerald.withValues(alpha: 0.3)
-                          : AppColors.glassBorder,
+              Column(
+                children: [
+                  // زر الموقع التلقائي
+                  GestureDetector(
+                    onTap: _fetchLocation,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: _location != null
+                            ? AppColors.emerald.withOpacity(0.08)
+                            : AppColors.warmBeige,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: _location != null
+                              ? AppColors.emerald.withOpacity(0.3)
+                              : AppColors.glassBorder,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            _location != null
+                                ? Icons.location_on_rounded
+                                : Icons.location_off_rounded,
+                            color: _location != null
+                                ? AppColors.emerald
+                                : AppColors.grey,
+                            size: 22,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              _locationText ?? 'اضغط لتحديد موقعك تلقائياً',
+                              style: GoogleFonts.cairo(
+                                fontSize: 13,
+                                color: _location != null
+                                    ? AppColors.forestGreen
+                                    : AppColors.grey,
+                              ),
+                            ),
+                          ),
+                          if (_location != null)
+                            const Icon(Icons.check_circle_rounded,
+                                color: AppColors.emerald, size: 18),
+                        ],
+                      ),
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        _location != null
-                            ? Icons.location_on_rounded
-                            : Icons.location_off_rounded,
-                        color: _location != null
-                            ? AppColors.emerald
-                            : AppColors.grey,
-                        size: 22,
+
+                  const SizedBox(height: 10),
+
+                  // زر التحديد اليدوي على الخريطة
+                  GestureDetector(
+                    onTap: _pickLocationManually,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: AppColors.warmBeige,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: AppColors.glassBorder),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          _locationText ?? 'اضغط لتحديد موقعك',
-                          style: GoogleFonts.cairo(
-                            fontSize: 13,
-                            color: _location != null
-                                ? AppColors.forestGreen
-                                : AppColors.grey,
+                      child: Row(
+                        children: [
+                            const Icon(Icons.map_rounded,
+                              color: AppColors.emerald, size: 22),
+                          const SizedBox(width: 10),
+                          Text(
+                            'تحديد الموقع يدوياً على الخريطة',
+                            style: GoogleFonts.cairo(
+                              fontSize: 13,
+                              color: AppColors.forestGreen,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                      if (_location != null)
-                        const Icon(
-                          Icons.check_circle_rounded,
-                          color: AppColors.emerald,
-                          size: 18,
-                        ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
         ),
-
         const SizedBox(height: 12),
-
         GlassCard(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -527,9 +623,8 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
 
   // ─── الخطوة 4: المراجعة ────────────────────────────────────────────────────
   Widget _buildStepReview() {
-    final typeColor = _selectedType != null
-        ? _colorForType(_selectedType!)
-        : AppColors.grey;
+    final typeColor =
+        _selectedType != null ? _colorForType(_selectedType!) : AppColors.grey;
 
     return GlassCard(
       showGoldLine: true,
@@ -630,9 +725,8 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
             border: Border(top: BorderSide(color: AppColors.glassBorder)),
           ),
           child: GestureDetector(
-            onTap: _isLoading
-                ? null
-                : (isLastStep ? _submitTaameem : _nextStep),
+            onTap:
+                _isLoading ? null : (isLastStep ? _submitTaameem : _nextStep),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               height: 52,
@@ -690,17 +784,28 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
 
   Color _colorForType(String type) {
     switch (type) {
-      case 'missingPerson':  return AppColors.missingPerson;
-      case 'foundItem':      return AppColors.foundItem;
-      case 'lostItem':       return AppColors.lostItem;
-      case 'theft':          return AppColors.theft;
-      case 'helpRequest':    return AppColors.helpRequest;
-      case 'humanitarian':   return AppColors.humanitarian;
-      case 'emergency':      return AppColors.emergency;
-      case 'generalWarning': return AppColors.generalWarning;
-      case 'lostAnimal':     return AppColors.lostAnimal;
-      case 'inquiry':        return AppColors.inquiry;
-      default:               return AppColors.grey;
+      case 'missingPerson':
+        return AppColors.missingPerson;
+      case 'foundItem':
+        return AppColors.foundItem;
+      case 'lostItem':
+        return AppColors.lostItem;
+      case 'theft':
+        return AppColors.theft;
+      case 'helpRequest':
+        return AppColors.helpRequest;
+      case 'humanitarian':
+        return AppColors.humanitarian;
+      case 'emergency':
+        return AppColors.emergency;
+      case 'generalWarning':
+        return AppColors.generalWarning;
+      case 'lostAnimal':
+        return AppColors.lostAnimal;
+      case 'inquiry':
+        return AppColors.inquiry;
+      default:
+        return AppColors.grey;
     }
   }
 }

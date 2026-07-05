@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taameem/core/constants/app_constants.dart';
 import 'package:taameem/core/models/taameem_model.dart';
@@ -16,8 +18,19 @@ class FirestoreService {
   //  رفع تعميم جديد
   // ──────────────────────────────────────────────────────────────────────────
   Future<String> uploadTaameem(TaameemModel taameem) async {
-    final docRef = await _taameems.add(taameem.toFirestore());
-    return docRef.id;
+    try {
+      final docRef = await _taameems
+          .add(taameem.toFirestore())
+          .timeout(const Duration(seconds: 20));
+      return docRef.id;
+    } on TimeoutException {
+      throw Exception(
+          'انتهت مهلة الاتصال بـ Firestore. تحقق من الشبكة ثم أعد المحاولة.');
+    } on FirebaseException catch (e) {
+      throw Exception(
+        e.message ?? 'فشل رفع التعميم إلى Firestore (${e.code}).',
+      );
+    }
   }
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -96,9 +109,7 @@ class FirestoreService {
         .where('title', isLessThanOrEqualTo: '$query\uf8ff')
         .get();
 
-    return snapshot.docs
-        .map((doc) => TaameemModel.fromFirestore(doc))
-        .toList();
+    return snapshot.docs.map((doc) => TaameemModel.fromFirestore(doc)).toList();
   }
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -111,9 +122,7 @@ class FirestoreService {
         .orderBy('createdAt', descending: true)
         .get();
 
-    return snapshot.docs
-        .map((doc) => TaameemModel.fromFirestore(doc))
-        .toList();
+    return snapshot.docs.map((doc) => TaameemModel.fromFirestore(doc)).toList();
   }
 
   // ──────────────────────────────────────────────────────────────────────────

@@ -14,11 +14,10 @@ class TaameemBottomNav extends StatelessWidget {
   });
 
   static const List<_NavItem> _items = [
-    _NavItem(icon: Icons.map_rounded, label: 'الخريطة'),
-    _NavItem(icon: Icons.search_rounded, label: 'البحث'),
-    _NavItem(icon: null, label: 'تعميم'),          // زر الرفع المميز في المنتصف
-    _NavItem(icon: Icons.notifications_rounded, label: 'الإشعارات'),
-    _NavItem(icon: Icons.person_rounded, label: 'حسابي'),
+    _NavItem(icon: Icons.map_rounded, label: 'الخريطة', routeIndex: 0),
+    _NavItem(icon: Icons.grid_view_rounded, label: 'التعاميم', routeIndex: 1),
+    _NavItem(icon: Icons.notifications_rounded, label: 'الإشعارات', routeIndex: 3),
+    _NavItem(icon: Icons.person_rounded, label: 'حسابي', routeIndex: 4),
   ];
 
   @override
@@ -43,7 +42,6 @@ class TaameemBottomNav extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(_items.length, (i) {
-              if (i == 2) return _buildUploadButton();
               return _buildNavItem(i);
             }),
           ),
@@ -54,10 +52,10 @@ class TaameemBottomNav extends StatelessWidget {
 
   Widget _buildNavItem(int index) {
     final item = _items[index];
-    final isSelected = currentIndex == index;
+    final isSelected = currentIndex == item.routeIndex;
 
     return GestureDetector(
-      onTap: () => onTap(index),
+      onTap: () => onTap(item.routeIndex),
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
         width: 60,
@@ -94,77 +92,16 @@ class TaameemBottomNav extends StatelessWidget {
     );
   }
 
-  /// زر رفع التعميم المميز في المنتصف — يأخذ شكل الشعار
-  Widget _buildUploadButton() {
-    return GestureDetector(
-      onTap: () => onTap(2),
-      child: SizedBox(
-        width: 72,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Transform.translate(
-              offset: const Offset(0, -8),
-              child: Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [AppColors.emerald, AppColors.forestGreen],
-                  ),
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.emerald.withValues(alpha: 0.4),
-                      blurRadius: 16,
-                      offset: const Offset(0, 6),
-                    ),
-                    BoxShadow(
-                      color: AppColors.gold.withValues(alpha: 0.25),
-                      blurRadius: 8,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                  border: Border.all(
-                    color: AppColors.gold.withValues(alpha: 0.6),
-                    width: 1.5,
-                  ),
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    const Icon(
-                      Icons.add_rounded,
-                      color: AppColors.white,
-                      size: 26,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Transform.translate(
-              offset: const Offset(0, -6),
-              child: Text(
-                'رفع تعميم',
-                style: GoogleFonts.cairo(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.emerald,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class _NavItem {
   final IconData? icon;
   final String label;
+  final int routeIndex;
 
-  const _NavItem({required this.icon, required this.label});
+  const _NavItem({
+    required this.icon,
+    required this.label,
+    required this.routeIndex,
+  });
 }

@@ -11,6 +11,7 @@ import '../../../core/models/taameem_model.dart';
 import '../../../core/services/ai_service.dart';
 import '../../../core/services/firestore_service.dart';
 import '../../../core/services/location_service.dart';
+import '../../../core/services/matching_service.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/widgets/animated_background.dart';
 import '../widgets/chat_bubble.dart';
@@ -145,12 +146,13 @@ class _AiChatScreenState extends State<AiChatScreen> {
         }
       });
     } catch (e) {
+      final err = e.toString().replaceFirst('Exception: ', '');
       if (!mounted) return;
       setState(() {
         _messages.removeWhere((m) => m.isThinking);
         _isLoading = false;
         _messages.add(ChatMessage.aiText(
-          'عذراً، حدث خطأ في الاتصال. تأكد من إضافة مفتاح API في الإعدادات وحاول مرة أخرى.',
+          'تعذر الوصول لخدمة الذكاء: $err',
         ));
       });
     }
@@ -163,7 +165,10 @@ class _AiChatScreenState extends State<AiChatScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final location = await LocationService.instance.getCurrentLocation();
+      final location = await LocationService.instance.getPreciseLocation();
+      if (location == null) {
+        throw Exception('تعذر تحديد موقعك تلقائياً. فعّل إذن الموقع ثم حاول مرة أخرى.');
+      }
       final days = AppConstants.decayDays[draft['type']] ?? 3;
       final now = DateTime.now();
 
@@ -182,7 +187,31 @@ class _AiChatScreenState extends State<AiChatScreen> {
         status: 'active',
       );
 
-      await FirestoreService.instance.uploadTaameem(taameem);
+      final uploadedId = await FirestoreService.instance.uploadTaameem(taameem);
+
+      final publishedTaameem = TaameemModel(
+        id: uploadedId,
+        userId: taameem.userId,
+        userPhone: taameem.userPhone,
+        type: taameem.type,
+        title: taameem.title,
+        description: taameem.description,
+        latitude: taameem.latitude,
+        longitude: taameem.longitude,
+        imageUrls: taameem.imageUrls,
+        createdAt: taameem.createdAt,
+        expiresAt: taameem.expiresAt,
+        status: taameem.status,
+        city: taameem.city,
+        neighborhood: taameem.neighborhood,
+        viewCount: taameem.viewCount,
+      );
+
+      final matches =
+          await MatchingService.instance.findMatches(publishedTaameem);
+      for (final match in matches.take(5)) {
+        await MatchingService.instance.saveMatch(uploadedId, match.id);
+      }
 
       if (!mounted) return;
       setState(() {
@@ -198,11 +227,12 @@ class _AiChatScreenState extends State<AiChatScreen> {
         'content': 'تم نشر التعميم بنجاح.',
       });
     } catch (e) {
+      final err = e.toString().replaceFirst('Exception: ', '');
       if (!mounted) return;
       setState(() {
         _isLoading = false;
         _messages.add(ChatMessage.aiText(
-          'حدث خطأ أثناء النشر. حاول مرة أخرى.',
+          'تعذر نشر التعميم: $err',
         ));
       });
     }
@@ -237,7 +267,11 @@ class _AiChatScreenState extends State<AiChatScreen> {
   }
 
   Future<void> _attachLocation() async {
-    final loc = await LocationService.instance.getCurrentLocation();
+    final loc = await LocationService.instance.getPreciseLocation();
+    if (loc == null) {
+      _showSnack('تعذر تحديد الموقع تلقائياً. فعّل إذن الموقع أو اختره يدوياً في شاشة الرفع.');
+      return;
+    }
     setState(() => _attachedLocation = loc);
     _showSnack('تم إرفاق موقعك تلقائياً');
   }
@@ -279,9 +313,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
             children: [
               _buildHeader(),
               Expanded(
-                child: _messages.isEmpty
-                    ? _buildWelcomeView()
-                    : _buildChatList(),
+                child:
+                    _messages.isEmpty ? _buildWelcomeView() : _buildChatList(),
               ),
               ChatInputBar(
                 controller: _textController,
@@ -291,7 +324,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
                 onPickImage: _pickFromGallery,
                 onPickCamera: _pickFromCamera,
                 onAttachLocation: _attachLocation,
-                onRemoveImage: (i) => setState(() => _attachedImages.removeAt(i)),
+                onRemoveImage: (i) =>
+                    setState(() => _attachedImages.removeAt(i)),
               ),
             ],
           ),
@@ -342,9 +376,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                     ),
                   ),
                 ),
-              )
-                  .animate(onPlay: (c) => c.repeat(reverse: true))
-                  .shimmer(
+              ).animate(onPlay: (c) => c.repeat(reverse: true)).shimmer(
                     duration: 3000.ms,
                     color: AppColors.gold.withValues(alpha: 0.25),
                   ),
@@ -371,7 +403,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
                           color: AppColors.emerald,
                           shape: BoxShape.circle,
                         ),
-                      ).animate(onPlay: (c) => c.repeat(reverse: true))
+                      )
+                          .animate(onPlay: (c) => c.repeat(reverse: true))
                           .fadeOut(duration: 1200.ms),
                       const SizedBox(width: 5),
                       Text(
@@ -435,7 +468,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
               gradient: const LinearGradient(
                 colors: [AppColors.emerald, AppColors.forestGreen],
               ),
-              border: Border.all(color: AppColors.gold.withValues(alpha: 0.5), width: 2),
+              border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.5), width: 2),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.emerald.withValues(alpha: 0.3),
@@ -453,12 +487,9 @@ class _AiChatScreenState extends State<AiChatScreen> {
                 ),
               ),
             ),
-          )
-              .animate(onPlay: (c) => c.repeat(reverse: true))
-              .shimmer(duration: 2000.ms, color: AppColors.gold.withValues(alpha: 0.3)),
-
+          ).animate(onPlay: (c) => c.repeat(reverse: true)).shimmer(
+              duration: 2000.ms, color: AppColors.gold.withValues(alpha: 0.3)),
           const SizedBox(height: 16),
-
           Text(
             AppConstants.aiWelcomeMessage,
             style: GoogleFonts.cairo(

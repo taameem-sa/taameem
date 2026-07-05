@@ -14,14 +14,9 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  late List<AppNotification> _notifications;
+  static const String _userId = 'temp_user';
+  List<AppNotification> _notifications = [];
   String _activeFilter = 'all';
-
-  @override
-  void initState() {
-    super.initState();
-    _notifications = NotificationService.getMockNotifications();
-  }
 
   List<AppNotification> get _filtered {
     if (_activeFilter == 'all') return _notifications;
@@ -37,18 +32,34 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: AnimatedBackground(
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(),
-              _buildFilterTabs(),
-              Expanded(child: _buildList()),
-            ],
-          ),
-        ),
+      body: StreamBuilder<List<AppNotification>>(
+        stream: NotificationService.instance.streamNotifications(_userId),
+        builder: (context, snapshot) {
+          _notifications = snapshot.data ?? [];
+
+          return AnimatedBackground(
+            child: SafeArea(
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  _buildFilterTabs(),
+                  Expanded(child: _buildList()),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
+  }
+
+  Future<void> _markAllAsRead() async {
+    await NotificationService.instance.markAllAsRead(_userId);
+  }
+
+  Future<void> _markRead(AppNotification n) async {
+    if (n.isRead) return;
+    await NotificationService.instance.markAsRead(n.id);
   }
 
   Widget _buildHeader() {
@@ -87,21 +98,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           const Spacer(),
           if (_unreadCount > 0)
             GestureDetector(
-              onTap: () {
-                setState(() {
-                  _notifications = _notifications
-                      .map((n) => AppNotification(
-                            id: n.id,
-                            title: n.title,
-                            body: n.body,
-                            type: n.type,
-                            taameemId: n.taameemId,
-                            createdAt: n.createdAt,
-                            isRead: true,
-                          ))
-                      .toList();
-                });
-              },
+              onTap: _markAllAsRead,
               child: Text(
                 'تمييز الكل كمقروء',
                 style: GoogleFonts.cairo(
@@ -241,19 +238,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ),
       ),
     );
-  }
-
-  void _markRead(AppNotification n) {
-    setState(() {
-      final idx = _notifications.indexWhere((x) => x.id == n.id);
-      if (idx >= 0) {
-        _notifications[idx] = AppNotification(
-          id: n.id, title: n.title, body: n.body,
-          type: n.type, taameemId: n.taameemId,
-          createdAt: n.createdAt, isRead: true,
-        );
-      }
-    });
   }
 
   bool _isToday(AppNotification n) {

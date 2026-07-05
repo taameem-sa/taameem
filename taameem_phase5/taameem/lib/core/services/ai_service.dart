@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 /// ──────────────────────────────────────────────────────────────────────────
@@ -26,8 +28,13 @@ class AiService {
   // Sonnet: لتحليل الصور والمهام المعقدة — عند الحاجة
   static const String _modelSonnet = 'claude-sonnet-4-6';
 
-  // *** ضع مفتاح API هنا مؤقتاً للاختبار فقط ***
-  static const String _apiKey = '';
+  // مرر المفتاح عبر dart-define بدلاً من تضمينه داخل الكود.
+  // مثال: flutter run --dart-define=ANTHROPIC_API_KEY=...
+  static const String _apiKeyFromDefine = String.fromEnvironment(
+    'ANTHROPIC_API_KEY',
+    defaultValue: '',
+  );
+  static String? _cachedResolvedApiKey;
 
   // ────────────────────────────────────────────────────────────────────────
   //  System Prompt — هوية تعميم الكاملة
@@ -144,6 +151,13 @@ TAAMEEM_JSON_END
     List<File>? images,
     bool useVision = false,
   }) async {
+    final apiKey = await _resolveApiKey();
+    if (apiKey.isEmpty) {
+      throw Exception(
+        'مفتاح Anthropic غير مضاف. أضفه عبر --dart-define أو Firebase Remote Config (anthropic_api_key).',
+      );
+    }
+
     // اختيار النموذج
     final model = (images != null && images.isNotEmpty)
         ? _modelSonnet   // Sonnet لتحليل الصور
@@ -202,7 +216,7 @@ TAAMEEM_JSON_END
       Uri.parse(_apiUrl),
       headers: {
         'Content-Type': 'application/json',
-        'X-API-Key': _apiKey,
+        'X-API-Key': apiKey,
         'anthropic-version': '2023-06-01',
         'anthropic-beta': 'prompt-caching-2024-07-31', // ← تفعيل Caching
       },
@@ -210,7 +224,7 @@ TAAMEEM_JSON_END
     ).timeout(const Duration(seconds: 30));
 
     if (response.statusCode != 200) {
-      throw Exception('خطأ في الاتصال: ${response.statusCode}');
+      throw Exception(_formatApiError(response));
     }
 
     final data = jsonDecode(response.body);
@@ -229,6 +243,121 @@ TAAMEEM_JSON_END
     }
 
     return text;
+  }
+
+  // ────────────────────────────────────────────────────────────────────────
+  //  تقييم تشابه صورتين عبر Vision (0.0 - 1.0)
+  // ────────────────────────────────────────────────────────────────────────
+  Future<double?> scoreImageMatchByUrls(String imageUrlA, String imageUrlB) async {
+    final apiKey = await _resolveApiKey();
+    if (apiKey.isEmpty) return null;
+
+    try {
+      final responseA = await http
+          .get(Uri.parse(imageUrlA))
+          .timeout(const Duration(seconds: 12));
+      final responseB = await http
+          .get(Uri.parse(imageUrlB))
+          .timeout(const Duration(seconds: 12));
+
+      if (responseA.statusCode != 200 || responseB.statusCode != 200) {
+        return null;
+      }
+
+      final bytesA = responseA.bodyBytes;
+      final bytesB = responseB.bodyBytes;
+
+      // تجنب رفع صور ضخمة جدًا لاستقرار الأداء.
+      if (bytesA.length > 2500000 || bytesB.length > 2500000) {
+        return null;
+      }
+
+      final mediaTypeA = _guessMediaType(responseA.headers['content-type']);
+      final mediaTypeB = _guessMediaType(responseB.headers['content-type']);
+
+      final body = jsonEncode({
+        'model': _modelSonnet,
+        'max_tokens': 180,
+        'messages': [
+          {
+            'role': 'user',
+            'content': [
+              {
+                'type': 'text',
+                'text':
+                    'قارن الصورتين لقياس احتمال أنهما لنفس الشخص/الشيء المفقود. '
+                        'أعد JSON فقط بالشكل {"score": رقم من 0 إلى 1} دون أي نص إضافي.'
+              },
+              {
+                'type': 'image',
+                'source': {
+                  'type': 'base64',
+                  'media_type': mediaTypeA,
+                  'data': base64Encode(bytesA),
+                },
+              },
+              {
+                'type': 'image',
+                'source': {
+                  'type': 'base64',
+                  'media_type': mediaTypeB,
+                  'data': base64Encode(bytesB),
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      final response = await http.post(
+        Uri.parse(_apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: body,
+      ).timeout(const Duration(seconds: 30));
+
+      if (response.statusCode != 200) return null;
+
+      final data = jsonDecode(response.body);
+      final text = (data['content']?[0]?['text'] ?? '').toString();
+      final parsed = _extractScore(text);
+      return parsed;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String _guessMediaType(String? contentType) {
+    if (contentType == null) return 'image/jpeg';
+    final lower = contentType.toLowerCase();
+    if (lower.contains('png')) return 'image/png';
+    if (lower.contains('webp')) return 'image/webp';
+    return 'image/jpeg';
+  }
+
+  double? _extractScore(String raw) {
+    try {
+      final start = raw.indexOf('{');
+      final end = raw.lastIndexOf('}');
+      if (start != -1 && end != -1 && end > start) {
+        final jsonText = raw.substring(start, end + 1);
+        final obj = jsonDecode(jsonText) as Map<String, dynamic>;
+        final score = (obj['score'] as num?)?.toDouble();
+        if (score == null) return null;
+        return score.clamp(0, 1).toDouble();
+      }
+    } catch (_) {
+      // Fallback below.
+    }
+
+    final match = RegExp(r'(0(\.\d+)?|1(\.0+)?)').firstMatch(raw);
+    if (match == null) return null;
+    final value = double.tryParse(match.group(0)!);
+    if (value == null) return null;
+    return value.clamp(0, 1).toDouble();
   }
 
   // ────────────────────────────────────────────────────────────────────────
@@ -262,5 +391,110 @@ TAAMEEM_JSON_END
     final startIdx = response.indexOf(start);
     if (startIdx == -1) return response.trim();
     return response.substring(0, startIdx).trim();
+  }
+
+  Future<String> _resolveApiKey() async {
+    if (_cachedResolvedApiKey != null && _cachedResolvedApiKey!.isNotEmpty) {
+      return _cachedResolvedApiKey!;
+    }
+
+    final defineKey = _sanitizeApiKey(_apiKeyFromDefine);
+    if (defineKey.isNotEmpty && !_isPlaceholderKey(defineKey)) {
+      _cachedResolvedApiKey = defineKey;
+      return defineKey;
+    }
+
+    try {
+      final envKey = _sanitizeApiKey(dotenv.env['ANTHROPIC_API_KEY'] ?? '');
+      if (envKey.isNotEmpty && !_isPlaceholderKey(envKey)) {
+        _cachedResolvedApiKey = envKey;
+        return envKey;
+      }
+    } catch (_) {
+      // dotenv may not be initialized in some build flows.
+    }
+
+    try {
+      final rc = FirebaseRemoteConfig.instance;
+      await rc.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: const Duration(seconds: 8),
+        minimumFetchInterval: const Duration(minutes: 5),
+      ));
+      await rc.setDefaults(const {
+        'anthropic_api_key': '',
+      });
+      await rc.fetchAndActivate();
+
+      final remoteKey = _sanitizeApiKey(rc.getString('anthropic_api_key'));
+      if (remoteKey.isNotEmpty && !_isPlaceholderKey(remoteKey)) {
+        _cachedResolvedApiKey = remoteKey;
+        return remoteKey;
+      }
+    } catch (_) {
+      // Keep graceful fallback.
+    }
+
+    return '';
+  }
+
+  String _sanitizeApiKey(String value) {
+    var key = value.trim();
+    if (key.length >= 2) {
+      final first = key[0];
+      final last = key[key.length - 1];
+      if ((first == '"' && last == '"') || (first == "'" && last == "'")) {
+        key = key.substring(1, key.length - 1).trim();
+      }
+    }
+    return key;
+  }
+
+  bool _isPlaceholderKey(String value) {
+    final lower = value.toLowerCase();
+    return lower == 'paste_real_key_here' ||
+        lower == 'your_key' ||
+        lower == 'your_api_key' ||
+        lower == 'replace_me' ||
+        lower == 'todo' ||
+        lower == 'test' ||
+        lower.contains('paste') ||
+        lower.contains('replace') ||
+        lower.contains('your_') ||
+        lower.contains('example');
+  }
+
+  String _formatApiError(http.Response response) {
+    final code = response.statusCode;
+
+    String rawMessage = '';
+    String rawType = '';
+
+    try {
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      final error = body['error'] as Map<String, dynamic>?;
+      rawMessage = (error?['message'] ?? '').toString();
+      rawType = (error?['type'] ?? '').toString();
+    } catch (_) {
+      rawMessage = response.body;
+    }
+
+    final lower = rawMessage.toLowerCase();
+    if (code == 401 || lower.contains('invalid x-api-key') || rawType == 'authentication_error') {
+      return 'مفتاح Anthropic غير صحيح. حدّث القيمة في --dart-define أو Firebase Remote Config (anthropic_api_key).';
+    }
+
+    if (code == 429) {
+      return 'تم تجاوز حد الطلبات مؤقتاً. حاول بعد قليل.';
+    }
+
+    if (code >= 500) {
+      return 'خدمة الذكاء غير متاحة حالياً من الخادم. حاول لاحقاً.';
+    }
+
+    if (rawMessage.trim().isNotEmpty) {
+      return 'فشل خدمة الذكاء ($code): $rawMessage';
+    }
+
+    return 'فشل خدمة الذكاء ($code).';
   }
 }

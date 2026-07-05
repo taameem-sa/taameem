@@ -7,7 +7,8 @@ class TaameemModel {
   final String id;
   final String userId;
   final String userPhone;
-  final String type;          // 'missingPerson' | 'foundItem' | 'lostItem' | 'theft' | 'helpRequest' | 'humanitarian' | 'emergency' | 'generalWarning' | 'lostAnimal' | 'inquiry'
+  final String
+      type; // 'missingPerson' | 'foundItem' | 'lostItem' | 'theft' | 'helpRequest' | 'humanitarian' | 'emergency' | 'generalWarning' | 'lostAnimal' | 'inquiry'
   final String title;
   final String description;
   final double latitude;
@@ -15,7 +16,7 @@ class TaameemModel {
   final List<String> imageUrls;
   final DateTime createdAt;
   final DateTime expiresAt;
-  final String status;        // 'active' | 'expired' | 'resolved'
+  final String status; // 'active' | 'expired' | 'resolved'
   final String city;
   final String neighborhood;
   final int viewCount;
@@ -55,88 +56,107 @@ class TaameemModel {
   // ─── اللون الخاص بنوع التعميم ─────────────────────────────────────────────
   Color get typeColor {
     switch (type) {
-      case 'missingPerson':  return AppColors.missingPerson;
-      case 'foundItem':      return AppColors.foundItem;
-      case 'lostItem':       return AppColors.lostItem;
-      case 'theft':          return AppColors.theft;
-      case 'helpRequest':    return AppColors.helpRequest;
-      case 'humanitarian':   return AppColors.humanitarian;
-      case 'emergency':      return AppColors.emergency;
-      case 'generalWarning': return AppColors.generalWarning;
-      case 'lostAnimal':     return AppColors.lostAnimal;
-      case 'inquiry':        return AppColors.inquiry;
-      default:               return AppColors.grey;
+      case 'missingPerson':
+        return AppColors.missingPerson;
+      case 'foundItem':
+        return AppColors.foundItem;
+      case 'lostItem':
+        return AppColors.lostItem;
+      case 'theft':
+        return AppColors.theft;
+      case 'helpRequest':
+        return AppColors.helpRequest;
+      case 'humanitarian':
+        return AppColors.humanitarian;
+      case 'emergency':
+        return AppColors.emergency;
+      case 'generalWarning':
+        return AppColors.generalWarning;
+      case 'lostAnimal':
+        return AppColors.lostAnimal;
+      case 'inquiry':
+        return AppColors.inquiry;
+      default:
+        return AppColors.grey;
     }
   }
 
   // ─── الاسم العربي للنوع ───────────────────────────────────────────────────
-  String get typeName =>
-      AppConstants.categoryNames[type] ?? 'تعميم';
+  String get typeName => AppConstants.categoryNames[type] ?? 'تعميم';
 
   // ─── ملصق الخريطة ─────────────────────────────────────────────────────────
-  String get mapLabel =>
-      AppConstants.mapLabels[type] ?? 'تعميم';
+  String get mapLabel => AppConstants.mapLabels[type] ?? 'تعميم';
 
   // ─── التحويل من Firestore ──────────────────────────────────────────────────
   factory TaameemModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
+
+    double parseDouble(dynamic value, [double fallback = 0.0]) {
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? fallback;
+      return fallback;
+    }
+
+    final lat = data['latitude'] ?? data['lat'];
+    final lng = data['longitude'] ?? data['lng'];
+
     return TaameemModel(
-      id:           doc.id,
-      userId:       data['userId'] ?? '',
-      userPhone:    data['userPhone'] ?? '',
-      type:         data['type'] ?? 'inquiry',
-      title:        data['title'] ?? '',
-      description:  data['description'] ?? '',
-      latitude:     (data['latitude'] ?? 0.0).toDouble(),
-      longitude:    (data['longitude'] ?? 0.0).toDouble(),
-      imageUrls:    List<String>.from(data['imageUrls'] ?? []),
-      createdAt:    (data['createdAt'] as Timestamp).toDate(),
-      expiresAt:    (data['expiresAt'] as Timestamp).toDate(),
-      status:       data['status'] ?? 'active',
-      city:         data['city'] ?? '',
+      id: doc.id,
+      userId: data['userId'] ?? '',
+      userPhone: data['userPhone'] ?? '',
+      type: data['type'] ?? 'inquiry',
+      title: data['title'] ?? '',
+      description: data['description'] ?? '',
+      latitude: parseDouble(lat),
+      longitude: parseDouble(lng),
+      imageUrls: List<String>.from(data['imageUrls'] ?? []),
+      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      expiresAt: (data['expiresAt'] as Timestamp).toDate(),
+      status: data['status'] ?? 'active',
+      city: data['city'] ?? '',
       neighborhood: data['neighborhood'] ?? '',
-      viewCount:    data['viewCount'] ?? 0,
+      viewCount: data['viewCount'] ?? 0,
     );
   }
 
   // ─── التحويل إلى Map لرفعه في Firestore ───────────────────────────────────
   Map<String, dynamic> toFirestore() {
     return {
-      'userId':       userId,
-      'userPhone':    userPhone,
-      'type':         type,
-      'title':        title,
-      'description':  description,
-      'latitude':     latitude,
-      'longitude':    longitude,
-      'imageUrls':    imageUrls,
-      'createdAt':    Timestamp.fromDate(createdAt),
-      'expiresAt':    Timestamp.fromDate(expiresAt),
-      'status':       status,
-      'city':         city,
+      'userId': userId,
+      'userPhone': userPhone,
+      'type': type,
+      'title': title,
+      'description': description,
+      'latitude': latitude,
+      'longitude': longitude,
+      'imageUrls': imageUrls,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'expiresAt': Timestamp.fromDate(expiresAt),
+      'status': status,
+      'city': city,
       'neighborhood': neighborhood,
-      'viewCount':    viewCount,
+      'viewCount': viewCount,
     };
   }
 
   // ─── نسخة معدّلة ──────────────────────────────────────────────────────────
   TaameemModel copyWith({String? status, int? viewCount}) {
     return TaameemModel(
-      id:           id,
-      userId:       userId,
-      userPhone:    userPhone,
-      type:         type,
-      title:        title,
-      description:  description,
-      latitude:     latitude,
-      longitude:    longitude,
-      imageUrls:    imageUrls,
-      createdAt:    createdAt,
-      expiresAt:    expiresAt,
-      status:       status ?? this.status,
-      city:         city,
+      id: id,
+      userId: userId,
+      userPhone: userPhone,
+      type: type,
+      title: title,
+      description: description,
+      latitude: latitude,
+      longitude: longitude,
+      imageUrls: imageUrls,
+      createdAt: createdAt,
+      expiresAt: expiresAt,
+      status: status ?? this.status,
+      city: city,
       neighborhood: neighborhood,
-      viewCount:    viewCount ?? this.viewCount,
+      viewCount: viewCount ?? this.viewCount,
     );
   }
 }

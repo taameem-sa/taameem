@@ -180,6 +180,54 @@ class _HomeScreenState extends State<HomeScreen> {
             // ─── شريط العنوان ─────────────────────────────────────────
             _buildTopBar(filtered.length),
 
+            Positioned(
+              right: 0,
+              top: MediaQuery.of(context).size.height * 0.35,
+              child: GestureDetector(
+                onTap: () => setState(() => _isSidePanelOpen = !_isSidePanelOpen),
+                child: Container(
+                  width: 28,
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.glassBackground,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      bottomLeft: Radius.circular(12),
+                    ),
+                    border: Border.all(color: AppColors.glassBorder),
+                    boxShadow: [BoxShadow(
+                      color: AppColors.glassShadow,
+                      blurRadius: 12,
+                    )],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        _isSidePanelOpen
+                            ? Icons.chevron_right_rounded
+                            : Icons.chevron_left_rounded,
+                        size: 16,
+                        color: AppColors.forestGreen,
+                      ),
+                      const SizedBox(height: 8),
+                      RotatedBox(
+                        quarterTurns: 1,
+                        child: Text(
+                          'القائمة الجانبية',
+                          style: GoogleFonts.cairo(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.forestGreen,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
             // ─── فلاتر الأنواع ────────────────────────────────────────
             _buildFilterChips(),
 
@@ -322,36 +370,37 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const Spacer(),
 
-                // زر القائمة الجانبية
                 GestureDetector(
-                  onTap: () => setState(
-                      () => _isSidePanelOpen = !_isSidePanelOpen),
+                  onTap: () => setState(() {
+                    _currentIndex = 2;
+                  }),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 5),
+                    height: 34,
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
                     decoration: BoxDecoration(
-                      color: AppColors.emerald.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.glassBorder),
+                      gradient: const LinearGradient(
+                        colors: [AppColors.emerald, AppColors.forestGreen],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.emerald.withOpacity(0.35),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        )
+                      ],
                     ),
                     child: Row(
                       children: [
-                        Text(
-                          'القائمة',
-                          style: GoogleFonts.cairo(
-                            fontSize: 12,
-                            color: AppColors.forestGreen,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(width: 3),
-                        Icon(
-                          _isSidePanelOpen
-                              ? Icons.chevron_right_rounded
-                              : Icons.chevron_left_rounded,
-                          size: 16,
-                          color: AppColors.forestGreen,
-                        ),
+                        const Icon(Icons.add_rounded,
+                            color: Colors.white, size: 16),
+                        const SizedBox(width: 5),
+                        Text('رفع تعميم',
+                            style: GoogleFonts.cairo(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            )),
                       ],
                     ),
                   ),

@@ -1,0 +1,24 @@
+{
+	"flutter": {
+		"platforms": {
+			"android": {
+				"default": {
+					"projectId": "taameem-3f949",
+					"appId": "1:279973020282:android:d7ff6df5fe89429e0af1c3",
+					"fileOutput": "android/app/google-services.json"
+				}
+			},
+			"dart": {
+				"lib/firebase_options.dart": {
+					"projectId": "taameem-3f949",
+					"configurations": {
+						"android": "1:279973020282:android:d7ff6df5fe89429e0af1c3"
+					}
+				}
+			}
+		}
+	},
+	"firestore": {
+		"indexes": "firestore.indexes.json"
+	}
+}
