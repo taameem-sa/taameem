@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:taameem/core/constants/app_constants.dart';
 import 'package:taameem/core/models/taameem_model.dart';
 
@@ -150,5 +151,16 @@ class FirestoreService {
   // ──────────────────────────────────────────────────────────────────────────
   Future<void> deleteTaameem(String id) async {
     await _taameems.doc(id).delete();
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+  //  تحديث الموقع الافتراضي للمستخدم (لاستهداف الإشعارات الجغرافية)
+  // ──────────────────────────────────────────────────────────────────────────
+  Future<void> upsertUserDefaultLocation(String userId, LatLng location) async {
+    await _db.collection('users').doc(userId).set({
+      'defaultLocationLat': location.latitude,
+      'defaultLocationLng': location.longitude,
+      'defaultLocationUpdatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 }

@@ -18,6 +18,10 @@ class TaameemModel {
   final DateTime expiresAt;
   final String status; // 'active' | 'expired' | 'resolved'
   final String city;
+  final double radiusKm;
+  final bool allKingdom;
+  final double? scopeCenterLat;
+  final double? scopeCenterLng;
   final String neighborhood;
   final int viewCount;
 
@@ -35,6 +39,10 @@ class TaameemModel {
     required this.expiresAt,
     required this.status,
     this.city = '',
+    this.radiusKm = 10,
+    this.allKingdom = false,
+    this.scopeCenterLat,
+    this.scopeCenterLng,
     this.neighborhood = '',
     this.viewCount = 0,
   });
@@ -114,6 +122,14 @@ class TaameemModel {
       expiresAt: (data['expiresAt'] as Timestamp).toDate(),
       status: data['status'] ?? 'active',
       city: data['city'] ?? '',
+      radiusKm: parseDouble(data['radiusKm'], 10),
+      allKingdom: data['allKingdom'] == true,
+      scopeCenterLat: data['scopeCenterLat'] is num
+          ? (data['scopeCenterLat'] as num).toDouble()
+          : null,
+      scopeCenterLng: data['scopeCenterLng'] is num
+          ? (data['scopeCenterLng'] as num).toDouble()
+          : null,
       neighborhood: data['neighborhood'] ?? '',
       viewCount: data['viewCount'] ?? 0,
     );
@@ -134,6 +150,10 @@ class TaameemModel {
       'expiresAt': Timestamp.fromDate(expiresAt),
       'status': status,
       'city': city,
+      'radiusKm': radiusKm,
+      'allKingdom': allKingdom,
+      'scopeCenterLat': scopeCenterLat,
+      'scopeCenterLng': scopeCenterLng,
       'neighborhood': neighborhood,
       'viewCount': viewCount,
     };
@@ -155,6 +175,10 @@ class TaameemModel {
       expiresAt: expiresAt,
       status: status ?? this.status,
       city: city,
+      radiusKm: radiusKm,
+      allKingdom: allKingdom,
+      scopeCenterLat: scopeCenterLat,
+      scopeCenterLng: scopeCenterLng,
       neighborhood: neighborhood,
       viewCount: viewCount ?? this.viewCount,
     );

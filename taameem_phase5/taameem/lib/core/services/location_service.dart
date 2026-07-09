@@ -1,18 +1,47 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationService {
   LocationService._();
   static final LocationService instance = LocationService._();
+  static const String _defaultLatKey = 'defaultLocationLat';
+  static const String _defaultLngKey = 'defaultLocationLng';
 
   // الموقع الافتراضي: الرياض
   static const LatLng defaultLocation = LatLng(24.7136, 46.6753);
+
+  // ─── قراءة الموقع الافتراضي المحفوظ ─────────────────────────────────────
+  Future<LatLng> getDefaultLocation() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lat = prefs.getDouble(_defaultLatKey);
+    final lng = prefs.getDouble(_defaultLngKey);
+    if (lat == null || lng == null) return defaultLocation;
+    return LatLng(lat, lng);
+  }
+
+  // ─── حفظ موقع افتراضي جديد ─────────────────────────────────────────────
+  Future<void> setDefaultLocation(LatLng location) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_defaultLatKey, location.latitude);
+    await prefs.setDouble(_defaultLngKey, location.longitude);
+  }
+
+  // ─── موقع فعلي إن توفر، وإلا الموقع الافتراضي ─────────────────────────
+  Future<LatLng> getCurrentOrDefaultLocation() async {
+    final precise = await getPreciseLocation();
+    if (precise != null) {
+      await setDefaultLocation(precise);
+      return precise;
+    }
+    return getDefaultLocation();
+  }
 
   // ─── الحصول على موقع المستخدم ─────────────────────────────────────────────
   Future<LatLng> getCurrentLocation() async {
     try {
       final permission = await _checkPermission();
-      if (!permission) return defaultLocation;
+      if (!permission) return getDefaultLocation();
 
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
@@ -21,7 +50,7 @@ class LocationService {
 
       return LatLng(position.latitude, position.longitude);
     } catch (e) {
-      return defaultLocation;
+      return getDefaultLocation();
     }
   }
 

@@ -18,6 +18,7 @@ import 'package:taameem/features/home/widgets/map_marker_widget.dart';
 import 'package:taameem/features/home/widgets/side_panel.dart';
 import 'package:taameem/features/home/widgets/taameem_card_popup.dart';
 import 'package:taameem/features/home/screens/taameem_detail_screen.dart';
+import 'package:taameem/features/upload/screens/camera_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -371,9 +372,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Spacer(),
 
                 GestureDetector(
-                  onTap: () => setState(() {
-                    _currentIndex = 2;
-                  }),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const CameraScreen(),
+                    ),
+                  ),
                   child: Container(
                     height: 34,
                     padding: const EdgeInsets.symmetric(horizontal: 14),

@@ -58,6 +58,32 @@ class StorageService {
     return urls;
   }
 
+  // ─── رفع مرفق واحد (صورة / فيديو / ملف) ───────────────────────────────
+  Future<String> uploadAttachment(File file, String folder) async {
+    final ext = _extension(file.path);
+    final fileName = '${_uuid.v4()}$ext';
+    final ref = _storage.ref().child('$folder/$fileName');
+
+    final uploadTask = ref.putFile(
+      file,
+      SettableMetadata(contentType: _contentTypeForExt(ext)),
+    );
+
+    final snapshot = await uploadTask;
+    return await snapshot.ref.getDownloadURL();
+  }
+
+  // ─── رفع جميع المرفقات ─────────────────────────────────────────────────
+  Future<List<String>> uploadMediaFiles(
+      List<File> files, String taameemId) async {
+    final urls = <String>[];
+    for (final file in files) {
+      final url = await uploadAttachment(file, 'taameems/$taameemId');
+      urls.add(url);
+    }
+    return urls;
+  }
+
   // ─── حذف صورة ────────────────────────────────────────────────────────────
   Future<void> deleteImage(String url) async {
     try {
@@ -65,6 +91,50 @@ class StorageService {
       await ref.delete();
     } catch (_) {
       // تجاهل خطأ إذا الصورة غير موجودة
+    }
+  }
+
+  String _extension(String path) {
+    final idx = path.lastIndexOf('.');
+    if (idx < 0 || idx == path.length - 1) return '';
+    return path.substring(idx).toLowerCase();
+  }
+
+  String _contentTypeForExt(String ext) {
+    switch (ext) {
+      case '.jpg':
+      case '.jpeg':
+        return 'image/jpeg';
+      case '.png':
+        return 'image/png';
+      case '.webp':
+        return 'image/webp';
+      case '.heic':
+        return 'image/heic';
+      case '.mp4':
+        return 'video/mp4';
+      case '.mov':
+        return 'video/quicktime';
+      case '.avi':
+        return 'video/x-msvideo';
+      case '.pdf':
+        return 'application/pdf';
+      case '.doc':
+        return 'application/msword';
+      case '.docx':
+        return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      case '.xls':
+        return 'application/vnd.ms-excel';
+      case '.xlsx':
+        return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      case '.ppt':
+        return 'application/vnd.ms-powerpoint';
+      case '.pptx':
+        return 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+      case '.txt':
+        return 'text/plain';
+      default:
+        return 'application/octet-stream';
     }
   }
 }

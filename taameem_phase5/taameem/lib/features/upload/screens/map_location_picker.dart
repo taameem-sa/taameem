@@ -1,4 +1,4 @@
-import 'dart:ui' as ui;
+﻿import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,7 +32,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'حدد الموقع على الخريطة',
+          'ط­ط¯ط¯ ط§ظ„ظ…ظˆظ‚ط¹ ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط©',
           style: GoogleFonts.cairo(
             fontSize: 16,
             fontWeight: FontWeight.w700,
@@ -80,7 +80,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                                 color: Colors.white, width: 3),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.emerald.withOpacity(0.4),
+                                color: AppColors.emerald.withValues(alpha: 0.4),
                                 blurRadius: 10,
                               ),
                             ],
@@ -103,7 +103,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
             ],
           ),
 
-          // تعليمة للمستخدم
+          // طھط¹ظ„ظٹظ…ط© ظ„ظ„ظ…ط³طھط®ط¯ظ…
           Positioned(
             top: 12,
             left: 16,
@@ -117,7 +117,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                 border: Border.all(color: AppColors.glassBorder),
               ),
               child: Text(
-                'اضغط على الخريطة لتحديد موقع التعميم',
+                'ط§ط¶ط؛ط· ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط© ظ„طھط­ط¯ظٹط¯ ظ…ظˆظ‚ط¹ ط§ظ„طھط¹ظ…ظٹظ…',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.cairo(
                   fontSize: 13,
@@ -127,7 +127,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
             ),
           ),
 
-          // زر التأكيد
+          // ط²ط± ط§ظ„طھط£ظƒظٹط¯
           Positioned(
             bottom: 24,
             left: 16,
@@ -143,7 +143,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.emerald.withOpacity(0.35),
+                      color: AppColors.emerald.withValues(alpha: 0.35),
                       blurRadius: 14,
                       offset: const Offset(0, 5),
                     ),
@@ -157,7 +157,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                           color: Colors.white, size: 20),
                       const SizedBox(width: 8),
                       Text(
-                        'تأكيد الموقع',
+                        'طھط£ظƒظٹط¯ ط§ظ„ظ…ظˆظ‚ط¹',
                         style: GoogleFonts.cairo(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -192,3 +192,4 @@ class _TrianglePainter extends CustomPainter {
   @override
   bool shouldRepaint(_TrianglePainter old) => false;
 }
+
