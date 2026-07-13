@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:taameem/core/constants/app_colors.dart';
 import 'package:taameem/core/widgets/animated_background.dart';
 import 'login_screen.dart';
@@ -56,9 +55,9 @@ class _SplashScreenState extends State<SplashScreen> {
               const SizedBox(height: 28),
 
               // ─── اسم التطبيق ───────────────────────────────────────────
-              Text(
+              const Text(
                 'تعميم',
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 36,
                   fontWeight: FontWeight.w800,
                   color: AppColors.nearBlack,
@@ -69,9 +68,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   .fadeIn(duration: 500.ms)
                   .slideY(begin: 0.3, end: 0),
 
-              Text(
+              const Text(
                 'T A A M E E M',
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: AppColors.gold,
@@ -83,9 +82,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
               const SizedBox(height: 16),
 
-              Text(
+              const Text(
                 'أمان وتواصل المجتمع',
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                   color: AppColors.forestGreen,
@@ -108,15 +107,15 @@ class _TaameemLogo extends StatelessWidget {
     return CustomPaint(
       size: const Size(120, 140),
       painter: _ShieldPainter(),
-      child: SizedBox(
+      child: const SizedBox(
         width: 120,
         height: 140,
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 12),
+            padding: EdgeInsets.only(bottom: 12),
             child: Text(
               'ت',
-              style: GoogleFonts.cairo(
+              style: TextStyle(fontFamily: 'Tajawal',
                 fontSize: 56,
                 fontWeight: FontWeight.w700,
                 color: AppColors.white,
@@ -142,7 +141,7 @@ class _ShieldPainter extends CustomPainter {
     canvas.drawPath(path, shadowPaint);
 
     // تدرج أخضر
-    final gradient = LinearGradient(
+    const gradient = LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
@@ -198,3 +197,4 @@ class _ShieldPainter extends CustomPainter {
   @override
   bool shouldRepaint(_ShieldPainter oldDelegate) => false;
 }
+

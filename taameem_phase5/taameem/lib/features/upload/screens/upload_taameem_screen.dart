@@ -1,9 +1,10 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/models/taameem_model.dart';
@@ -25,6 +26,7 @@ class UploadTaameemScreen extends StatefulWidget {
 }
 
 class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
@@ -35,8 +37,8 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
   bool _isLoading = false;
   String? _locationText;
 
-  // ظ…ط±ط§ط­ظ„ ط§ظ„ط¹ط±ط¶
-  int _currentStep = 0; // 0: ط§ظ„ظ†ظˆط¹ | 1: ط§ظ„طھظپط§طµظٹظ„ | 2: ط§ظ„ظ…ظˆظ‚ط¹ | 3: ط§ظ„ظ…ط±ط§ط¬ط¹ط©
+  // مراحل العرض
+  int _currentStep = 0; // 0: النوع | 1: التفاصيل | 2: الموقع | 3: المراجعة
 
   @override
   void initState() {
@@ -57,8 +59,8 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
       setState(() {
         _location = loc;
         _locationText = loc != null
-            ? 'طھظ… طھط­ط¯ظٹط¯ ظ…ظˆظ‚ط¹ظƒ طھظ„ظ‚ط§ط¦ظٹط§ظ‹'
-            : 'طھط¹ط°ط± طھط­ط¯ظٹط¯ ظ…ظˆظ‚ط¹ظƒ طھظ„ظ‚ط§ط¦ظٹط§ظ‹. ط§ط³طھط®ط¯ظ… ط§ظ„طھط­ط¯ظٹط¯ ط§ظ„ظٹط¯ظˆظٹ ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط©.';
+            ? 'تم تحديد موقعك تلقائياً'
+            : 'تعذر تحديد موقعك تلقائياً. استخدم التحديد اليدوي على الخريطة.';
       });
     }
   }
@@ -76,7 +78,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
       setState(() {
         _location = result;
         _locationText =
-            'طھظ… طھط­ط¯ظٹط¯ ط§ظ„ظ…ظˆظ‚ط¹ ظٹط¯ظˆظٹط§ظ‹ (${result.latitude.toStringAsFixed(4)}, ${result.longitude.toStringAsFixed(4)})';
+            'تم تحديد الموقع يدوياً (${result.latitude.toStringAsFixed(4)}, ${result.longitude.toStringAsFixed(4)})';
       });
     }
   }
@@ -124,27 +126,47 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
     }
   }
 
+  Future<({String userId, String userPhone})> _resolvePublisherIdentity() async {
+    final existing = _auth.currentUser;
+    if (existing != null) {
+      return (
+        userId: existing.uid,
+        userPhone: existing.phoneNumber ?? '',
+      );
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    var guestId = prefs.getString('guest_user_id');
+    if (guestId == null || guestId.isEmpty) {
+      guestId = 'guest_${DateTime.now().millisecondsSinceEpoch}';
+      await prefs.setString('guest_user_id', guestId);
+    }
+
+    return (userId: guestId, userPhone: '');
+  }
+
   Future<void> _submitTaameem() async {
     if (!_canProceed) return;
     setState(() => _isLoading = true);
 
     try {
-      final userId = 'temp_user'; // TODO: Firebase Auth UID
-      final userPhone = '+9665XXXXXXXX'; // TODO: Firebase Auth Phone
+      final identity = await _resolvePublisherIdentity();
+      final userId = identity.userId;
+      final userPhone = identity.userPhone;
 
-      // ط±ظپط¹ ط§ظ„طµظˆط± ط£ظˆظ„ط§ظ‹
+      // رفع الصور أولاً
       List<String> imageUrls = [];
       if (_images.isNotEmpty) {
-        final tempId = DateTime.now().millisecondsSinceEpoch.toString();
+        final tempId = '${identity.userId}_${DateTime.now().millisecondsSinceEpoch}';
         imageUrls = await StorageService.instance.uploadImages(_images, tempId);
       }
 
-      // ط­ط³ط§ط¨ طھط§ط±ظٹط® ط§ظ„ط§ظ†طھظ‡ط§ط،
+      // حساب تاريخ الانتهاء
       final days = AppConstants.decayDays[_selectedType!] ?? 3;
       final now = DateTime.now();
       final expiry = now.add(Duration(days: days));
 
-      // ط¥ظ†ط´ط§ط، ظ†ظ…ظˆط°ط¬ ط§ظ„طھط¹ظ…ظٹظ…
+      // إنشاء نموذج التعميم
       final taameem = TaameemModel(
         id: '',
         userId: userId,
@@ -160,7 +182,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
         status: 'active',
       );
 
-      // ط±ظپط¹ ظپظٹ Firestore
+      // رفع في Firestore
       final uploadedId = await FirestoreService.instance.uploadTaameem(taameem);
 
       final publishedTaameem = TaameemModel(
@@ -189,11 +211,11 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
 
       if (!mounted) return;
 
-      // ظ†ط¬ط§ط­
+      // نجاح
       _showSuccessDialog();
     } catch (e) {
       if (!mounted) return;
-      _showError('ط­ط¯ط« ط®ط·ط£طŒ ط­ط§ظˆظ„ ظ…ط±ط© ط£ط®ط±ظ‰');
+      _showError(e.toString().replaceFirst('Exception: ', ''));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -225,19 +247,19 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              Text(
-                'طھظ… ظ†ط´ط± ط§ظ„طھط¹ظ…ظٹظ… ط¨ظ†ط¬ط§ط­',
-                style: GoogleFonts.cairo(
+              const Text(
+                'تم نشر التعميم بنجاح',
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: AppColors.nearBlack,
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                'ط³ظٹط¸ظ‡ط± طھط¹ظ…ظٹظ…ظƒ ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط© ط§ظ„ط¢ظ†\nظˆط³ظٹظڈط±ط³ظ„ ط¥ط´ط¹ط§ط± ظ„ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† ط§ظ„ظ‚ط±ظٹط¨ظٹظ†',
+              const Text(
+                'سيظهر تعميمك على الخريطة الآن\nوسيُرسل إشعار للمستخدمين القريبين',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 13,
                   color: AppColors.forestGreen,
                   height: 1.6,
@@ -258,10 +280,10 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
                     ),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
-                      'ط±ط§ط¦ط¹طŒ ط¹ظˆط¯ط© ظ„ظ„ط®ط±ظٹط·ط©',
-                      style: GoogleFonts.cairo(
+                      'رائع، عودة للخريطة',
+                      style: TextStyle(fontFamily: 'Tajawal',
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -280,7 +302,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
   void _showError(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(msg, style: GoogleFonts.cairo()),
+        content: Text(msg, style: const TextStyle(fontFamily: 'Tajawal',)),
         backgroundColor: AppColors.error,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -312,13 +334,13 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
     );
   }
 
-  // â”€â”€â”€ ط±ط£ط³ ط§ظ„طµظپط­ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── رأس الصفحة ────────────────────────────────────────────────────────────
   Widget _buildHeader() {
     final titles = [
-      'ط§ط®طھط± ظ†ظˆط¹ ط§ظ„طھط¹ظ…ظٹظ…',
-      'ط§ظ„طھظپط§طµظٹظ„',
-      'ط§ظ„ظ…ظˆظ‚ط¹ ظˆط§ظ„طµظˆط±',
-      'ظ…ط±ط§ط¬ط¹ط© ظˆظ†ط´ط±'
+      'اختر نوع التعميم',
+      'التفاصيل',
+      'الموقع والصور',
+      'مراجعة ونشر'
     ];
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -344,7 +366,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
           Expanded(
             child: Text(
               titles[_currentStep],
-              style: GoogleFonts.cairo(
+              style: const TextStyle(fontFamily: 'Tajawal',
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: AppColors.nearBlack,
@@ -353,7 +375,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
           ),
           Text(
             '${_currentStep + 1}/4',
-            style: GoogleFonts.cairo(
+            style: const TextStyle(fontFamily: 'Tajawal',
               fontSize: 13,
               color: AppColors.grey,
             ),
@@ -363,7 +385,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
     );
   }
 
-  // â”€â”€â”€ ط´ط±ظٹط· ط§ظ„طھظ‚ط¯ظ… â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── شريط التقدم ───────────────────────────────────────────────────────────
   Widget _buildProgressBar() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -385,7 +407,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
     );
   }
 
-  // â”€â”€â”€ ظ…ط­طھظˆظ‰ ط§ظ„ط®ط·ظˆط© ط§ظ„ط­ط§ظ„ظٹط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── محتوى الخطوة الحالية ──────────────────────────────────────────────────
   Widget _buildCurrentStep() {
     switch (_currentStep) {
       case 0:
@@ -401,7 +423,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
     }
   }
 
-  // â”€â”€â”€ ط§ظ„ط®ط·ظˆط© 1: ط§ظ„ظ†ظˆط¹ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── الخطوة 1: النوع ───────────────────────────────────────────────────────
   Widget _buildStepType() {
     return GlassCard(
       showGoldLine: true,
@@ -409,9 +431,9 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'ظ…ط§ ط·ط¨ظٹط¹ط© ط§ظ„طھط¹ظ…ظٹظ… ط§ظ„ط°ظٹ طھط±ظٹط¯ ظ†ط´ط±ظ‡طں',
-            style: GoogleFonts.cairo(
+          const Text(
+            'ما طبيعة التعميم الذي تريد نشره؟',
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 14,
               color: AppColors.forestGreen,
             ),
@@ -426,7 +448,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
     ).animate().fadeIn(duration: 300.ms);
   }
 
-  // â”€â”€â”€ ط§ظ„ط®ط·ظˆط© 2: ط§ظ„طھظپط§طµظٹظ„ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── الخطوة 2: التفاصيل ────────────────────────────────────────────────────
   Widget _buildStepDetails() {
     return GlassCard(
       showGoldLine: true,
@@ -436,16 +458,16 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _fieldLabel('ط§ظ„ط¹ظ†ظˆط§ظ† *'),
+            _fieldLabel('العنوان *'),
             const SizedBox(height: 8),
             TextFormField(
               controller: _titleController,
               style:
-                  GoogleFonts.cairo(fontSize: 15, color: AppColors.nearBlack),
+                  const TextStyle(fontFamily: 'Tajawal',fontSize: 15, color: AppColors.nearBlack),
               decoration: InputDecoration(
-                hintText: 'ظ…ط«ط§ظ„: ط³ظٹط§ط±ط© ظƒط§ظ…ط±ظٹ ط¨ظٹط¶ط§ط، ظ…ط³ط±ظˆظ‚ط©',
+                hintText: 'مثال: سيارة كامري بيضاء مسروقة',
                 hintStyle:
-                    GoogleFonts.cairo(color: AppColors.grey, fontSize: 13),
+                    const TextStyle(fontFamily: 'Tajawal',color: AppColors.grey, fontSize: 13),
                 filled: true,
                 fillColor: AppColors.warmBeige,
                 border: OutlineInputBorder(
@@ -466,17 +488,17 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
               onChanged: (_) => setState(() {}),
             ),
             const SizedBox(height: 16),
-            _fieldLabel('ط§ظ„ظˆطµظپ ط§ظ„طھظپطµظٹظ„ظٹ'),
+            _fieldLabel('الوصف التفصيلي'),
             const SizedBox(height: 8),
             TextFormField(
               controller: _descController,
               style:
-                  GoogleFonts.cairo(fontSize: 14, color: AppColors.nearBlack),
+                  const TextStyle(fontFamily: 'Tajawal',fontSize: 14, color: AppColors.nearBlack),
               decoration: InputDecoration(
                 hintText:
-                    'ط£ط¶ظپ ط£ظٹ طھظپط§طµظٹظ„ ظ…ظپظٹط¯ط©: ط§ظ„ظ„ظˆظ†طŒ ط§ظ„ط¹ظ„ط§ظ…ط§طھ ط§ظ„ظ…ظ…ظٹط²ط©طŒ ط¢ط®ط± ظ…ظƒط§ظ†...',
+                    'أضف أي تفاصيل مفيدة: اللون، العلامات المميزة، آخر مكان...',
                 hintStyle:
-                    GoogleFonts.cairo(color: AppColors.grey, fontSize: 12),
+                    const TextStyle(fontFamily: 'Tajawal',color: AppColors.grey, fontSize: 12),
                 filled: true,
                 fillColor: AppColors.warmBeige,
                 border: OutlineInputBorder(
@@ -503,7 +525,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
     ).animate().fadeIn(duration: 300.ms);
   }
 
-  // â”€â”€â”€ ط§ظ„ط®ط·ظˆط© 3: ط§ظ„ظ…ظˆظ‚ط¹ ظˆط§ظ„طµظˆط± â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── الخطوة 3: الموقع والصور ───────────────────────────────────────────────
   Widget _buildStepLocationAndMedia() {
     return Column(
       children: [
@@ -513,11 +535,11 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _fieldLabel('ط§ظ„ظ…ظˆظ‚ط¹ ط§ظ„ط¬ط؛ط±ط§ظپظٹ'),
+              _fieldLabel('الموقع الجغرافي'),
               const SizedBox(height: 12),
               Column(
                 children: [
-                  // ط²ط± ط§ظ„ظ…ظˆظ‚ط¹ ط§ظ„طھظ„ظ‚ط§ط¦ظٹ
+                  // زر الموقع التلقائي
                   GestureDetector(
                     onTap: _fetchLocation,
                     child: Container(
@@ -548,8 +570,8 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              _locationText ?? 'ط§ط¶ط؛ط· ظ„طھط­ط¯ظٹط¯ ظ…ظˆظ‚ط¹ظƒ طھظ„ظ‚ط§ط¦ظٹط§ظ‹',
-                              style: GoogleFonts.cairo(
+                              _locationText ?? 'اضغط لتحديد موقعك تلقائياً',
+                              style: TextStyle(fontFamily: 'Tajawal',
                                 fontSize: 13,
                                 color: _location != null
                                     ? AppColors.forestGreen
@@ -567,7 +589,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
 
                   const SizedBox(height: 10),
 
-                  // ط²ط± ط§ظ„طھط­ط¯ظٹط¯ ط§ظ„ظٹط¯ظˆظٹ ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط©
+                  // زر التحديد اليدوي على الخريطة
                   GestureDetector(
                     onTap: _pickLocationManually,
                     child: Container(
@@ -578,14 +600,14 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(color: AppColors.glassBorder),
                       ),
-                      child: Row(
+                      child: const Row(
                         children: [
-                            const Icon(Icons.map_rounded,
+                            Icon(Icons.map_rounded,
                               color: AppColors.emerald, size: 22),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10),
                           Text(
-                            'طھط­ط¯ظٹط¯ ط§ظ„ظ…ظˆظ‚ط¹ ظٹط¯ظˆظٹط§ظ‹ ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط©',
-                            style: GoogleFonts.cairo(
+                            'تحديد الموقع يدوياً على الخريطة',
+                            style: TextStyle(fontFamily: 'Tajawal',
                               fontSize: 13,
                               color: AppColors.forestGreen,
                               fontWeight: FontWeight.w500,
@@ -606,7 +628,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _fieldLabel('ط§ظ„طµظˆط± (ط§ط®طھظٹط§ط±ظٹ â€” ط­طھظ‰ 4 طµظˆط±)'),
+              _fieldLabel('الصور (اختياري — حتى 4 صور)'),
               const SizedBox(height: 12),
               ImagePickerWidget(
                 images: _images,
@@ -621,7 +643,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
     ).animate().fadeIn(duration: 300.ms);
   }
 
-  // â”€â”€â”€ ط§ظ„ط®ط·ظˆط© 4: ط§ظ„ظ…ط±ط§ط¬ط¹ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── الخطوة 4: المراجعة ────────────────────────────────────────────────────
   Widget _buildStepReview() {
     final typeColor =
         _selectedType != null ? _colorForType(_selectedType!) : AppColors.grey;
@@ -632,54 +654,54 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'ظ…ط±ط§ط¬ط¹ط© ط§ظ„طھط¹ظ…ظٹظ… ظ‚ط¨ظ„ ط§ظ„ظ†ط´ط±',
-            style: GoogleFonts.cairo(
+          const Text(
+            'مراجعة التعميم قبل النشر',
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 14,
               color: AppColors.forestGreen,
             ),
           ),
           const SizedBox(height: 20),
 
-          // ظ†ظˆط¹ ط§ظ„طھط¹ظ…ظٹظ…
+          // نوع التعميم
           _ReviewRow(
-            label: 'ط§ظ„ظ†ظˆط¹',
+            label: 'النوع',
             value: AppConstants.categoryNames[_selectedType] ?? '',
             color: typeColor,
           ),
 
           _ReviewRow(
-            label: 'ط§ظ„ط¹ظ†ظˆط§ظ†',
+            label: 'العنوان',
             value: _titleController.text.trim(),
           ),
 
           if (_descController.text.isNotEmpty)
             _ReviewRow(
-              label: 'ط§ظ„ظˆطµظپ',
+              label: 'الوصف',
               value: _descController.text.trim(),
             ),
 
           _ReviewRow(
-            label: 'ط§ظ„ظ…ظˆظ‚ط¹',
-            value: _locationText ?? 'ط؛ظٹط± ظ…ط­ط¯ط¯',
+            label: 'الموقع',
+            value: _locationText ?? 'غير محدد',
             icon: Icons.location_on_rounded,
           ),
 
           _ReviewRow(
-            label: 'ط§ظ„طµظˆط±',
-            value: '${_images.length} طµظˆط±ط©',
+            label: 'الصور',
+            value: '${_images.length} صورة',
             icon: Icons.photo_rounded,
           ),
 
           _ReviewRow(
-            label: 'ظ…ط¯ط© ط§ظ„ظ†ط´ط±',
-            value: '${AppConstants.decayDays[_selectedType] ?? 3} ط£ظٹط§ظ…',
+            label: 'مدة النشر',
+            value: '${AppConstants.decayDays[_selectedType] ?? 3} أيام',
             icon: Icons.timer_outlined,
           ),
 
           const SizedBox(height: 20),
 
-          // طھظ†ط¨ظٹظ‡
+          // تنبيه
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -687,15 +709,15 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.gold.withValues(alpha: 0.3)),
             ),
-            child: Row(
+            child: const Row(
               children: [
-                const Icon(Icons.info_outline_rounded,
+                Icon(Icons.info_outline_rounded,
                     size: 18, color: AppColors.gold),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'ط¨ط¹ط¯ ط§ظ„ظ†ط´ط± ط³طھطھظ„ظ‚ظ‰ ط¥ط´ط¹ط§ط±ط§ظ‹ ط¥ط°ط§ ظˆط¬ط¯ طھط·ط§ط¨ظ‚ ظ…ط¹ طھط¹ظ…ظٹظ…ط§طھ ط£ط®ط±ظ‰',
-                    style: GoogleFonts.cairo(
+                    'بعد النشر ستتلقى إشعاراً إذا وجد تطابق مع تعميمات أخرى',
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 12,
                       color: AppColors.forestGreen,
                       height: 1.5,
@@ -710,7 +732,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
     ).animate().fadeIn(duration: 300.ms);
   }
 
-  // â”€â”€â”€ ط£ط²ط±ط§ط± ط§ظ„ط£ط³ظپظ„ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── أزرار الأسفل ──────────────────────────────────────────────────────────
   Widget _buildBottomButtons() {
     final isLastStep = _currentStep == 3;
 
@@ -756,8 +778,8 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
                             color: Colors.white, strokeWidth: 2),
                       )
                     : Text(
-                        isLastStep ? 'ظ†ط´ط± ط§ظ„طھط¹ظ…ظٹظ… ط§ظ„ط¢ظ†' : 'ط§ظ„طھط§ظ„ظٹ',
-                        style: GoogleFonts.cairo(
+                        isLastStep ? 'نشر التعميم الآن' : 'التالي',
+                        style: const TextStyle(fontFamily: 'Tajawal',
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -774,7 +796,7 @@ class _UploadTaameemScreenState extends State<UploadTaameemScreen> {
   Widget _fieldLabel(String text) {
     return Text(
       text,
-      style: GoogleFonts.cairo(
+      style: const TextStyle(fontFamily: 'Tajawal',
         fontSize: 13,
         fontWeight: FontWeight.w600,
         color: AppColors.forestGreen,
@@ -834,7 +856,7 @@ class _ReviewRow extends StatelessWidget {
             width: 70,
             child: Text(
               label,
-              style: GoogleFonts.cairo(
+              style: const TextStyle(fontFamily: 'Tajawal',
                 fontSize: 12,
                 color: AppColors.grey,
               ),
@@ -850,7 +872,7 @@ class _ReviewRow extends StatelessWidget {
                 Expanded(
                   child: Text(
                     value,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: color ?? AppColors.nearBlack,
@@ -865,4 +887,5 @@ class _ReviewRow extends StatelessWidget {
     );
   }
 }
+
 

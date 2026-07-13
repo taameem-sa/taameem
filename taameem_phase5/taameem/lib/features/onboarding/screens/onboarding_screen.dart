@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/animated_background.dart';
@@ -86,9 +85,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 12, 0, 0),
                   child: GestureDetector(
                     onTap: _finish,
-                    child: Text(
+                    child: const Text(
                       'تخطي',
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(fontFamily: 'Tajawal',
                         fontSize: 13,
                         color: AppColors.grey,
                       ),
@@ -167,7 +166,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         _currentPage < _pages.length - 1
                             ? 'التالي'
                             : 'ابدأ الآن',
-                        style: GoogleFonts.cairo(
+                        style: const TextStyle(fontFamily: 'Tajawal',
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -208,7 +207,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           Text(
             page.title,
-            style: GoogleFonts.cairo(
+            style: const TextStyle(fontFamily: 'Tajawal',
               fontSize: 26,
               fontWeight: FontWeight.w800,
               color: AppColors.nearBlack,
@@ -224,7 +223,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           Text(
             page.subtitle,
-            style: GoogleFonts.cairo(
+            style: const TextStyle(fontFamily: 'Tajawal',
               fontSize: 15,
               color: AppColors.forestGreen,
               height: 1.7,
@@ -259,3 +258,4 @@ class _OnboardPage {
     required this.color,
   });
 }
+

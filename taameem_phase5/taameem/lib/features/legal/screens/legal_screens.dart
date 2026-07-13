@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/animated_background.dart';
 import '../../../core/widgets/glass_card.dart';
@@ -13,10 +12,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _LegalScreen(
+    return const _LegalScreen(
       title: 'سياسة الخصوصية',
       icon: Icons.privacy_tip_outlined,
-      sections: const [
+      sections: [
         _LegalSection(
           title: '1. المعلومات التي نجمعها',
           content:
@@ -77,10 +76,10 @@ class TermsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _LegalScreen(
+    return const _LegalScreen(
       title: 'شروط الاستخدام',
       icon: Icons.gavel_outlined,
-      sections: const [
+      sections: [
         _LegalSection(
           title: '1. القبول بالشروط',
           content:
@@ -183,7 +182,7 @@ class _LegalScreen extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       title,
-                      style: GoogleFonts.cairo(
+                      style: const TextStyle(fontFamily: 'Tajawal',
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                         color: AppColors.nearBlack,
@@ -205,7 +204,7 @@ class _LegalScreen extends StatelessWidget {
                       children: [
                         Text(
                           sections[i].title,
-                          style: GoogleFonts.cairo(
+                          style: const TextStyle(fontFamily: 'Tajawal',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: AppColors.emerald,
@@ -214,7 +213,7 @@ class _LegalScreen extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           sections[i].content,
-                          style: GoogleFonts.cairo(
+                          style: const TextStyle(fontFamily: 'Tajawal',
                             fontSize: 13,
                             color: AppColors.forestGreen,
                             height: 1.7,
@@ -240,3 +239,4 @@ class _LegalSection {
   final String content;
   const _LegalSection({required this.title, required this.content});
 }
+

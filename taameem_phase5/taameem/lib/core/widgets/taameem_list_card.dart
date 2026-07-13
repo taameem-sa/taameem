@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 import '../models/taameem_model.dart';
 
@@ -88,7 +87,7 @@ class TaameemListCard extends StatelessWidget {
                                     ),
                                     child: Text(
                                       taameem.mapLabel,
-                                      style: GoogleFonts.cairo(
+                                      style: TextStyle(fontFamily: 'Tajawal',
                                         fontSize: 10,
                                         fontWeight: FontWeight.w700,
                                         color: color,
@@ -104,9 +103,9 @@ class TaameemListCard extends StatelessWidget {
                                         color: AppColors.grey.withValues(alpha: 0.12),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
-                                      child: Text(
+                                      child: const Text(
                                         'منتهي',
-                                        style: GoogleFonts.cairo(
+                                        style: TextStyle(fontFamily: 'Tajawal',
                                           fontSize: 10,
                                           color: AppColors.grey,
                                         ),
@@ -115,7 +114,7 @@ class TaameemListCard extends StatelessWidget {
                                   const Spacer(),
                                   Text(
                                     taameem.timeAgo,
-                                    style: GoogleFonts.cairo(
+                                    style: const TextStyle(fontFamily: 'Tajawal',
                                       fontSize: 10,
                                       color: AppColors.grey,
                                     ),
@@ -128,7 +127,7 @@ class TaameemListCard extends StatelessWidget {
                               // العنوان
                               Text(
                                 taameem.title,
-                                style: GoogleFonts.cairo(
+                                style: const TextStyle(fontFamily: 'Tajawal',
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                   color: AppColors.nearBlack,
@@ -143,7 +142,7 @@ class TaameemListCard extends StatelessWidget {
                                 const SizedBox(height: 4),
                                 Text(
                                   taameem.description,
-                                  style: GoogleFonts.cairo(
+                                  style: const TextStyle(fontFamily: 'Tajawal',
                                     fontSize: 12,
                                     color: AppColors.forestGreen,
                                     height: 1.5,
@@ -164,7 +163,7 @@ class TaameemListCard extends StatelessWidget {
                                     const SizedBox(width: 3),
                                     Text(
                                       taameem.city,
-                                      style: GoogleFonts.cairo(
+                                      style: const TextStyle(fontFamily: 'Tajawal',
                                         fontSize: 11,
                                         color: AppColors.grey,
                                       ),
@@ -176,7 +175,7 @@ class TaameemListCard extends StatelessWidget {
                                   const SizedBox(width: 3),
                                   Text(
                                     '${taameem.viewCount}',
-                                    style: GoogleFonts.cairo(
+                                    style: const TextStyle(fontFamily: 'Tajawal',
                                       fontSize: 11,
                                       color: AppColors.grey,
                                     ),
@@ -241,7 +240,7 @@ class TaameemListCard extends StatelessWidget {
       child: Center(
         child: Text(
           taameem.mapLabel,
-          style: GoogleFonts.cairo(
+          style: TextStyle(fontFamily: 'Tajawal',
             fontSize: 11,
             fontWeight: FontWeight.w700,
             color: color,
@@ -252,3 +251,4 @@ class TaameemListCard extends StatelessWidget {
     );
   }
 }
+

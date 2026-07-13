@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:taameem/core/constants/app_colors.dart';
 import 'package:taameem/core/widgets/animated_background.dart';
@@ -120,9 +119,9 @@ class _OtpScreenState extends State<OtpScreen> {
 
                 const SizedBox(height: 28),
 
-                Text(
+                const Text(
                   'التحقق من رقم الهاتف',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                     color: AppColors.nearBlack,
@@ -136,7 +135,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 Text(
                   'تم إرسال رمز التحقق إلى\n${widget.phoneNumber}',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.cairo(
+                  style: const TextStyle(fontFamily: 'Tajawal',
                     fontSize: 14,
                     color: AppColors.forestGreen,
                     height: 1.6,
@@ -158,7 +157,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         length: 6,
                         obscureText: false,
                         animationType: AnimationType.fade,
-                        textStyle: GoogleFonts.cairo(
+                        textStyle: const TextStyle(fontFamily: 'Tajawal',
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                           color: AppColors.nearBlack,
@@ -192,9 +191,9 @@ class _OtpScreenState extends State<OtpScreen> {
 
                       if (_isError) ...[
                         const SizedBox(height: 8),
-                        Text(
+                        const Text(
                           'رمز التحقق غير صحيح، حاول مرة أخرى',
-                          style: GoogleFonts.cairo(
+                          style: TextStyle(fontFamily: 'Tajawal',
                             fontSize: 13,
                             color: AppColors.error,
                           ),
@@ -233,9 +232,9 @@ class _OtpScreenState extends State<OtpScreen> {
                                       strokeWidth: 2,
                                     ),
                                   )
-                                : Text(
+                                : const Text(
                                     'تحقق وادخل',
-                                    style: GoogleFonts.cairo(
+                                    style: TextStyle(fontFamily: 'Tajawal',
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
                                       color: AppColors.white,
@@ -266,7 +265,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     _resendTimer > 0
                         ? 'إعادة الإرسال خلال $_resendTimer ثانية'
                         : 'إعادة إرسال الرمز',
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 14,
                       color: _resendTimer > 0
                           ? AppColors.grey
@@ -287,3 +286,4 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 }
+

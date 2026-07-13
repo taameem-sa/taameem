@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 
 class AdminStatsCard extends StatelessWidget {
@@ -65,7 +64,7 @@ class AdminStatsCard extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 value,
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
                   color: color,
@@ -74,7 +73,7 @@ class AdminStatsCard extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 label,
-                style: GoogleFonts.cairo(
+                style: const TextStyle(fontFamily: 'Tajawal',
                   fontSize: 12,
                   color: AppColors.grey,
                 ),
@@ -93,3 +92,4 @@ class AdminStatsCard extends StatelessWidget {
         );
   }
 }
+

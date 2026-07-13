@@ -1,7 +1,6 @@
-﻿import 'dart:ui' as ui;
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import '../../../core/constants/app_colors.dart';
 
@@ -31,9 +30,9 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
         backgroundColor: AppColors.creamWhite,
         elevation: 0,
         centerTitle: true,
-        title: Text(
-          'ط­ط¯ط¯ ط§ظ„ظ…ظˆظ‚ط¹ ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط©',
-          style: GoogleFonts.cairo(
+        title: const Text(
+          'حدد الموقع على الخريطة',
+          style: TextStyle(fontFamily: 'Tajawal',
             fontSize: 16,
             fontWeight: FontWeight.w700,
             color: AppColors.nearBlack,
@@ -103,7 +102,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
             ],
           ),
 
-          // طھط¹ظ„ظٹظ…ط© ظ„ظ„ظ…ط³طھط®ط¯ظ…
+          // تعليمة للمستخدم
           Positioned(
             top: 12,
             left: 16,
@@ -116,10 +115,10 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.glassBorder),
               ),
-              child: Text(
-                'ط§ط¶ط؛ط· ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط© ظ„طھط­ط¯ظٹط¯ ظ…ظˆظ‚ط¹ ط§ظ„طھط¹ظ…ظٹظ…',
+              child: const Text(
+                'اضغط على الخريطة لتحديد موقع التعميم',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 13,
                   color: AppColors.forestGreen,
                 ),
@@ -127,7 +126,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
             ),
           ),
 
-          // ط²ط± ط§ظ„طھط£ظƒظٹط¯
+          // زر التأكيد
           Positioned(
             bottom: 24,
             left: 16,
@@ -149,16 +148,16 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                     ),
                   ],
                 ),
-                child: Center(
+                child: const Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.check_rounded,
+                      Icon(Icons.check_rounded,
                           color: Colors.white, size: 20),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
-                        'طھط£ظƒظٹط¯ ط§ظ„ظ…ظˆظ‚ط¹',
-                        style: GoogleFonts.cairo(
+                        'تأكيد الموقع',
+                        style: TextStyle(fontFamily: 'Tajawal',
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -192,4 +191,5 @@ class _TrianglePainter extends CustomPainter {
   @override
   bool shouldRepaint(_TrianglePainter old) => false;
 }
+
 

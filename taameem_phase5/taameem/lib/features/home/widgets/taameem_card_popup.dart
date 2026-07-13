@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 
 class TaameemCardPopup extends StatelessWidget {
@@ -74,7 +73,7 @@ class TaameemCardPopup extends StatelessWidget {
                       child: Center(
                         child: Text(
                           taameem['label'],
-                          style: GoogleFonts.cairo(
+                          style: TextStyle(fontFamily: 'Tajawal',
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
                             color: typeColor,
@@ -93,7 +92,7 @@ class TaameemCardPopup extends StatelessWidget {
                         children: [
                           Text(
                             taameem['title'],
-                            style: GoogleFonts.cairo(
+                            style: const TextStyle(fontFamily: 'Tajawal',
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                               color: AppColors.nearBlack,
@@ -104,7 +103,7 @@ class TaameemCardPopup extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             taameem['description'],
-                            style: GoogleFonts.cairo(
+                            style: const TextStyle(fontFamily: 'Tajawal',
                               fontSize: 12,
                               color: AppColors.forestGreen,
                               height: 1.5,
@@ -120,7 +119,7 @@ class TaameemCardPopup extends StatelessWidget {
                               const SizedBox(width: 4),
                               Text(
                                 taameem['time'],
-                                style: GoogleFonts.cairo(
+                                style: const TextStyle(fontFamily: 'Tajawal',
                                     fontSize: 11, color: AppColors.grey),
                               ),
                             ],
@@ -158,10 +157,10 @@ class TaameemCardPopup extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               'عرض التفاصيل',
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(fontFamily: 'Tajawal',
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -197,3 +196,4 @@ class TaameemCardPopup extends StatelessWidget {
     );
   }
 }
+

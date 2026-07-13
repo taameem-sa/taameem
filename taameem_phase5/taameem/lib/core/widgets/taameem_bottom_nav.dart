@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 
 class TaameemBottomNav extends StatelessWidget {
@@ -80,7 +79,7 @@ class TaameemBottomNav extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               item.label,
-              style: GoogleFonts.cairo(
+              style: TextStyle(fontFamily: 'Tajawal',
                 fontSize: 10,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                 color: isSelected ? AppColors.emerald : AppColors.grey,
@@ -105,3 +104,4 @@ class _NavItem {
     required this.routeIndex,
   });
 }
+

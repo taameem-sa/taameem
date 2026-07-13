@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/models/chat_message.dart';
 
@@ -100,7 +99,7 @@ class _UserBubble extends StatelessWidget {
           if (message.text != null && message.text!.isNotEmpty)
             Text(
               message.text!,
-              style: GoogleFonts.cairo(
+              style: const TextStyle(fontFamily: 'Tajawal',
                 fontSize: 14,
                 color: Colors.white,
                 height: 1.5,
@@ -142,7 +141,7 @@ class _AiBubble extends StatelessWidget {
           ),
           child: Text(
             message.text ?? '',
-            style: GoogleFonts.cairo(
+            style: const TextStyle(fontFamily: 'Tajawal',
               fontSize: 14,
               color: AppColors.nearBlack,
               height: 1.6,
@@ -179,9 +178,9 @@ class _ThinkingBubble extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    const Text(
                       'تعميم يكتب',
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(fontFamily: 'Tajawal',
                         fontSize: 12,
                         color: AppColors.grey,
                       ),
@@ -265,10 +264,10 @@ class _AiAvatar extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: AppColors.gold.withValues(alpha: 0.5), width: 1),
       ),
-      child: Center(
+      child: const Center(
         child: Text(
           'ت',
-          style: GoogleFonts.cairo(
+          style: TextStyle(fontFamily: 'Tajawal',
             fontSize: 16,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -298,3 +297,4 @@ class _UserAvatar extends StatelessWidget {
     );
   }
 }
+

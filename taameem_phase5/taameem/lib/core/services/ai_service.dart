@@ -498,3 +498,4 @@ TAAMEEM_JSON_END
     return 'فشل خدمة الذكاء ($code).';
   }
 }
+

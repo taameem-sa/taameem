@@ -1,4 +1,4 @@
-﻿import 'dart:ui';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,13 +27,12 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
   late LatLng _center;
   String? _city;
   bool _allKingdom = false;
-  bool _loading = true;
   final MapController _mapCtrl = MapController();
 
   static const List<String> _cities = [
-    'ط§ظ„ط±ظٹط§ط¶', 'ط¬ط¯ط©', 'ظ…ظƒط© ط§ظ„ظ…ظƒط±ظ…ط©', 'ط§ظ„ظ…ط¯ظٹظ†ط© ط§ظ„ظ…ظ†ظˆط±ط©',
-    'ط§ظ„ط¯ظ…ط§ظ…', 'ط§ظ„ط®ط¨ط±', 'طھط¨ظˆظƒ', 'ط£ط¨ظ‡ط§', 'ط§ظ„ظ‚طµظٹظ…',
-    'ط­ط§ط¦ظ„', 'ظ†ط¬ط±ط§ظ†', 'ط¬ظٹط²ط§ظ†', 'ط§ظ„ط¬ظˆظپ',
+    'الرياض', 'جدة', 'مكة المكرمة', 'المدينة المنورة',
+    'الدمام', 'الخبر', 'تبوك', 'أبها', 'القصيم',
+    'حائل', 'نجران', 'جيزان', 'الجوف',
   ];
 
   @override
@@ -48,7 +47,7 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
   Future<void> _loadLocation() async {
     final loc = await LocationService.instance.getCurrentOrDefaultLocation();
     if (mounted) {
-      setState(() { _center = loc; _loading = false; });
+      setState(() { _center = loc; });
       _mapCtrl.move(_center, 10);
     }
   }
@@ -57,7 +56,7 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // ط±ط£ط³ + ط­ظپط¸
+        // رأس + حفظ
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Row(
@@ -65,14 +64,14 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('ظ†ط·ط§ظ‚ ط§ظ†طھط´ط§ط± ط§ظ„طھط¹ظ…ظٹظ…',
-                    style: GoogleFonts.cairo(
+                  const Text('نطاق انتشار التعميم',
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 16, fontWeight: FontWeight.w800,
                       color: AppColors.nearBlack)),
                   Text(_allKingdom
-                      ? 'ًں“چ ط§ظ„ظ…ظ…ظ„ظƒط© ظƒط§ظ…ظ„ط©'
-                      : 'ًں“چ ${_radius.round()} ظƒظ…',
-                    style: GoogleFonts.cairo(
+                      ? '📍 المملكة كاملة'
+                      : '📍 ${_radius.round()} كم',
+                    style: const TextStyle(fontFamily: 'Tajawal',
                       fontSize: 12, color: AppColors.emerald)),
                 ],
               ),
@@ -95,8 +94,8 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
                         colors: [AppColors.emerald, AppColors.forestGreen]),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text('ط­ظپط¸',
-                    style: GoogleFonts.cairo(
+                  child: const Text('حفظ',
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 14, fontWeight: FontWeight.w700,
                       color: Colors.white)),
                 ),
@@ -107,96 +106,75 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
 
         Container(height: 1, color: AppColors.glassBorder),
 
-        // ط§ظ„ط®ط±ظٹط·ط© ظ…ط¹ ط§ظ„ط¯ط§ط¦ط±ط©
+        // الخريطة مع الدائرة
         SizedBox(
-          height: 240,
-          child: _loading
-            ? const Center(child: CircularProgressIndicator(
-                color: AppColors.emerald, strokeWidth: 2))
-            : Stack(
+          height: 200,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Stack(
                 children: [
-                  FlutterMap(
-                    mapController: _mapCtrl,
-                    options: MapOptions(
-                      initialCenter: _center,
-                      initialZoom: _allKingdom ? 5 : 10,
-                      interactionOptions: const InteractionOptions(
-                        flags: InteractiveFlag.all),
+                  // خلفية الخريطة المبسطة
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE8F5F0),
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'com.taameem.app',
-                      ),
-                      if (!_allKingdom)
-                        CircleLayer(circles: [
-                          CircleMarker(
-                            point: _center,
-                            radius: _radius * 1000,
-                            useRadiusInMeter: true,
-                            color: AppColors.emerald.withValues(alpha: 0.18),
-                            borderColor: AppColors.emerald.withValues(alpha: 0.6),
-                            borderStrokeWidth: 2,
-                          ),
-                        ]),
-                      MarkerLayer(markers: [
-                        Marker(
-                          point: _center,
-                          width: 16, height: 16,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.emerald,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: Colors.white, width: 2.5),
-                            ),
-                          ),
-                        ),
-                      ]),
-                    ],
+                    child: CustomPaint(
+                      size: Size.infinite,
+                      painter: _MapGridPainter(),
+                    ),
                   ),
-
-                  // ط´ط±ظٹط· ظ†طµظپ ط§ظ„ظ‚ط·ط±
+                  // الدائرة
                   if (!_allKingdom)
-                    Positioned(
-                      bottom: 8, left: 8, right: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
+                    Center(
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: (_radius / 500 * 160 + 40).clamp(40, 160),
+                        height: (_radius / 500 * 160 + 40).clamp(40, 160),
                         decoration: BoxDecoration(
-                          color: AppColors.glassBackground,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.glassBorder),
+                          shape: BoxShape.circle,
+                          color: AppColors.emerald.withValues(alpha: 0.15),
+                          border: Border.all(
+                            color: AppColors.emerald.withValues(alpha: 0.5),
+                            width: 2,
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            Text('${_radius.round()} ظƒظ…',
-                              style: GoogleFonts.cairo(
-                                fontSize: 13, fontWeight: FontWeight.w700,
-                                color: AppColors.emerald)),
-                            Expanded(
-                              child: Slider(
-                                value: _radius,
-                                min: 1, max: 500,
-                                activeColor: AppColors.emerald,
-                                inactiveColor: AppColors.glassBorder,
-                                onChanged: (v) =>
-                                    setState(() => _radius = v),
-                              ),
-                            ),
-                            Text('500 ظƒظ…',
-                              style: GoogleFonts.cairo(
-                                fontSize: 11, color: AppColors.grey)),
-                          ],
-                        ),
+                      ),
+                    ),
+                  // نقطة المركز
+                  Center(
+                    child: Container(
+                      width: 14, height: 14,
+                      decoration: BoxDecoration(
+                        color: AppColors.emerald,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2.5),
+                        boxShadow: [BoxShadow(
+                          color: AppColors.emerald.withValues(alpha: 0.4),
+                          blurRadius: 8)],
+                      ),
+                    ),
+                  ),
+                  // نص المملكة
+                  if (_allKingdom)
+                    Center(
+                      child: Text(
+                        '🇸🇦\nالمملكة كاملة',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.tajawal(
+                          fontSize: 16, fontWeight: FontWeight.w800,
+                          color: AppColors.error, height: 1.6),
                       ),
                     ),
                 ],
               ),
+            ),
+          ),
         ),
 
-        // ط²ط± ط§ظ„ظ…ظ…ظ„ظƒط© ظƒط§ظ…ظ„ط©
+        // زر المملكة كاملة
         Padding(
           padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
           child: GestureDetector(
@@ -216,10 +194,10 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('ًں‡¸ًں‡¦', style: const TextStyle(fontSize: 18)),
+                  const Text('🇸🇦', style: TextStyle(fontSize: 18)),
                   const SizedBox(width: 8),
-                  Text('ط§ظ„ظ…ظ…ظ„ظƒط© ظƒط§ظ…ظ„ط©',
-                    style: GoogleFonts.cairo(
+                  Text('المملكة كاملة',
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 14, fontWeight: FontWeight.w800,
                       color: _allKingdom
                           ? Colors.white : AppColors.error)),
@@ -234,18 +212,18 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
           ),
         ),
 
-        // ط§ط®طھظٹط§ط± ط§ظ„ظ…ط¯ظٹظ†ط©
+        // اختيار المدينة
         if (!_allKingdom) ...[
-          Padding(
-            padding: const EdgeInsets.symmetric(
+          const Padding(
+            padding: EdgeInsets.symmetric(
                 horizontal: 14, vertical: 4),
             child: Row(
               children: [
-                const Icon(Icons.location_city_rounded,
+                Icon(Icons.location_city_rounded,
                     size: 14, color: AppColors.grey),
-                const SizedBox(width: 6),
-                Text('ط£ظˆ ط§ط®طھط± ظ…ط¯ظٹظ†ط©:',
-                  style: GoogleFonts.cairo(
+                SizedBox(width: 6),
+                Text('أو اختر مدينة:',
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 12, color: AppColors.grey)),
               ],
             ),
@@ -277,7 +255,7 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
                             ? AppColors.emerald : AppColors.glassBorder),
                     ),
                     child: Text(c,
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(fontFamily: 'Tajawal',
                         fontSize: 12, fontWeight: FontWeight.w600,
                         color: isSelected
                             ? Colors.white : AppColors.forestGreen)),
@@ -291,4 +269,40 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
     );
   }
 }
+
+class _MapGridPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = AppColors.emerald.withValues(alpha: 0.07)
+      ..strokeWidth = 1;
+    const spacing = 24.0;
+    for (double x = 0; x < size.width; x += spacing) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    for (double y = 0; y < size.height; y += spacing) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+    // خطوط الطريق
+    final roadPaint = Paint()
+      ..color = AppColors.emerald.withValues(alpha: 0.15)
+      ..strokeWidth = 2;
+    canvas.drawLine(
+      Offset(0, size.height * 0.4),
+      Offset(size.width, size.height * 0.4), roadPaint);
+    canvas.drawLine(
+      Offset(0, size.height * 0.7),
+      Offset(size.width, size.height * 0.7), roadPaint);
+    canvas.drawLine(
+      Offset(size.width * 0.35, 0),
+      Offset(size.width * 0.35, size.height), roadPaint);
+    canvas.drawLine(
+      Offset(size.width * 0.7, 0),
+      Offset(size.width * 0.7, size.height), roadPaint);
+  }
+
+  @override
+  bool shouldRepaint(_MapGridPainter old) => false;
+}
+
 

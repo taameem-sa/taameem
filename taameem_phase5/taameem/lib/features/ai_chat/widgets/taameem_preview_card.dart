@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 
@@ -88,7 +87,7 @@ class TaameemPreviewCard extends StatelessWidget {
                         ),
                         child: Text(
                           mapLabel,
-                          style: GoogleFonts.cairo(
+                          style: TextStyle(fontFamily: 'Tajawal',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                             color: _contrastColor(color),
@@ -98,7 +97,7 @@ class TaameemPreviewCard extends StatelessWidget {
                       const SizedBox(width: 10),
                       Text(
                         typeName,
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(fontFamily: 'Tajawal',
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: color,
@@ -123,16 +122,16 @@ class TaameemPreviewCard extends StatelessWidget {
                 ),
 
                 // ─── تسمية المراجعة ───────────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
                   child: Row(
                     children: [
-                      const Icon(Icons.preview_rounded,
+                      Icon(Icons.preview_rounded,
                           size: 14, color: AppColors.grey),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Text(
                         'مراجعة التعميم قبل النشر',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(fontFamily: 'Tajawal',
                           fontSize: 11,
                           color: AppColors.grey,
                           fontWeight: FontWeight.w500,
@@ -147,7 +146,7 @@ class TaameemPreviewCard extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                   child: Text(
                     draft['title'] ?? '',
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(fontFamily: 'Tajawal',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: AppColors.nearBlack,
@@ -163,7 +162,7 @@ class TaameemPreviewCard extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                     child: Text(
                       draft['description'],
-                      style: GoogleFonts.cairo(
+                      style: const TextStyle(fontFamily: 'Tajawal',
                         fontSize: 13,
                         color: AppColors.forestGreen,
                         height: 1.6,
@@ -189,7 +188,7 @@ class TaameemPreviewCard extends StatelessWidget {
                         const SizedBox(width: 5),
                         Text(
                           'سينتهي خلال $days أيام تلقائياً',
-                          style: GoogleFonts.cairo(
+                          style: const TextStyle(fontFamily: 'Tajawal',
                             fontSize: 12,
                             color: AppColors.emerald,
                             fontWeight: FontWeight.w500,
@@ -218,15 +217,15 @@ class TaameemPreviewCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(color: AppColors.glassBorder),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.edit_outlined,
+                              Icon(Icons.edit_outlined,
                                   size: 15, color: AppColors.forestGreen),
-                              const SizedBox(width: 4),
+                              SizedBox(width: 4),
                               Text(
                                 'تعديل',
-                                style: GoogleFonts.cairo(
+                                style: TextStyle(fontFamily: 'Tajawal',
                                   fontSize: 12,
                                   color: AppColors.forestGreen,
                                   fontWeight: FontWeight.w500,
@@ -258,18 +257,18 @@ class TaameemPreviewCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.send_rounded,
                                   size: 16,
                                   color: Colors.white,
                                 ),
-                                const SizedBox(width: 6),
+                                SizedBox(width: 6),
                                 Text(
                                   'نشر التعميم الآن',
-                                  style: GoogleFonts.cairo(
+                                  style: TextStyle(fontFamily: 'Tajawal',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white,
@@ -307,3 +306,4 @@ class TaameemPreviewCard extends StatelessWidget {
     return hsl.withLightness((hsl.lightness - 0.15).clamp(0, 1)).toColor();
   }
 }
+

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 
 class ImagePickerWidget extends StatelessWidget {
@@ -92,7 +91,7 @@ class _AddButton extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               label,
-              style: GoogleFonts.cairo(
+              style: const TextStyle(fontFamily: 'Tajawal',
                 fontSize: 11,
                 color: AppColors.forestGreen,
               ),
@@ -147,3 +146,4 @@ class _ImageTile extends StatelessWidget {
     );
   }
 }
+

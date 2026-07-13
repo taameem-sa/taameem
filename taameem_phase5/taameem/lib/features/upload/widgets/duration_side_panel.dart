@@ -1,5 +1,4 @@
-﻿import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 
 class DurationSidePanel extends StatefulWidget {
@@ -24,12 +23,12 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
 
   int _hours = 0, _days = 0, _weeks = 0, _years = 0;
 
-  // ط§ط®طھطµط§ط±ط§طھ ط³ط±ظٹط¹ط©
+  // اختصارات سريعة
   static const List<Map<String, dynamic>> _quickPicks = [
-    {'label': 'ط³ط§ط¹ط©',  'hours': 1,  'days': 0, 'weeks': 0, 'years': 0},
-    {'label': 'ظٹظˆظ…',   'hours': 0,  'days': 1, 'weeks': 0, 'years': 0},
-    {'label': 'ط£ط³ط¨ظˆط¹', 'hours': 0,  'days': 0, 'weeks': 1, 'years': 0},
-    {'label': 'ط´ظ‡ط±',   'hours': 0,  'days': 30,'weeks': 0, 'years': 0},
+    {'label': 'ساعة',  'hours': 1,  'days': 0, 'weeks': 0, 'years': 0},
+    {'label': 'يوم',   'hours': 0,  'days': 1, 'weeks': 0, 'years': 0},
+    {'label': 'أسبوع', 'hours': 0,  'days': 0, 'weeks': 1, 'years': 0},
+    {'label': 'شهر',   'hours': 0,  'days': 30,'weeks': 0, 'years': 0},
   ];
 
   @override
@@ -61,11 +60,11 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
 
   String get _summary {
     final parts = <String>[];
-    if (_years  > 0) parts.add('$_years ط³ظ†ط©');
-    if (_weeks  > 0) parts.add('$_weeks ط£ط³ط¨ظˆط¹');
-    if (_days   > 0) parts.add('$_days ظٹظˆظ…');
-    if (_hours  > 0) parts.add('$_hours ط³ط§ط¹ط©');
-    return parts.isEmpty ? 'ظ„ظ… ظٹظڈط­ط¯ط¯' : parts.join(' ظˆ ');
+    if (_years  > 0) parts.add('$_years سنة');
+    if (_weeks  > 0) parts.add('$_weeks أسبوع');
+    if (_days   > 0) parts.add('$_days يوم');
+    if (_hours  > 0) parts.add('$_hours ساعة');
+    return parts.isEmpty ? 'لم يُحدد' : parts.join(' و ');
   }
 
   Widget _column(String label, int max, int value,
@@ -73,7 +72,7 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
     return Expanded(
       child: Column(
         children: [
-          Text(label, style: GoogleFonts.cairo(
+          Text(label, style: const TextStyle(fontFamily: 'Tajawal',
             fontSize: 12, fontWeight: FontWeight.w600,
             color: AppColors.forestGreen)),
           const SizedBox(height: 8),
@@ -101,7 +100,7 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
                           color: AppColors.emerald.withValues(alpha: 0.3)),
                     ) : null,
                     child: Text('$i',
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(fontFamily: 'Tajawal',
                         fontSize: isSelected ? 24 : 18,
                         fontWeight: isSelected
                             ? FontWeight.w800 : FontWeight.w400,
@@ -122,7 +121,7 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // ط±ط£ط³ + ط­ظپط¸
+        // رأس + حفظ
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Row(
@@ -130,12 +129,12 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('ظ…ط¯ط© ط§ظ„طھط¹ظ…ظٹظ…',
-                    style: GoogleFonts.cairo(
+                  const Text('مدة التعميم',
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 18, fontWeight: FontWeight.w800,
                       color: AppColors.nearBlack)),
                   Text(_summary,
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(fontFamily: 'Tajawal',
                       fontSize: 12, color: AppColors.emerald)),
                 ],
               ),
@@ -150,8 +149,8 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
                       colors: [AppColors.emerald, AppColors.forestGreen]),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text('ط­ظپط¸',
-                    style: GoogleFonts.cairo(
+                  child: const Text('حفظ',
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 14, fontWeight: FontWeight.w700,
                       color: Colors.white)),
                 ),
@@ -162,7 +161,7 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
 
         Container(height: 1, color: AppColors.glassBorder),
 
-        // ط§ط®طھطµط§ط±ط§طھ ط³ط±ظٹط¹ط©
+        // اختصارات سريعة
         Padding(
           padding: const EdgeInsets.symmetric(
               horizontal: 14, vertical: 12),
@@ -192,7 +191,7 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
                     ),
                     child: Center(
                       child: Text(q['label'] as String,
-                        style: GoogleFonts.cairo(
+                        style: const TextStyle(fontFamily: 'Tajawal',
                           fontSize: 12, fontWeight: FontWeight.w600,
                           color: AppColors.forestGreen)),
                     ),
@@ -203,34 +202,34 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
           ),
         ),
 
-        // ط§ظ„ط¹ط¬ظ„ط§طھ
+        // العجلات
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               children: [
-                _column('ط³ط§ط¹ط§طھ', 23, _hours, _hoursCtrl,
+                _column('ساعات', 23, _hours, _hoursCtrl,
                     (v) => setState(() => _hours = v)),
                 _divider(),
-                _column('ط£ظٹط§ظ…',   6, _days,  _daysCtrl,
+                _column('أيام',   6, _days,  _daysCtrl,
                     (v) => setState(() => _days = v)),
                 _divider(),
-                _column('ط£ط³ط§ط¨ظٹط¹',51, _weeks, _weeksCtrl,
+                _column('أسابيع',51, _weeks, _weeksCtrl,
                     (v) => setState(() => _weeks = v)),
                 _divider(),
-                _column('ط³ظ†ظˆط§طھ',  1, _years, _yearsCtrl,
+                _column('سنوات',  1, _years, _yearsCtrl,
                     (v) => setState(() => _years = v)),
               ],
             ),
           ),
         ),
 
-        // طھظ†ط¨ظٹظ‡ ط§ظ„ط­ط¯ ط§ظ„ط£ظ‚طµظ‰
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+        // تنبيه الحد الأقصى
+        const Padding(
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 20),
           child: Text(
-            '* ط§ظ„ط­ط¯ ط§ظ„ط£ظ‚طµظ‰ ظ„ظ…ط¯ط© ط§ظ„طھط¹ظ…ظٹظ… ط³ظ†ط© ظˆط§ط­ط¯ط©',
-            style: GoogleFonts.cairo(
+            '* الحد الأقصى لمدة التعميم سنة واحدة',
+            style: TextStyle(fontFamily: 'Tajawal',
                 fontSize: 11, color: AppColors.grey)),
         ),
       ],
@@ -242,4 +241,5 @@ class _DurationSidePanelState extends State<DurationSidePanel> {
     color: AppColors.glassBorder,
     margin: const EdgeInsets.symmetric(horizontal: 2));
 }
+
 

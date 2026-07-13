@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/app_colors.dart';
@@ -34,7 +33,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _anonymousMap = false;
 
   // فئات الإشعارات
-  Map<String, bool> _categoryNotifs = {
+  final Map<String, bool> _categoryNotifs = {
     'missingPerson':  true,
     'theft':          true,
     'emergency':      true,
@@ -73,10 +72,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (loc == null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'تعذر الوصول للموقع الحالي، تم الإبقاء على الموقع الافتراضي الحالي',
-            style: GoogleFonts.cairo(),
+            style: TextStyle(fontFamily: 'Tajawal',),
           ),
           backgroundColor: AppColors.error,
         ),
@@ -178,16 +177,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
                           child: Row(
                             children: [
-                              Icon(Icons.place_rounded,
+                              const Icon(Icons.place_rounded,
                                   size: 16, color: AppColors.emerald),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'الموقع الافتراضي',
-                                      style: GoogleFonts.cairo(
+                                      style: TextStyle(fontFamily: 'Tajawal',
                                         fontSize: 13,
                                         fontWeight: FontWeight.w700,
                                         color: AppColors.forestGreen,
@@ -195,7 +194,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     ),
                                     Text(
                                       _defaultLocationLabel,
-                                      style: GoogleFonts.cairo(
+                                      style: const TextStyle(fontFamily: 'Tajawal',
                                           fontSize: 11,
                                           color: AppColors.grey),
                                     ),
@@ -220,10 +219,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       border: Border.all(
                                           color: AppColors.glassBorder),
                                     ),
-                                    child: Center(
+                                    child: const Center(
                                       child: Text(
                                         'تحديث من موقعي الحالي',
-                                        style: GoogleFonts.cairo(
+                                        style: TextStyle(fontFamily: 'Tajawal',
                                           fontSize: 12,
                                           color: AppColors.forestGreen,
                                           fontWeight: FontWeight.w600,
@@ -247,10 +246,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       color: AppColors.gold.withValues(alpha: 0.28),
                                     ),
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       'إعادة ضبط',
-                                      style: GoogleFonts.cairo(
+                                      style: TextStyle(fontFamily: 'Tajawal',
                                         fontSize: 12,
                                         color: AppColors.gold,
                                         fontWeight: FontWeight.w700,
@@ -270,9 +269,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     'نصف القطر:',
-                                    style: GoogleFonts.cairo(
+                                    style: TextStyle(fontFamily: 'Tajawal',
                                       fontSize: 13,
                                       color: AppColors.forestGreen,
                                     ),
@@ -280,7 +279,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   const Spacer(),
                                   Text(
                                     '${_notifyRadius.round()} كم',
-                                    style: GoogleFonts.cairo(
+                                    style: const TextStyle(fontFamily: 'Tajawal',
                                       fontSize: 14,
                                       fontWeight: FontWeight.w700,
                                       color: AppColors.emerald,
@@ -308,15 +307,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   },
                                 ),
                               ),
-                              Row(
+                              const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('1 كم',
-                                      style: GoogleFonts.cairo(
+                                      style: TextStyle(fontFamily: 'Tajawal',
                                           fontSize: 11, color: AppColors.grey)),
                                   Text('50 كم',
-                                      style: GoogleFonts.cairo(
+                                      style: TextStyle(fontFamily: 'Tajawal',
                                           fontSize: 11, color: AppColors.grey)),
                                 ],
                               ),
@@ -405,13 +404,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
 
                     // معلومات التطبيق
-                    Center(
+                    const Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(vertical: 16),
                         child: Text(
                           'تعميم — الإصدار 1.0.0\nجميع الحقوق محفوظة © 2025',
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.cairo(
+                          style: TextStyle(fontFamily: 'Tajawal',
                             fontSize: 11,
                             color: AppColors.grey,
                             height: 1.6,
@@ -448,9 +447,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           const SizedBox(width: 14),
-          Text(
+          const Text(
             'الإعدادات',
-            style: GoogleFonts.cairo(
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 22,
               fontWeight: FontWeight.w700,
               color: AppColors.nearBlack,
@@ -484,7 +483,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(width: 10),
                 Text(
                   title,
-                  style: GoogleFonts.cairo(
+                  style: const TextStyle(fontFamily: 'Tajawal',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.forestGreen,
@@ -514,18 +513,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const Icon(Icons.logout_rounded,
                   size: 40, color: AppColors.error),
               const SizedBox(height: 16),
-              Text(
+              const Text(
                 'تسجيل الخروج',
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: AppColors.nearBlack,
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
+              const Text(
                 'هل أنت متأكد من تسجيل الخروج؟',
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 13, color: AppColors.grey),
                 textAlign: TextAlign.center,
               ),
@@ -542,9 +541,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: AppColors.glassBorder),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Text('إلغاء',
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(fontFamily: 'Tajawal',
                                   fontSize: 14, color: AppColors.forestGreen)),
                         ),
                       ),
@@ -563,9 +562,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           color: AppColors.error,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Text('خروج',
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(fontFamily: 'Tajawal',
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white)),
@@ -609,14 +608,14 @@ class _ToggleTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(label,
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(fontFamily: 'Tajawal',
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: AppColors.nearBlack)),
                 if (subtitle != null) ...[
                   const SizedBox(height: 2),
                   Text(subtitle!,
-                      style: GoogleFonts.cairo(
+                      style: const TextStyle(fontFamily: 'Tajawal',
                           fontSize: 11, color: AppColors.grey, height: 1.4)),
                 ],
               ],
@@ -661,15 +660,16 @@ class _ActionTile extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(label,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                       color: c)),
             ),
-            Icon(Icons.chevron_left_rounded, size: 18, color: AppColors.grey),
+            const Icon(Icons.chevron_left_rounded, size: 18, color: AppColors.grey),
           ],
         ),
       ),
     );
   }
 }
+

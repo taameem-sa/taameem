@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 
 class ChatInputBar extends StatefulWidget {
@@ -172,19 +171,19 @@ class _ChatInputBarState extends State<ChatInputBar> {
       ),
       child: TextField(
         controller: widget.controller,
-        style: GoogleFonts.cairo(
+        style: const TextStyle(fontFamily: 'Tajawal',
           fontSize: 14,
           color: AppColors.nearBlack,
           height: 1.5,
         ),
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: 'اكتب التعميم، بأي شكل تريده...',
-          hintStyle: GoogleFonts.cairo(
+          hintStyle: TextStyle(fontFamily: 'Tajawal',
             fontSize: 13,
             color: AppColors.grey,
           ),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
+          contentPadding: EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 10,
           ),
@@ -276,3 +275,4 @@ class _IconBtn extends StatelessWidget {
     );
   }
 }
+

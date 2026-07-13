@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/models/taameem_model.dart';
 import '../../../core/services/firestore_service.dart';
@@ -50,9 +49,9 @@ class AchievementsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 14),
-          Text(
+          const Text(
             'الإنجازات',
-            style: GoogleFonts.cairo(
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 22,
               fontWeight: FontWeight.w700,
               color: AppColors.nearBlack,
@@ -109,7 +108,7 @@ class AchievementsScreen extends StatelessWidget {
                       const SizedBox(height: 6),
                       Text(
                         b['label'] as String,
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(fontFamily: 'Tajawal',
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
                           color: earned
@@ -138,11 +137,11 @@ class AchievementsScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
           child: Text(
             'التعميمات المُغلقة بنجاح',
-            style: GoogleFonts.cairo(
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 16,
               fontWeight: FontWeight.w700,
               color: AppColors.nearBlack,
@@ -171,16 +170,16 @@ class AchievementsScreen extends StatelessWidget {
                       Icon(Icons.emoji_events_outlined,
                           size: 60, color: AppColors.grey.withValues(alpha: 0.4)),
                       const SizedBox(height: 12),
-                      Text(
+                      const Text(
                         'لا توجد إنجازات بعد',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(fontFamily: 'Tajawal',
                             fontSize: 16, color: AppColors.grey),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         'عندما تُغلق تعميماً بنجاح\nسيُضاف إلى إنجازاتك',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(fontFamily: 'Tajawal',
                           fontSize: 13,
                           color: AppColors.grey.withValues(alpha: 0.7),
                           height: 1.6,
@@ -206,3 +205,4 @@ class AchievementsScreen extends StatelessWidget {
     );
   }
 }
+

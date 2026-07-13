@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../core/widgets/animated_background.dart';
@@ -67,9 +66,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
       child: Row(
         children: [
-          Text(
+          const Text(
             'الإشعارات',
-            style: GoogleFonts.cairo(
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 24,
               fontWeight: FontWeight.w700,
               color: AppColors.nearBlack,
@@ -87,7 +86,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               child: Center(
                 child: Text(
                   '$_unreadCount',
-                  style: GoogleFonts.cairo(
+                  style: const TextStyle(fontFamily: 'Tajawal',
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
@@ -99,9 +98,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           if (_unreadCount > 0)
             GestureDetector(
               onTap: _markAllAsRead,
-              child: Text(
+              child: const Text(
                 'تمييز الكل كمقروء',
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 12,
                   color: AppColors.emerald,
                   fontWeight: FontWeight.w600,
@@ -149,7 +148,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               child: Center(
                 child: Text(
                   t['label']!,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: isActive ? Colors.white : AppColors.forestGreen,
@@ -174,9 +173,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             Icon(Icons.notifications_none_rounded,
                 size: 64, color: AppColors.grey.withValues(alpha: 0.4)),
             const SizedBox(height: 16),
-            Text(
+            const Text(
               'لا توجد إشعارات',
-              style: GoogleFonts.cairo(
+              style: TextStyle(fontFamily: 'Tajawal',
                 fontSize: 16, color: AppColors.grey),
             ),
           ],
@@ -231,7 +230,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
       child: Text(
         text,
-        style: GoogleFonts.cairo(
+        style: const TextStyle(fontFamily: 'Tajawal',
           fontSize: 12,
           fontWeight: FontWeight.w600,
           color: AppColors.grey,
@@ -317,7 +316,7 @@ class _NotificationCard extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 notification.title,
-                                style: GoogleFonts.cairo(
+                                style: TextStyle(fontFamily: 'Tajawal',
                                   fontSize: 13,
                                   fontWeight: isUnread
                                       ? FontWeight.w700
@@ -340,7 +339,7 @@ class _NotificationCard extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           notification.body,
-                          style: GoogleFonts.cairo(
+                          style: const TextStyle(fontFamily: 'Tajawal',
                             fontSize: 12,
                             color: AppColors.forestGreen,
                             height: 1.5,
@@ -351,7 +350,7 @@ class _NotificationCard extends StatelessWidget {
                         const SizedBox(height: 6),
                         Text(
                           notification.timeAgo,
-                          style: GoogleFonts.cairo(
+                          style: const TextStyle(fontFamily: 'Tajawal',
                             fontSize: 10,
                             color: AppColors.grey,
                           ),
@@ -368,3 +367,4 @@ class _NotificationCard extends StatelessWidget {
     );
   }
 }
+

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:taameem/core/constants/app_colors.dart';
 import 'package:taameem/core/widgets/animated_background.dart';
@@ -73,18 +72,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'مرحباً بك',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(fontFamily: 'Tajawal',
                           fontSize: 26,
                           fontWeight: FontWeight.w700,
                           color: AppColors.nearBlack,
                         ),
                       ),
                       const SizedBox(height: 6),
-                      Text(
+                      const Text(
                         'أدخل رقم هاتفك للمتابعة',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(fontFamily: 'Tajawal',
                           fontSize: 14,
                           color: AppColors.forestGreen,
                         ),
@@ -99,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           initialCountryCode: 'SA',
                           decoration: InputDecoration(
                             labelText: 'رقم الجوال',
-                            labelStyle: GoogleFonts.cairo(
+                            labelStyle: const TextStyle(fontFamily: 'Tajawal',
                               color: AppColors.forestGreen,
                             ),
                             filled: true,
@@ -122,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
-                          style: GoogleFonts.cairo(
+                          style: const TextStyle(fontFamily: 'Tajawal',
                             fontSize: 16,
                             color: AppColors.nearBlack,
                           ),
@@ -146,10 +145,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 32),
 
                 // ─── نص الشروط ───────────────────────────────────────────
-                Text(
+                const Text(
                   'بتسجيل دخولك توافق على سياسة الاستخدام والخصوصية',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 12,
                     color: AppColors.grey,
                   ),
@@ -174,12 +173,12 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 105,
           child: CustomPaint(
             painter: _MiniShieldPainter(),
-            child: Center(
+            child: const Center(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+                padding: EdgeInsets.only(bottom: 10),
                 child: Text(
                   'ت',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 42,
                     fontWeight: FontWeight.w700,
                     color: AppColors.white,
@@ -190,17 +189,17 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        Text(
+        const Text(
           'تعميم',
-          style: GoogleFonts.cairo(
+          style: TextStyle(fontFamily: 'Tajawal',
             fontSize: 28,
             fontWeight: FontWeight.w800,
             color: AppColors.nearBlack,
           ),
         ),
-        Text(
+        const Text(
           'T A A M E E M',
-          style: GoogleFonts.cairo(
+          style: TextStyle(fontFamily: 'Tajawal',
             fontSize: 11,
             fontWeight: FontWeight.w400,
             color: AppColors.gold,
@@ -245,9 +244,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     strokeWidth: 2,
                   ),
                 )
-              : Text(
+              : const Text(
                   'إرسال رمز التحقق',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: AppColors.white,
@@ -279,7 +278,7 @@ class _MiniShieldPainter extends CustomPainter {
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12);
     canvas.drawPath(path, shadowPaint);
 
-    final gradient = LinearGradient(
+    const gradient = LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [AppColors.emerald, AppColors.forestGreen],
@@ -306,3 +305,4 @@ class _MiniShieldPainter extends CustomPainter {
   @override
   bool shouldRepaint(_MiniShieldPainter oldDelegate) => false;
 }
+

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
@@ -279,7 +278,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
   void _showSnack(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(msg, style: GoogleFonts.cairo()),
+        content: Text(msg, style: const TextStyle(fontFamily: 'Tajawal',)),
         backgroundColor: AppColors.emerald,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -366,10 +365,10 @@ class _AiChatScreenState extends State<AiChatScreen> {
                         blurRadius: 10)
                   ],
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'ت',
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -386,9 +385,9 @@ class _AiChatScreenState extends State<AiChatScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'تعميم AI',
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: AppColors.nearBlack,
@@ -407,9 +406,9 @@ class _AiChatScreenState extends State<AiChatScreen> {
                           .animate(onPlay: (c) => c.repeat(reverse: true))
                           .fadeOut(duration: 1200.ms),
                       const SizedBox(width: 5),
-                      Text(
+                      const Text(
                         'متاح الآن',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(fontFamily: 'Tajawal',
                           fontSize: 11,
                           color: AppColors.emerald,
                         ),
@@ -477,10 +476,10 @@ class _AiChatScreenState extends State<AiChatScreen> {
                 ),
               ],
             ),
-            child: Center(
+            child: const Center(
               child: Text(
                 'ت',
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 44,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
@@ -490,9 +489,9 @@ class _AiChatScreenState extends State<AiChatScreen> {
           ).animate(onPlay: (c) => c.repeat(reverse: true)).shimmer(
               duration: 2000.ms, color: AppColors.gold.withValues(alpha: 0.3)),
           const SizedBox(height: 16),
-          Text(
+          const Text(
             AppConstants.aiWelcomeMessage,
-            style: GoogleFonts.cairo(
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 16,
               color: AppColors.forestGreen,
               fontWeight: FontWeight.w500,
@@ -565,7 +564,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                   const SizedBox(width: 6),
                   Text(
                     action['text']!,
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(fontFamily: 'Tajawal',
                       fontSize: 12,
                       color: AppColors.forestGreen,
                       fontWeight: FontWeight.w500,
@@ -583,3 +582,4 @@ class _AiChatScreenState extends State<AiChatScreen> {
     );
   }
 }
+

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/models/taameem_model.dart';
 import '../../../core/services/admin_service.dart';
@@ -75,9 +74,9 @@ class _AdminScreenState extends State<AdminScreen>
         ),
       ),
       const SizedBox(width: 14),
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('لوحة التحكم', style: GoogleFonts.cairo(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.nearBlack)),
-        Text('صلاحيات المسؤول', style: GoogleFonts.cairo(fontSize: 11, color: AppColors.emerald)),
+      const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text('لوحة التحكم', style: TextStyle(fontFamily: 'Tajawal',fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.nearBlack)),
+        Text('صلاحيات المسؤول', style: TextStyle(fontFamily: 'Tajawal',fontSize: 11, color: AppColors.emerald)),
       ]),
       const Spacer(),
       GestureDetector(
@@ -107,8 +106,8 @@ class _AdminScreenState extends State<AdminScreen>
           borderRadius: BorderRadius.circular(12)),
         labelColor: Colors.white,
         unselectedLabelColor: AppColors.forestGreen,
-        labelStyle: GoogleFonts.cairo(fontSize: 12, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: GoogleFonts.cairo(fontSize: 12),
+        labelStyle: const TextStyle(fontFamily: 'Tajawal',fontSize: 12, fontWeight: FontWeight.w600),
+        unselectedLabelStyle: const TextStyle(fontFamily: 'Tajawal',fontSize: 12),
         tabs: const [
           Tab(child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.dashboard_rounded, size: 16), SizedBox(width: 4), Text('إحصائيات')])),
           Tab(child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.article_rounded, size: 16), SizedBox(width: 4), Text('تعميمات')])),
@@ -123,7 +122,7 @@ class _AdminScreenState extends State<AdminScreen>
     return RefreshIndicator(
       onRefresh: _loadStats, color: AppColors.emerald,
       child: ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 90), children: [
-        Text('إحصائيات عامة', style: GoogleFonts.cairo(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.nearBlack)),
+        const Text('إحصائيات عامة', style: TextStyle(fontFamily: 'Tajawal',fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.nearBlack)),
         const SizedBox(height: 12),
         GridView.count(
           crossAxisCount: 2, shrinkWrap: true,
@@ -140,7 +139,7 @@ class _AdminScreenState extends State<AdminScreen>
         ),
         if (_typeBreakdown.isNotEmpty) ...[
           const SizedBox(height: 20),
-          Text('توزيع التعميمات حسب النوع', style: GoogleFonts.cairo(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.nearBlack)),
+          const Text('توزيع التعميمات حسب النوع', style: TextStyle(fontFamily: 'Tajawal',fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.nearBlack)),
           const SizedBox(height: 12),
           GlassCard(
             showGoldLine: true, padding: const EdgeInsets.all(16),
@@ -153,8 +152,8 @@ class _AdminScreenState extends State<AdminScreen>
                   Row(children: [
                     Container(width: 10, height: 10, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
                     const SizedBox(width: 8),
-                    Expanded(child: Text(_typeName(e.key), style: GoogleFonts.cairo(fontSize: 12, color: AppColors.forestGreen))),
-                    Text('${e.value}', style: GoogleFonts.cairo(fontSize: 12, fontWeight: FontWeight.w700, color: color)),
+                    Expanded(child: Text(_typeName(e.key), style: const TextStyle(fontFamily: 'Tajawal',fontSize: 12, color: AppColors.forestGreen))),
+                    Text('${e.value}', style: TextStyle(fontFamily: 'Tajawal',fontSize: 12, fontWeight: FontWeight.w700, color: color)),
                   ]),
                   const SizedBox(height: 4),
                   ClipRRect(
@@ -193,7 +192,7 @@ class _AdminScreenState extends State<AdminScreen>
                 border: Border.all(color: _taameemFilter == s ? AppColors.emerald : AppColors.glassBorder)),
               child: Center(child: Text(
                 {'active':'نشطة','resolved':'محلولة','expired':'منتهية'}[s]!,
-                style: GoogleFonts.cairo(fontSize: 12, fontWeight: FontWeight.w600,
+                style: TextStyle(fontFamily: 'Tajawal',fontSize: 12, fontWeight: FontWeight.w600,
                   color: _taameemFilter == s ? Colors.white : AppColors.forestGreen),
               )),
             ),
@@ -205,7 +204,7 @@ class _AdminScreenState extends State<AdminScreen>
       builder: (_, snap) {
         if (snap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(color: AppColors.emerald));
         final list = snap.data ?? [];
-        if (list.isEmpty) return Center(child: Text('لا توجد تعميمات', style: GoogleFonts.cairo(fontSize: 15, color: AppColors.grey)));
+        if (list.isEmpty) return const Center(child: Text('لا توجد تعميمات', style: TextStyle(fontFamily: 'Tajawal',fontSize: 15, color: AppColors.grey)));
         return ListView.builder(
           padding: const EdgeInsets.only(bottom: 90),
           itemCount: list.length,
@@ -227,7 +226,7 @@ class _AdminScreenState extends State<AdminScreen>
     builder: (_, snap) {
       if (snap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(color: AppColors.emerald));
       final users = snap.data ?? [];
-      if (users.isEmpty) return Center(child: Text('لا يوجد مستخدمون', style: GoogleFonts.cairo(fontSize: 15, color: AppColors.grey)));
+      if (users.isEmpty) return const Center(child: Text('لا يوجد مستخدمون', style: TextStyle(fontFamily: 'Tajawal',fontSize: 15, color: AppColors.grey)));
       return ListView.builder(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 90),
         itemCount: users.length,
@@ -245,12 +244,12 @@ class _AdminScreenState extends State<AdminScreen>
               border: Border.all(color: banned ? AppColors.error.withValues(alpha: 0.3) : AppColors.glassBorder)),
             child: Row(children: [
               CircleAvatar(radius: 22, backgroundColor: AppColors.emerald.withValues(alpha: 0.1),
-                child: Text(phone.isNotEmpty ? phone[0] : 'م', style: GoogleFonts.cairo(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.emerald))),
+                child: Text(phone.isNotEmpty ? phone[0] : 'م', style: const TextStyle(fontFamily: 'Tajawal',fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.emerald))),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(phone, style: GoogleFonts.cairo(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.nearBlack)),
+                Text(phone, style: const TextStyle(fontFamily: 'Tajawal',fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.nearBlack)),
                 Text(role == 'owner' ? 'مالك' : role == 'admin' ? 'مشرف' : 'مستخدم',
-                  style: GoogleFonts.cairo(fontSize: 10, color: role != 'user' ? AppColors.gold : AppColors.grey)),
+                  style: TextStyle(fontFamily: 'Tajawal',fontSize: 10, color: role != 'user' ? AppColors.gold : AppColors.grey)),
               ])),
               if (role == 'user')
                 GestureDetector(
@@ -262,7 +261,7 @@ class _AdminScreenState extends State<AdminScreen>
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: banned ? AppColors.emerald.withValues(alpha: 0.3) : AppColors.error.withValues(alpha: 0.3))),
                     child: Text(banned ? 'رفع الحظر' : 'حظر',
-                      style: GoogleFonts.cairo(fontSize: 11, fontWeight: FontWeight.w600, color: banned ? AppColors.emerald : AppColors.error)),
+                      style: TextStyle(fontFamily: 'Tajawal',fontSize: 11, fontWeight: FontWeight.w600, color: banned ? AppColors.emerald : AppColors.error)),
                   ),
                 ),
             ]),
@@ -290,21 +289,21 @@ class _AdminScreenState extends State<AdminScreen>
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           const Icon(Icons.delete_forever_rounded, size: 40, color: AppColors.error),
           const SizedBox(height: 12),
-          Text('حذف التعميم', style: GoogleFonts.cairo(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.nearBlack)),
+          const Text('حذف التعميم', style: TextStyle(fontFamily: 'Tajawal',fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.nearBlack)),
           const SizedBox(height: 8),
-          Text('"${t.title}"', style: GoogleFonts.cairo(fontSize: 13, color: AppColors.forestGreen), textAlign: TextAlign.center),
+          Text('"${t.title}"', style: const TextStyle(fontFamily: 'Tajawal',fontSize: 13, color: AppColors.forestGreen), textAlign: TextAlign.center),
           const SizedBox(height: 20),
           Row(children: [
             Expanded(child: GestureDetector(
               onTap: () => Navigator.pop(context),
               child: Container(height: 44, decoration: BoxDecoration(color: AppColors.warmBeige, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.glassBorder)),
-                child: Center(child: Text('إلغاء', style: GoogleFonts.cairo(fontSize: 14, color: AppColors.forestGreen)))),
+                child: const Center(child: Text('إلغاء', style: TextStyle(fontFamily: 'Tajawal',fontSize: 14, color: AppColors.forestGreen)))),
             )),
             const SizedBox(width: 10),
             Expanded(child: GestureDetector(
               onTap: () async { Navigator.pop(context); await AdminService.instance.deleteTaameem(t.id); },
               child: Container(height: 44, decoration: BoxDecoration(color: AppColors.error, borderRadius: BorderRadius.circular(12)),
-                child: Center(child: Text('حذف', style: GoogleFonts.cairo(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)))),
+                child: const Center(child: Text('حذف', style: TextStyle(fontFamily: 'Tajawal',fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)))),
             )),
           ]),
         ]),
@@ -315,3 +314,4 @@ class _AdminScreenState extends State<AdminScreen>
   Color _typeColor(String k) { switch (k) { case 'missingPerson': return AppColors.missingPerson; case 'theft': return AppColors.theft; case 'emergency': return AppColors.emergency; case 'helpRequest': return AppColors.helpRequest; case 'generalWarning': return AppColors.generalWarning; case 'lostItem': return AppColors.lostItem; case 'foundItem': return AppColors.foundItem; case 'lostAnimal': return AppColors.lostAnimal; case 'humanitarian': return AppColors.humanitarian; default: return AppColors.inquiry; } }
   String _typeName(String k) { const n = {'missingPerson':'فقدان أشخاص','foundItem':'إيجاد شيء','lostItem':'فقدان شيء','theft':'سرقة','helpRequest':'استغاثة','humanitarian':'إنساني','emergency':'طارئ','generalWarning':'تحذير عام','lostAnimal':'فقدان حيوان','inquiry':'استفسار'}; return n[k] ?? k; }
 }
+

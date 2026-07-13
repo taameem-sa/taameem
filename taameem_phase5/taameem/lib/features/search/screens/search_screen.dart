@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/constants/app_colors.dart';
@@ -127,7 +126,7 @@ class _SearchScreenState extends State<SearchScreen>
 
   void _showSnack(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: GoogleFonts.cairo()),
+      content: Text(msg, style: const TextStyle(fontFamily: 'Tajawal',)),
       backgroundColor: AppColors.emerald,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -176,7 +175,7 @@ class _SearchScreenState extends State<SearchScreen>
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
       child: Row(
         children: [
-          Text('التعاميم', style: GoogleFonts.cairo(
+          const Text('التعاميم', style: TextStyle(fontFamily: 'Tajawal',
             fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.nearBlack,
           )),
           const SizedBox(width: 10),
@@ -184,11 +183,11 @@ class _SearchScreenState extends State<SearchScreen>
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
               decoration: BoxDecoration(
-                color: AppColors.emerald.withOpacity(0.1),
+                color: AppColors.emerald.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text('${_results.length} تعميم',
-                style: GoogleFonts.cairo(
+                style: const TextStyle(fontFamily: 'Tajawal',
                   fontSize: 12, fontWeight: FontWeight.w700,
                   color: AppColors.emerald,
                 )),
@@ -240,14 +239,14 @@ class _SearchScreenState extends State<SearchScreen>
                 Expanded(
                   child: TextField(
                     controller: _searchController,
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(fontFamily: 'Tajawal',
                       fontSize: 14, color: AppColors.nearBlack),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'ابحث بالنص، العنوان، الوصف...',
-                      hintStyle: GoogleFonts.cairo(
+                      hintStyle: TextStyle(fontFamily: 'Tajawal',
                         fontSize: 13, color: AppColors.grey),
                       border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                      contentPadding: EdgeInsets.symmetric(vertical: 14),
                     ),
                     onChanged: (v) {
                       setState(() => _query = v);
@@ -283,7 +282,7 @@ class _SearchScreenState extends State<SearchScreen>
                     margin: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
                       color: _searchImage != null
-                        ? AppColors.emerald.withOpacity(0.12)
+                        ? AppColors.emerald.withValues(alpha: 0.12)
                         : Colors.transparent,
                       borderRadius: BorderRadius.circular(13),
                     ),
@@ -295,7 +294,7 @@ class _SearchScreenState extends State<SearchScreen>
                           color: _searchImage != null
                             ? AppColors.emerald
                             : AppColors.forestGreen),
-                        Text('صورة', style: GoogleFonts.cairo(
+                        const Text('صورة', style: TextStyle(fontFamily: 'Tajawal',
                           fontSize: 8, color: AppColors.grey)),
                       ],
                     ),
@@ -337,7 +336,7 @@ class _SearchScreenState extends State<SearchScreen>
                 border: Border.all(
                   color: isActive ? color : AppColors.glassBorder),
                 boxShadow: isActive ? [BoxShadow(
-                  color: color.withOpacity(0.3), blurRadius: 8)] : [],
+                  color: color.withValues(alpha: 0.3), blurRadius: 8)] : [],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -347,7 +346,7 @@ class _SearchScreenState extends State<SearchScreen>
                     color: isActive ? Colors.white : AppColors.forestGreen),
                   const SizedBox(width: 5),
                   Text(f['label'] as String,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 11, fontWeight: FontWeight.w700,
                       color: isActive ? Colors.white : AppColors.forestGreen,
                     )),
@@ -371,12 +370,12 @@ class _SearchScreenState extends State<SearchScreen>
           padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
             color: _selectedRegion != null && _selectedRegion != 'كل المناطق'
-              ? AppColors.emerald.withOpacity(0.1)
+              ? AppColors.emerald.withValues(alpha: 0.1)
               : AppColors.warmBeige,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: _selectedRegion != null && _selectedRegion != 'كل المناطق'
-                ? AppColors.emerald.withOpacity(0.4)
+                ? AppColors.emerald.withValues(alpha: 0.4)
                 : AppColors.glassBorder),
           ),
           child: Row(
@@ -389,7 +388,7 @@ class _SearchScreenState extends State<SearchScreen>
               const SizedBox(width: 8),
               Text(
                 _selectedRegion ?? 'تصفية حسب المنطقة',
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: _selectedRegion != null
@@ -398,7 +397,7 @@ class _SearchScreenState extends State<SearchScreen>
                 ),
               ),
               const Spacer(),
-              Icon(Icons.keyboard_arrow_down_rounded,
+              const Icon(Icons.keyboard_arrow_down_rounded,
                 size: 18, color: AppColors.grey),
               if (_selectedRegion != null && _selectedRegion != 'كل المناطق')
                 GestureDetector(
@@ -438,10 +437,10 @@ class _SearchScreenState extends State<SearchScreen>
                 color: AppColors.warmBeige,
                 borderRadius: BorderRadius.circular(2)),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text('اختر المنطقة',
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 16, fontWeight: FontWeight.w700,
                   color: AppColors.nearBlack)),
             ),
@@ -459,10 +458,10 @@ class _SearchScreenState extends State<SearchScreen>
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: AppColors.glassBorder.withOpacity(0.5)))),
+                      color: AppColors.glassBorder.withValues(alpha: 0.5)))),
                 child: Row(
                   children: [
-                    Text(r, style: GoogleFonts.cairo(
+                    Text(r, style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 14,
                       fontWeight: _selectedRegion == r
                         ? FontWeight.w700 : FontWeight.w400,
@@ -476,7 +475,7 @@ class _SearchScreenState extends State<SearchScreen>
                   ],
                 ),
               ),
-            ))).toList(),
+            ))),
             SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
           ],
         ),
@@ -527,20 +526,21 @@ class _SearchScreenState extends State<SearchScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.grid_view_rounded,
-            size: 64, color: AppColors.grey.withOpacity(0.3)),
+            size: 64, color: AppColors.grey.withValues(alpha: 0.3)),
           const SizedBox(height: 16),
-          Text('لا توجد تعاميم',
-            style: GoogleFonts.cairo(
+          const Text('لا توجد تعاميم',
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 18, fontWeight: FontWeight.w600,
               color: AppColors.grey)),
           const SizedBox(height: 8),
           Text('جرّب تغيير الفلاتر\nأو كن أول من ينشر تعميماً',
             textAlign: TextAlign.center,
-            style: GoogleFonts.cairo(
-              fontSize: 13, color: AppColors.grey.withOpacity(0.7),
+            style: TextStyle(fontFamily: 'Tajawal',
+              fontSize: 13, color: AppColors.grey.withValues(alpha: 0.7),
               height: 1.6)),
         ],
       ).animate().fadeIn(duration: 400.ms),
     );
   }
 }
+

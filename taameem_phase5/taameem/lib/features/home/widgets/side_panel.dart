@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 
 class SidePanel extends StatelessWidget {
@@ -46,9 +45,9 @@ class SidePanel extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
-                      Text(
+                      const Text(
                         'التعميمات القريبة',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(fontFamily: 'Tajawal',
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: AppColors.nearBlack,
@@ -154,7 +153,7 @@ class _SidePanelCard extends StatelessWidget {
               child: Center(
                 child: Text(
                   taameem['label'],
-                  style: GoogleFonts.cairo(
+                  style: const TextStyle(fontFamily: 'Tajawal',
                     fontSize: 7,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
@@ -172,7 +171,7 @@ class _SidePanelCard extends StatelessWidget {
                 children: [
                   Text(
                     taameem['title'],
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(fontFamily: 'Tajawal',
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: AppColors.nearBlack,
@@ -183,7 +182,7 @@ class _SidePanelCard extends StatelessWidget {
                   const SizedBox(height: 3),
                   Text(
                     taameem['time'],
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(fontFamily: 'Tajawal',
                       fontSize: 10,
                       color: AppColors.grey,
                     ),
@@ -203,3 +202,4 @@ class _SidePanelCard extends StatelessWidget {
     );
   }
 }
+

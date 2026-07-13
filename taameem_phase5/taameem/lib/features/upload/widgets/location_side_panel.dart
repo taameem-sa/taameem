@@ -1,8 +1,7 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/services/location_service.dart';
@@ -64,26 +63,28 @@ class _LocationSidePanelState extends State<LocationSidePanel> {
 
   String get _typeLabel {
     switch (widget.taameemType) {
-      case 'missingPerson':  return 'ظ…ظپظ‚ظˆط¯';
-      case 'theft':          return 'ظ…ط³ط±ظˆظ‚';
-      case 'emergency':      return 'ط·ط§ط±ط¦';
-      case 'helpRequest':    return 'ط§ط³طھط؛ط§ط«ط©';
-      case 'generalWarning': return 'طھط­ط°ظٹط±';
-      default:               return 'طھط¹ظ…ظٹظ…';
+      case 'missingPerson':  return 'مفقود';
+      case 'theft':          return 'مسروق';
+      case 'emergency':      return 'طارئ';
+      case 'helpRequest':    return 'استغاثة';
+      case 'generalWarning': return 'تحذير';
+      default:               return 'تعميم';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // ط±ط£ط³ + ط­ظپط¸
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.88,
+      child: Column(
+        children: [
+        // رأس + حفظ
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Row(
             children: [
-              Text('ظ…ظˆظ‚ط¹ ط§ظ„طھط¹ظ…ظٹظ…',
-                style: GoogleFonts.cairo(
+              const Text('موقع التعميم',
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 18, fontWeight: FontWeight.w800,
                   color: AppColors.nearBlack)),
               const Spacer(),
@@ -103,8 +104,8 @@ class _LocationSidePanelState extends State<LocationSidePanel> {
                         colors: [AppColors.emerald, AppColors.forestGreen]),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text('ط­ظپط¸',
-                    style: GoogleFonts.cairo(
+                  child: const Text('حفظ',
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 14, fontWeight: FontWeight.w700,
                       color: Colors.white)),
                 ),
@@ -115,7 +116,7 @@ class _LocationSidePanelState extends State<LocationSidePanel> {
 
         Container(height: 1, color: AppColors.glassBorder),
 
-        // طھط¹ظ„ظٹظ…ط©
+        // تعليمة
         Padding(
           padding: const EdgeInsets.symmetric(
               horizontal: 16, vertical: 8),
@@ -126,15 +127,16 @@ class _LocationSidePanelState extends State<LocationSidePanel> {
               color: AppColors.emerald.withValues(alpha: 0.07),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Text(
-              'ط§ط¶ط؛ط· ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط© ظ„طھط­ط¯ظٹط¯ ظ…ظˆظ‚ط¹ ط§ظ„طھط¹ظ…ظٹظ…',
-              style: GoogleFonts.cairo(
+            child: const Text(
+              'اضغط على الخريطة لتحديد موقع التعميم',
+              style: TextStyle(fontFamily: 'Tajawal',
                 fontSize: 12, color: AppColors.forestGreen)),
           ),
         ),
 
-        // ط§ظ„ط®ط±ظٹط·ط©
-        Expanded(
+        // الخريطة
+        SizedBox(
+          height: 220,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: ClipRRect(
@@ -170,20 +172,20 @@ class _LocationSidePanelState extends State<LocationSidePanel> {
           ),
         ),
 
-        // ط§ط®طھظٹط§ط± ط´ظƒظ„ ط§ظ„ط¹ظ„ط§ظ…ط©
+        // اختيار شكل العلامة
         Padding(
           padding: const EdgeInsets.fromLTRB(14, 12, 14, 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('ط´ظƒظ„ ط§ظ„ط¹ظ„ط§ظ…ط© ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط©',
-                style: GoogleFonts.cairo(
+              const Text('شكل العلامة على الخريطة',
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 13, fontWeight: FontWeight.w700,
                   color: AppColors.nearBlack)),
               const SizedBox(height: 10),
               Row(
                 children: [
-                  // ط§ظ„ط´ظƒظ„ 1 â€” ط¯ط§ط¦ط±ط©
+                  // الشكل 1 — دائرة
                   Expanded(
                     child: GestureDetector(
                       onTap: () => setState(
@@ -213,15 +215,15 @@ class _LocationSidePanelState extends State<LocationSidePanel> {
                                     color: Colors.white, width: 2)),
                               child: Center(
                                 child: Text(_typeLabel,
-                                  style: GoogleFonts.cairo(
+                                  style: const TextStyle(fontFamily: 'Tajawal',
                                     fontSize: 8, fontWeight: FontWeight.w800,
                                     color: Colors.white),
                                   textAlign: TextAlign.center),
                               ),
                             ),
                             const SizedBox(height: 6),
-                            Text('ط¯ط§ط¦ط±ط©',
-                              style: GoogleFonts.cairo(
+                            Text('دائرة',
+                              style: TextStyle(fontFamily: 'Tajawal',
                                 fontSize: 11, fontWeight: FontWeight.w600,
                                 color: _style == MarkerStyle.typeCircle
                                     ? AppColors.emerald : AppColors.grey)),
@@ -231,7 +233,7 @@ class _LocationSidePanelState extends State<LocationSidePanel> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  // ط§ظ„ط´ظƒظ„ 2 â€” ظ…ط±ط¨ط¹ ط¨طµظˆط±ط©
+                  // الشكل 2 — مربع بصورة
                   Expanded(
                     child: GestureDetector(
                       onTap: () => setState(
@@ -266,12 +268,12 @@ class _LocationSidePanelState extends State<LocationSidePanel> {
                                     child: Image.file(
                                       widget.markerImage!,
                                       fit: BoxFit.cover))
-                                : Icon(Icons.image_rounded,
+                                : const Icon(Icons.image_rounded,
                                     color: AppColors.grey, size: 20),
                             ),
                             const SizedBox(height: 6),
-                            Text('طµظˆط±ط©',
-                              style: GoogleFonts.cairo(
+                            Text('صورة',
+                              style: TextStyle(fontFamily: 'Tajawal',
                                 fontSize: 11, fontWeight: FontWeight.w600,
                                 color: _style == MarkerStyle.imageSquare
                                     ? AppColors.emerald : AppColors.grey)),
@@ -285,7 +287,8 @@ class _LocationSidePanelState extends State<LocationSidePanel> {
             ],
           ),
         ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -326,7 +329,7 @@ class _LocationSidePanelState extends State<LocationSidePanel> {
           ),
           child: Center(
             child: Text(_typeLabel,
-              style: GoogleFonts.cairo(
+              style: const TextStyle(fontFamily: 'Tajawal',
                 fontSize: 8, fontWeight: FontWeight.w800,
                 color: Colors.white),
               textAlign: TextAlign.center),
@@ -355,4 +358,5 @@ class _TrianglePainter extends CustomPainter {
   @override
   bool shouldRepaint(_TrianglePainter old) => old.color != color;
 }
+
 

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:taameem/core/constants/app_colors.dart';
 import 'package:taameem/core/models/taameem_model.dart';
@@ -212,11 +211,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: AppColors.forestGreen,
                       ),
                       const SizedBox(height: 8),
-                      RotatedBox(
+                      const RotatedBox(
                         quarterTurns: 1,
                         child: Text(
                           'القائمة الجانبية',
-                          style: GoogleFonts.cairo(
+                          style: TextStyle(fontFamily: 'Tajawal',
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
                             color: AppColors.forestGreen,
@@ -340,9 +339,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: CustomPaint(painter: _MiniShieldPainter()),
                 ),
                 const SizedBox(width: 8),
-                Text(
+                const Text(
                   'تعميم',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
                     color: AppColors.nearBlack,
@@ -361,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Text(
                     '$count تعميم',
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(fontFamily: 'Tajawal',
                       fontSize: 11,
                       color: AppColors.emerald,
                       fontWeight: FontWeight.w600,
@@ -388,19 +387,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.emerald.withOpacity(0.35),
+                          color: AppColors.emerald.withValues(alpha: 0.35),
                           blurRadius: 8,
                           offset: const Offset(0, 3),
                         )
                       ],
                     ),
-                    child: Row(
+                    child: const Row(
                       children: [
-                        const Icon(Icons.add_rounded,
+                        Icon(Icons.add_rounded,
                             color: Colors.white, size: 16),
-                        const SizedBox(width: 5),
+                        SizedBox(width: 5),
                         Text('رفع تعميم',
-                            style: GoogleFonts.cairo(
+                            style: TextStyle(fontFamily: 'Tajawal',
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
@@ -472,7 +471,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Text(
                   f['label'] as String,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: isActive ? Colors.white : AppColors.forestGreen,
@@ -569,7 +568,7 @@ class _ClusterBubble extends StatelessWidget {
       child: Center(
         child: Text(
           '$count',
-          style: GoogleFonts.cairo(
+          style: const TextStyle(fontFamily: 'Tajawal',
             fontSize: 16,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -614,3 +613,4 @@ class _MiniShieldPainter extends CustomPainter {
   @override
   bool shouldRepaint(_MiniShieldPainter old) => false;
 }
+

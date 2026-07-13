@@ -51,8 +51,8 @@ class MatchingService {
   }
 
   double _textScore(TaameemModel a, TaameemModel b) {
-    final aWords = _tokenize(a.title + ' ' + a.description);
-    final bWords = _tokenize(b.title + ' ' + b.description);
+    final aWords = _tokenize('${a.title} ${a.description}');
+    final bWords = _tokenize('${b.title} ${b.description}');
 
     final common = aWords.intersection(bWords);
     if (common.isEmpty) return 0;
@@ -134,3 +134,4 @@ class MatchingService {
         .toDouble();
   }
 }
+

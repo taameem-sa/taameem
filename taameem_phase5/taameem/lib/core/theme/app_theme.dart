@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:taameem/core/constants/app_colors.dart';
 
 class AppTheme {
@@ -31,49 +30,49 @@ class AppTheme {
   }
 
   static TextTheme _buildTextTheme() {
-    final cairoBase = GoogleFonts.cairoTextTheme();
-    return cairoBase.copyWith(
-      displayLarge: GoogleFonts.cairo(
+    final tajawalBase = const TextTheme();
+    return tajawalBase.copyWith(
+      displayLarge: TextStyle(fontFamily: 'Tajawal',
         fontSize: 32, fontWeight: FontWeight.w800,
         color: AppColors.nearBlack,
       ),
-      displayMedium: GoogleFonts.cairo(
+      displayMedium: TextStyle(fontFamily: 'Tajawal',
         fontSize: 28, fontWeight: FontWeight.w700,
         color: AppColors.nearBlack,
       ),
-      headlineLarge: GoogleFonts.cairo(
+      headlineLarge: TextStyle(fontFamily: 'Tajawal',
         fontSize: 24, fontWeight: FontWeight.w700,
         color: AppColors.forestGreen,
       ),
-      headlineMedium: GoogleFonts.cairo(
+      headlineMedium: TextStyle(fontFamily: 'Tajawal',
         fontSize: 20, fontWeight: FontWeight.w600,
         color: AppColors.forestGreen,
       ),
-      headlineSmall: GoogleFonts.cairo(
+      headlineSmall: TextStyle(fontFamily: 'Tajawal',
         fontSize: 18, fontWeight: FontWeight.w600,
         color: AppColors.forestGreen,
       ),
-      titleLarge: GoogleFonts.cairo(
+      titleLarge: TextStyle(fontFamily: 'Tajawal',
         fontSize: 16, fontWeight: FontWeight.w600,
         color: AppColors.nearBlack,
       ),
-      titleMedium: GoogleFonts.cairo(
+      titleMedium: TextStyle(fontFamily: 'Tajawal',
         fontSize: 14, fontWeight: FontWeight.w500,
         color: AppColors.forestGreen,
       ),
-      bodyLarge: GoogleFonts.cairo(
+      bodyLarge: TextStyle(fontFamily: 'Tajawal',
         fontSize: 16, fontWeight: FontWeight.w400,
         color: AppColors.nearBlack,
       ),
-      bodyMedium: GoogleFonts.cairo(
+      bodyMedium: TextStyle(fontFamily: 'Tajawal',
         fontSize: 14, fontWeight: FontWeight.w400,
         color: AppColors.forestGreen,
       ),
-      bodySmall: GoogleFonts.cairo(
+      bodySmall: TextStyle(fontFamily: 'Tajawal',
         fontSize: 12, fontWeight: FontWeight.w400,
         color: AppColors.grey,
       ),
-      labelLarge: GoogleFonts.cairo(
+      labelLarge: TextStyle(fontFamily: 'Tajawal',
         fontSize: 14, fontWeight: FontWeight.w600,
         color: AppColors.white,
       ),
@@ -89,7 +88,7 @@ class AppTheme {
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
       ),
-      titleTextStyle: GoogleFonts.cairo(
+      titleTextStyle: TextStyle(fontFamily: 'Tajawal',
         fontSize: 18, fontWeight: FontWeight.w700,
         color: AppColors.nearBlack,
       ),
@@ -107,7 +106,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(16),
         ),
         elevation: 0,
-        textStyle: GoogleFonts.cairo(
+        textStyle: TextStyle(fontFamily: 'Tajawal',
           fontSize: 16, fontWeight: FontWeight.w600,
         ),
       ),
@@ -141,11 +140,11 @@ class AppTheme {
         borderRadius: BorderRadius.circular(16),
         borderSide: const BorderSide(color: AppColors.error, width: 1),
       ),
-      hintStyle: GoogleFonts.cairo(
+      hintStyle: TextStyle(fontFamily: 'Tajawal',
         color: AppColors.grey,
         fontSize: 14,
       ),
-      labelStyle: GoogleFonts.cairo(
+      labelStyle: TextStyle(fontFamily: 'Tajawal',
         color: AppColors.forestGreen,
         fontSize: 14,
       ),
@@ -172,10 +171,10 @@ class AppTheme {
       backgroundColor: AppColors.creamWhite,
       selectedItemColor: AppColors.emerald,
       unselectedItemColor: AppColors.grey,
-      selectedLabelStyle: GoogleFonts.cairo(
+      selectedLabelStyle: TextStyle(fontFamily: 'Tajawal',
         fontSize: 11, fontWeight: FontWeight.w600,
       ),
-      unselectedLabelStyle: GoogleFonts.cairo(
+      unselectedLabelStyle: TextStyle(fontFamily: 'Tajawal',
         fontSize: 11, fontWeight: FontWeight.w400,
       ),
       type: BottomNavigationBarType.fixed,
@@ -183,3 +182,4 @@ class AppTheme {
     );
   }
 }
+

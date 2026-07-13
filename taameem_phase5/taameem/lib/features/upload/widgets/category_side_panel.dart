@@ -1,6 +1,5 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 
 class CategorySidePanel extends StatefulWidget {
@@ -21,16 +20,16 @@ class _CategorySidePanelState extends State<CategorySidePanel> {
   String? _selected;
 
   static const List<Map<String, dynamic>> _cats = [
-    {'key':'missingPerson',  'name':'ظپظ‚ط¯ط§ظ† ط´ط®طµ',    'icon':'ًں‘¤', 'color':AppColors.missingPerson},
-    {'key':'foundItem',      'name':'ط¥ظٹط¬ط§ط¯ ط´ظٹط،',    'icon':'ًں“¦', 'color':AppColors.foundItem},
-    {'key':'lostItem',       'name':'ظپظ‚ط¯ط§ظ† ط´ظٹط،',    'icon':'ًں”چ', 'color':AppColors.lostItem},
-    {'key':'theft',          'name':'ط³ط±ظ‚ط©',          'icon':'ًںڑ¨', 'color':AppColors.theft},
-    {'key':'helpRequest',    'name':'ط§ط³طھط؛ط§ط«ط©',       'icon':'ًں†ک', 'color':AppColors.helpRequest},
-    {'key':'humanitarian',   'name':'ط¥ظ†ط³ط§ظ†ظٹ',        'icon':'ًں¤‌', 'color':AppColors.humanitarian},
-    {'key':'emergency',      'name':'ط·ط§ط±ط¦',          'icon':'ًںڑ‘', 'color':AppColors.emergency},
-    {'key':'generalWarning', 'name':'طھط­ط°ظٹط± ط¹ط§ظ…',    'icon':'âڑ ï¸ڈ', 'color':AppColors.generalWarning},
-    {'key':'lostAnimal',     'name':'ظپظ‚ط¯ط§ظ† ط­ظٹظˆط§ظ†',  'icon':'ًںگ¾', 'color':AppColors.lostAnimal},
-    {'key':'inquiry',        'name':'ط§ط³طھظپط³ط§ط±',       'icon':'ًں’¬', 'color':AppColors.inquiry},
+    {'key':'missingPerson',  'name':'فقدان شخص',    'icon':'👤', 'color':AppColors.missingPerson},
+    {'key':'foundItem',      'name':'إيجاد شيء',    'icon':'📦', 'color':AppColors.foundItem},
+    {'key':'lostItem',       'name':'فقدان شيء',    'icon':'🔍', 'color':AppColors.lostItem},
+    {'key':'theft',          'name':'سرقة',          'icon':'🚨', 'color':AppColors.theft},
+    {'key':'helpRequest',    'name':'استغاثة',       'icon':'🆘', 'color':AppColors.helpRequest},
+    {'key':'humanitarian',   'name':'إنساني',        'icon':'🤝', 'color':AppColors.humanitarian},
+    {'key':'emergency',      'name':'طارئ',          'icon':'🚑', 'color':AppColors.emergency},
+    {'key':'generalWarning', 'name':'تحذير عام',    'icon':'⚠️', 'color':AppColors.generalWarning},
+    {'key':'lostAnimal',     'name':'فقدان حيوان',  'icon':'🐾', 'color':AppColors.lostAnimal},
+    {'key':'inquiry',        'name':'استفسار',       'icon':'💬', 'color':AppColors.inquiry},
   ];
 
   @override
@@ -43,13 +42,13 @@ class _CategorySidePanelState extends State<CategorySidePanel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // ط²ط± ط§ظ„ط­ظپط¸
+        // زر الحفظ
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Row(
             children: [
-              Text('ظپط¦ط© ط§ظ„طھط¹ظ…ظٹظ…',
-                style: GoogleFonts.cairo(
+              const Text('فئة التعميم',
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 18, fontWeight: FontWeight.w800,
                   color: AppColors.nearBlack)),
               const Spacer(),
@@ -62,8 +61,8 @@ class _CategorySidePanelState extends State<CategorySidePanel> {
                       colors: [AppColors.emerald, AppColors.forestGreen]),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text('ط­ظپط¸',
-                    style: GoogleFonts.cairo(
+                  child: const Text('حفظ',
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white)),
                 ),
               ),
@@ -73,7 +72,7 @@ class _CategorySidePanelState extends State<CategorySidePanel> {
 
         Container(height: 1, color: AppColors.glassBorder),
 
-        // ظ‚ط§ط¦ظ…ط© ط§ظ„ظپط¦ط§طھ ظƒط¨ط·ط§ظ‚ط§طھ
+        // قائمة الفئات كبطاقات
         Expanded(
           child: ListView(
             padding: const EdgeInsets.all(14),
@@ -117,7 +116,7 @@ class _CategorySidePanelState extends State<CategorySidePanel> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(c['name'] as String,
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(fontFamily: 'Tajawal',
                                 fontSize: 13,
                                 fontWeight: isSelected
                                     ? FontWeight.w700 : FontWeight.w500,
@@ -143,4 +142,5 @@ class _CategorySidePanelState extends State<CategorySidePanel> {
     );
   }
 }
+
 

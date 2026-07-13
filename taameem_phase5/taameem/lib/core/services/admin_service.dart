@@ -116,3 +116,4 @@ class AdminService {
     await _db.collection('users').doc(userId).update({'banned': banned});
   }
 }
+

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/models/taameem_model.dart';
 import '../../../core/services/firestore_service.dart';
@@ -60,9 +59,9 @@ class _ProfileScreenState extends State<ProfileScreen>
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
       child: Row(
         children: [
-          Text(
+          const Text(
             'حسابي',
-            style: GoogleFonts.cairo(
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 24,
               fontWeight: FontWeight.w700,
               color: AppColors.nearBlack,
@@ -115,10 +114,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                   border: Border.all(
                       color: AppColors.gold.withValues(alpha: 0.5), width: 2),
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'م',
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -148,17 +147,17 @@ class _ProfileScreenState extends State<ProfileScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'مستخدم تعميم',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
                     color: AppColors.nearBlack,
                   ),
                 ),
-                Text(
+                const Text(
                   '+966 5XX XXX XXXX',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 13, color: AppColors.grey),
                 ),
                 const SizedBox(height: 4),
@@ -169,9 +168,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                     color: AppColors.gold.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Text(
+                  child: const Text(
                     'عضو نشط',
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 11,
                       color: AppColors.gold,
                       fontWeight: FontWeight.w600,
@@ -253,17 +252,17 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
           labelColor: Colors.white,
           unselectedLabelColor: AppColors.forestGreen,
-          labelStyle: GoogleFonts.cairo(
+          labelStyle: const TextStyle(fontFamily: 'Tajawal',
               fontSize: 13, fontWeight: FontWeight.w600),
           unselectedLabelStyle:
-              GoogleFonts.cairo(fontSize: 13, fontWeight: FontWeight.w400),
+              const TextStyle(fontFamily: 'Tajawal',fontSize: 13, fontWeight: FontWeight.w400),
           tabs: [
-            Tab(
+            const Tab(
               child: Row(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.list_rounded, size: 16),
-                  const SizedBox(width: 6),
-                  const Text('تعميماتي'),
+                  Icon(Icons.list_rounded, size: 16),
+                  SizedBox(width: 6),
+                  Text('تعميماتي'),
                 ],
               ),
             ),
@@ -274,12 +273,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                   MaterialPageRoute(
                       builder: (_) => const AchievementsScreen()),
                 ),
-                child: Row(
+                child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.emoji_events_rounded, size: 16),
-                      const SizedBox(width: 6),
-                      const Text('الإنجازات'),
+                      Icon(Icons.emoji_events_rounded, size: 16),
+                      SizedBox(width: 6),
+                      Text('الإنجازات'),
                     ]),
               ),
             ),
@@ -318,15 +317,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                 Icon(Icons.post_add_rounded,
                     size: 60, color: AppColors.grey.withValues(alpha: 0.4)),
                 const SizedBox(height: 16),
-                Text(
+                const Text(
                   'لم تنشر أي تعميم بعد',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 16, color: AppColors.grey),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'اضغط زر "رفع تعميم" في الشريط السفلي',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 13, color: AppColors.grey.withValues(alpha: 0.7)),
                 ),
               ],
@@ -361,17 +360,17 @@ class _ProfileScreenState extends State<ProfileScreen>
           Icon(Icons.emoji_events_rounded,
               size: 60, color: AppColors.gold.withValues(alpha: 0.5)),
           const SizedBox(height: 16),
-          Text(
+          const Text(
             'إنجازاتك',
-            style: GoogleFonts.cairo(
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 20, fontWeight: FontWeight.w700,
               color: AppColors.nearBlack),
           ),
           const SizedBox(height: 8),
-          Text(
+          const Text(
             'التعميمات التي أغلقتها بنجاح\nستظهر هنا كإنجازات',
             textAlign: TextAlign.center,
-            style: GoogleFonts.cairo(
+            style: TextStyle(fontFamily: 'Tajawal',
                 fontSize: 13, color: AppColors.grey, height: 1.6),
           ),
           const SizedBox(height: 20),
@@ -387,9 +386,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                     colors: [AppColors.emerald, AppColors.forestGreen]),
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Text(
+              child: const Text(
                 'عرض الإنجازات',
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 14, fontWeight: FontWeight.w600,
                     color: Colors.white),
               ),
@@ -419,7 +418,7 @@ class _StatItem extends StatelessWidget {
         children: [
           Text(
             value,
-            style: GoogleFonts.cairo(
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 24,
               fontWeight: FontWeight.w800,
               color: color,
@@ -427,7 +426,7 @@ class _StatItem extends StatelessWidget {
           ),
           Text(
             label,
-            style: GoogleFonts.cairo(fontSize: 11, color: AppColors.grey),
+            style: const TextStyle(fontFamily: 'Tajawal',fontSize: 11, color: AppColors.grey),
             textAlign: TextAlign.center,
           ),
         ],
@@ -435,3 +434,4 @@ class _StatItem extends StatelessWidget {
     );
   }
 }
+

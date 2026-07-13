@@ -1,8 +1,9 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/models/taameem_model.dart';
@@ -25,10 +26,11 @@ class ComposeTaameemScreen extends StatefulWidget {
 }
 
 class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final _textCtrl = TextEditingController();
   late List<File> _media;
 
-  // ط¥ط¹ط¯ط§ط¯ط§طھ ط§ظ„طھط¹ظ…ظٹظ…
+  // إعدادات التعميم
   String?       _type;
   LatLng?       _location;
   MarkerStyle   _markerStyle = MarkerStyle.typeCircle;
@@ -58,7 +60,26 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
     if (mounted) setState(() => _location = loc);
   }
 
-  // â”€â”€ ظپطھط­ ظ„ظˆط­ط© ط¬ط§ظ†ط¨ظٹط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  Future<({String userId, String userPhone})> _resolvePublisherIdentity() async {
+    final existing = _auth.currentUser;
+    if (existing != null) {
+      return (
+        userId: existing.uid,
+        userPhone: existing.phoneNumber ?? '',
+      );
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    var guestId = prefs.getString('guest_user_id');
+    if (guestId == null || guestId.isEmpty) {
+      guestId = 'guest_${DateTime.now().millisecondsSinceEpoch}';
+      await prefs.setString('guest_user_id', guestId);
+    }
+
+    return (userId: guestId, userPhone: '');
+  }
+
+  // ── فتح لوحة جانبية ──────────────────────────────────────────
   void _openPanel(Widget panel) {
     showGeneralDialog<void>(
       context: context,
@@ -97,13 +118,15 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
     );
   }
 
-  // â”€â”€ ظ†ط´ط± ط§ظ„طھط¹ظ…ظٹظ… â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── نشر التعميم ──────────────────────────────────────────────
   Future<void> _publish() async {
     setState(() => _isPublishing = true);
     try {
+      final identity = await _resolvePublisherIdentity();
+
       List<String> imageUrls = [];
       if (_media.isNotEmpty) {
-        final tempId = DateTime.now().millisecondsSinceEpoch.toString();
+        final tempId = '${identity.userId}_${DateTime.now().millisecondsSinceEpoch}';
         imageUrls = await StorageService.instance
             .uploadMediaFiles(_media, tempId);
       }
@@ -117,12 +140,12 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
 
       final t = TaameemModel(
         id: '',
-        userId: 'temp_user',
-        userPhone: '+9665XXXXXXXX',
+        userId: identity.userId,
+        userPhone: identity.userPhone,
         type: _type ?? 'inquiry',
         title: _textCtrl.text.trim().isNotEmpty
             ? _textCtrl.text.trim()
-            : AppConstants.categoryNames[_type] ?? 'طھط¹ظ…ظٹظ…',
+            : AppConstants.categoryNames[_type] ?? 'تعميم',
         description: _textCtrl.text.trim(),
         latitude: publishLocation.latitude,
         longitude: publishLocation.longitude,
@@ -144,9 +167,10 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _isPublishing = false);
+      final errorText = e.toString().replaceFirst('Exception: ', '');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('ط­ط¯ط« ط®ط·ط£طŒ ط­ط§ظˆظ„ ظ…ط±ط© ط£ط®ط±ظ‰',
-          style: GoogleFonts.cairo()),
+        content: Text(errorText,
+          style: const TextStyle(fontFamily: 'Tajawal',)),
         backgroundColor: AppColors.error,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
@@ -171,17 +195,17 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('âœ…', style: TextStyle(fontSize: 52)),
+              const Text('✅', style: TextStyle(fontSize: 52)),
               const SizedBox(height: 12),
-              Text('طھظ… ظ†ط´ط± ط§ظ„طھط¹ظ…ظٹظ…!',
-                style: GoogleFonts.cairo(
+              const Text('تم نشر التعميم!',
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 20, fontWeight: FontWeight.w800,
                   color: AppColors.nearBlack)),
               const SizedBox(height: 8),
-              Text(
-                'ط³ظٹط¸ظ‡ط± ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط© ظˆط³طھطµظ„ ط¥ط´ط¹ط§ط±ط§طھ ظ„ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† ظپظٹ ط§ظ„ظ†ط·ط§ظ‚ ط§ظ„ظ…ط­ط¯ط¯',
+              const Text(
+                'سيظهر على الخريطة وستصل إشعارات للمستخدمين في النطاق المحدد',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 13, color: AppColors.forestGreen,
                   height: 1.6)),
               const SizedBox(height: 20),
@@ -198,9 +222,9 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
                         colors: [AppColors.emerald, AppColors.forestGreen]),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Center(
-                    child: Text('ط§ظ„ط¹ظˆط¯ط© ظ„ظ„ط®ط±ظٹط·ط©',
-                      style: GoogleFonts.cairo(
+                  child: const Center(
+                    child: Text('العودة للخريطة',
+                      style: TextStyle(fontFamily: 'Tajawal',
                         fontSize: 14, fontWeight: FontWeight.w700,
                         color: Colors.white)),
                   ),
@@ -228,7 +252,7 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
         ext.endsWith('.webm');
   }
 
-  // â”€â”€ ط§ظ„ظˆط§ط¬ظ‡ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── الواجهة ──────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -243,13 +267,13 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
                     horizontal: 14, vertical: 10),
                 child: Column(
                   children: [
-                    // â”€â”€ ط­ظ‚ظ„ ط§ظ„ظ†طµ (Telegram style) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                    // ── حقل النص (Telegram style) ──────────────
                     _buildTextField(),
                     const SizedBox(height: 10),
-                    // â”€â”€ ط£ط²ط±ط§ط± ط§ظ„ط¥ط¹ط¯ط§ط¯ط§طھ ط§ظ„ط£ط±ط¨ط¹ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                    // ── أزرار الإعدادات الأربعة ──────────────
                     _buildOptionsGrid(),
                     const SizedBox(height: 12),
-                    // â”€â”€ ظ…ط¹ط±ط¶ ط§ظ„طµظˆط± â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+                    // ── معرض الصور ───────────────────────────
                     if (_media.isNotEmpty) _buildMediaBar(),
                   ],
                 ),
@@ -290,12 +314,12 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              Text('طھط¹ظ…ظٹظ… ط¬ط¯ظٹط¯',
-                style: GoogleFonts.cairo(
+              const Text('تعميم جديد',
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 17, fontWeight: FontWeight.w800,
                   color: AppColors.nearBlack)),
               const Spacer(),
-              // ط¹ط¯ط¯ ط§ظ„ظˆط³ط§ط¦ط·
+              // عدد الوسائط
               if (_media.isNotEmpty)
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -312,7 +336,7 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
                           size: 14, color: AppColors.gold),
                       const SizedBox(width: 4),
                       Text('${_media.length}',
-                        style: GoogleFonts.cairo(
+                        style: const TextStyle(fontFamily: 'Tajawal',
                           fontSize: 12, fontWeight: FontWeight.w700,
                           color: AppColors.gold)),
                     ],
@@ -334,15 +358,15 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
       ),
       child: TextField(
         controller: _textCtrl,
-        style: GoogleFonts.cairo(
+        style: const TextStyle(fontFamily: 'Tajawal',
           fontSize: 15, color: AppColors.nearBlack, height: 1.6),
-        decoration: InputDecoration(
-          hintText: 'ط£ط¶ظپ ظˆطµظپط§ظ‹ ط£ظˆ ط¹ظ†ظˆط§ظ†ط§ظ‹ (ط§ط®طھظٹط§ط±ظٹ)...',
-          hintStyle: GoogleFonts.cairo(
+        decoration: const InputDecoration(
+          hintText: 'أضف وصفاً أو عنواناً (اختياري)...',
+          hintStyle: TextStyle(fontFamily: 'Tajawal',
             fontSize: 14, color: AppColors.grey),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.all(16),
-          prefixIcon: const Padding(
+          contentPadding: EdgeInsets.all(16),
+          prefixIcon: Padding(
             padding: EdgeInsets.only(right: 12, top: 14),
             child: Icon(Icons.edit_rounded,
                 color: AppColors.emerald, size: 18),
@@ -362,7 +386,7 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
           children: [
             Expanded(child: _OptionCard(
               icon: Icons.category_rounded,
-              label: 'ظپط¦ط© ط§ظ„طھط¹ظ…ظٹظ…',
+              label: 'فئة التعميم',
               value: _type != null
                   ? AppConstants.categoryNames[_type] : null,
               color: _typeColor,
@@ -374,8 +398,8 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
             const SizedBox(width: 10),
             Expanded(child: _OptionCard(
               icon: Icons.location_on_rounded,
-              label: 'ظ…ظˆظ‚ط¹ ط§ظ„طھط¹ظ…ظٹظ…',
-              value: _location != null ? 'طھظ… ط§ظ„طھط­ط¯ظٹط¯' : null,
+              label: 'موقع التعميم',
+              value: _location != null ? 'تم التحديد' : null,
               color: AppColors.emerald,
               onTap: () => _openPanel(LocationSidePanel(
                 initialLocation: _location,
@@ -396,10 +420,10 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
           children: [
             Expanded(child: _OptionCard(
               icon: Icons.radar_rounded,
-              label: 'ظ†ط·ط§ظ‚ ط§ظ„ط§ظ†طھط´ط§ط±',
+              label: 'نطاق الانتشار',
               value: _allKingdom
-                  ? 'ًں‡¸ًں‡¦ ط§ظ„ظ…ظ…ظ„ظƒط©'
-                  : '${_radiusKm.round()} ظƒظ…',
+                  ? '🇸🇦 المملكة'
+                  : '${_radiusKm.round()} كم',
               color: AppColors.mint,
               onTap: () => _openPanel(RadiusSidePanel(
                 radiusKm: _radiusKm,
@@ -415,7 +439,7 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
             const SizedBox(width: 10),
             Expanded(child: _OptionCard(
               icon: Icons.timer_outlined,
-              label: 'ظ…ط¯ط© ط§ظ„طھط¹ظ…ظٹظ…',
+              label: 'مدة التعميم',
               value: _durationLabel,
               color: AppColors.gold,
               onTap: () => _openPanel(DurationSidePanel(
@@ -431,10 +455,10 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
 
   String get _durationLabel {
     final d = _duration;
-    if (d.inDays >= 365) return 'ط³ظ†ط©';
-    if (d.inDays >= 7)   return '${d.inDays ~/ 7} ط£ط³ط¨ظˆط¹';
-    if (d.inDays >= 1)   return '${d.inDays} ظٹظˆظ…';
-    return '${d.inHours} ط³ط§ط¹ط©';
+    if (d.inDays >= 365) return 'سنة';
+    if (d.inDays >= 7)   return '${d.inDays ~/ 7} أسبوع';
+    if (d.inDays >= 1)   return '${d.inDays} يوم';
+    return '${d.inHours} ساعة';
   }
 
   Color get _typeColor {
@@ -452,10 +476,10 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8, right: 4),
-          child: Text('ط§ظ„ظ…ط±ظپظ‚ط§طھ',
-            style: GoogleFonts.cairo(
+        const Padding(
+          padding: EdgeInsets.only(bottom: 8, right: 4),
+          child: Text('المرفقات',
+            style: TextStyle(fontFamily: 'Tajawal',
               fontSize: 13, fontWeight: FontWeight.w700,
               color: AppColors.forestGreen)),
         ),
@@ -496,8 +520,8 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
                                   color: AppColors.emerald,
                                   size: 28,
                                 ),
-                                Text(isVideo ? 'ظپظٹط¯ظٹظˆ' : 'ظ…ظ„ظپ',
-                                  style: GoogleFonts.cairo(
+                                Text(isVideo ? 'فيديو' : 'ملف',
+                                  style: const TextStyle(fontFamily: 'Tajawal',
                                     fontSize: 10,
                                     color: AppColors.forestGreen)),
                               ],
@@ -562,14 +586,14 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
                       width: 22, height: 22,
                       child: CircularProgressIndicator(
                         color: Colors.white, strokeWidth: 2))
-                  : Row(
+                  : const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.send_rounded,
+                        Icon(Icons.send_rounded,
                             color: Colors.white, size: 18),
-                        const SizedBox(width: 8),
-                        Text('ظ†ط´ط± ط§ظ„طھط¹ظ…ظٹظ… ط§ظ„ط¢ظ†',
-                          style: GoogleFonts.cairo(
+                        SizedBox(width: 8),
+                        Text('نشر التعميم الآن',
+                          style: TextStyle(fontFamily: 'Tajawal',
                             fontSize: 16, fontWeight: FontWeight.w700,
                             color: Colors.white)),
                       ],
@@ -583,7 +607,7 @@ class _ComposeTaameemScreenState extends State<ComposeTaameemScreen> {
   }
 }
 
-// â”€â”€ ط¨ط·ط§ظ‚ط© ط®ظٹط§ط± â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── بطاقة خيار ───────────────────────────────────────────────────
 class _OptionCard extends StatelessWidget {
   final IconData icon;
   final String   label;
@@ -634,11 +658,11 @@ class _OptionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(label,
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(fontFamily: 'Tajawal',
                       fontSize: 11, color: AppColors.grey)),
                   Text(
-                    hasValue ? value! : 'ط§ط®طھظٹط§ط±ظٹ',
-                    style: GoogleFonts.cairo(
+                    hasValue ? value! : 'اختياري',
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 12,
                       fontWeight: hasValue
                           ? FontWeight.w700 : FontWeight.w400,
@@ -656,4 +680,5 @@ class _OptionCard extends StatelessWidget {
     );
   }
 }
+
 

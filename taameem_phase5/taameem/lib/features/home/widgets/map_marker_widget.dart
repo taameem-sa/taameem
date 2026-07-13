@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 
 class MapMarkerWidget extends StatelessWidget {
@@ -45,7 +44,7 @@ class MapMarkerWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 label,
-                style: GoogleFonts.cairo(
+                style: TextStyle(fontFamily: 'Tajawal',
                   fontSize: 8,
                   fontWeight: FontWeight.w700,
                   color: _getTextColor(color),
@@ -92,3 +91,4 @@ class _MarkerTrianglePainter extends CustomPainter {
   @override
   bool shouldRepaint(_MarkerTrianglePainter old) => old.color != color;
 }
+

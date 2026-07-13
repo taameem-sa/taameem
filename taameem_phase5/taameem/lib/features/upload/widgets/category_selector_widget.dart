@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 
 class CategorySelectorWidget extends StatelessWidget {
@@ -80,7 +79,7 @@ class CategorySelectorWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     cat['name'] as String,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(fontFamily: 'Tajawal',
                       fontSize: 12,
                       fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                       color: isSelected ? color : AppColors.forestGreen,
@@ -114,3 +113,4 @@ class CategorySelectorWidget extends StatelessWidget {
     }
   }
 }
+

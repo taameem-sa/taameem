@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/models/taameem_model.dart';
@@ -43,7 +42,7 @@ class TaameemDetailScreen extends StatelessWidget {
               ),
             ),
             title: Text(taameem.typeName,
-              style: GoogleFonts.cairo(
+              style: const TextStyle(fontFamily: 'Tajawal',
                 fontSize: 16, fontWeight: FontWeight.w700,
                 color: AppColors.nearBlack)),
             actions: [
@@ -52,12 +51,12 @@ class TaameemDetailScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 12, vertical: 5),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.12),
+                  color: color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: color.withOpacity(0.3)),
+                  border: Border.all(color: color.withValues(alpha: 0.3)),
                 ),
                 child: Text(taameem.mapLabel,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 12, fontWeight: FontWeight.w700,
                     color: color)),
               ),
@@ -145,12 +144,12 @@ class _PublisherCard extends StatelessWidget {
                   ),
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: AppColors.gold.withOpacity(0.4), width: 1.5),
+                      color: AppColors.gold.withValues(alpha: 0.4), width: 1.5),
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     '👤',
-                    style: const TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
               ),
@@ -165,7 +164,7 @@ class _PublisherCard extends StatelessWidget {
                       taameem.userPhone.isNotEmpty
                           ? taameem.userPhone
                           : 'مستخدم تعميم',
-                      style: GoogleFonts.cairo(
+                      style: const TextStyle(fontFamily: 'Tajawal',
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: AppColors.nearBlack,
@@ -179,7 +178,7 @@ class _PublisherCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           'نشر ${taameem.timeAgo}',
-                          style: GoogleFonts.cairo(
+                          style: const TextStyle(fontFamily: 'Tajawal',
                             fontSize: 11, color: AppColors.grey),
                         ),
                         if (taameem.city.isNotEmpty) ...[
@@ -188,7 +187,7 @@ class _PublisherCard extends StatelessWidget {
                               size: 12, color: AppColors.grey),
                           const SizedBox(width: 2),
                           Text(taameem.city,
-                            style: GoogleFonts.cairo(
+                            style: const TextStyle(fontFamily: 'Tajawal',
                               fontSize: 11, color: AppColors.grey)),
                         ],
                       ],
@@ -202,13 +201,13 @@ class _PublisherCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.gold.withOpacity(0.1),
+                  color: AppColors.gold.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                      color: AppColors.gold.withOpacity(0.3)),
+                      color: AppColors.gold.withValues(alpha: 0.3)),
                 ),
-                child: Text('عضو',
-                  style: GoogleFonts.cairo(
+                child: const Text('عضو',
+                  style: TextStyle(fontFamily: 'Tajawal',
                     fontSize: 10, fontWeight: FontWeight.w700,
                     color: AppColors.gold)),
               ),
@@ -252,7 +251,7 @@ class _TaameemContent extends StatelessWidget {
                     topRight: Radius.circular(18),
                   ),
                   gradient: LinearGradient(
-                    colors: [color.withOpacity(0), color, color.withOpacity(0)],
+                    colors: [color.withValues(alpha: 0), color, color.withValues(alpha: 0)],
                   ),
                 ),
               ),
@@ -264,7 +263,7 @@ class _TaameemContent extends StatelessWidget {
                   children: [
                     // العنوان
                     Text(taameem.title,
-                      style: GoogleFonts.cairo(
+                      style: const TextStyle(fontFamily: 'Tajawal',
                         fontSize: 20,
                         fontWeight: FontWeight.w800,
                         color: AppColors.nearBlack,
@@ -274,7 +273,7 @@ class _TaameemContent extends StatelessWidget {
                     if (taameem.description.isNotEmpty) ...[
                       const SizedBox(height: 12),
                       Text(taameem.description,
-                        style: GoogleFonts.cairo(
+                        style: const TextStyle(fontFamily: 'Tajawal',
                           fontSize: 14,
                           color: AppColors.forestGreen,
                           height: 1.7,
@@ -326,7 +325,7 @@ class _InfoChip extends StatelessWidget {
       children: [
         Icon(icon, size: 12, color: c),
         const SizedBox(width: 4),
-        Text(label, style: GoogleFonts.cairo(fontSize: 11, color: c)),
+        Text(label, style: TextStyle(fontFamily: 'Tajawal',fontSize: 11, color: c)),
       ],
     );
   }
@@ -369,8 +368,8 @@ class _MediaGalleryState extends State<_MediaGallery> {
                     const Icon(Icons.perm_media_rounded,
                         size: 16, color: AppColors.forestGreen),
                     const SizedBox(width: 6),
-                    Text('المرفقات',
-                      style: GoogleFonts.cairo(
+                    const Text('المرفقات',
+                      style: TextStyle(fontFamily: 'Tajawal',
                         fontSize: 13, fontWeight: FontWeight.w700,
                         color: AppColors.forestGreen)),
                     const SizedBox(width: 6),
@@ -378,11 +377,11 @@ class _MediaGalleryState extends State<_MediaGallery> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
-                        color: AppColors.emerald.withOpacity(0.1),
+                        color: AppColors.emerald.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text('${widget.urls.length}',
-                        style: GoogleFonts.cairo(
+                        style: const TextStyle(fontFamily: 'Tajawal',
                           fontSize: 11, fontWeight: FontWeight.w700,
                           color: AppColors.emerald)),
                     ),
@@ -524,15 +523,15 @@ class _MiniMapCard extends StatelessWidget {
                     const Icon(Icons.location_on_rounded,
                         size: 16, color: AppColors.emerald),
                     const SizedBox(width: 6),
-                    Text('الموقع',
-                      style: GoogleFonts.cairo(
+                    const Text('الموقع',
+                      style: TextStyle(fontFamily: 'Tajawal',
                         fontSize: 13, fontWeight: FontWeight.w700,
                         color: AppColors.forestGreen)),
                     const Spacer(),
                     Text(
                       '${taameem.latitude.toStringAsFixed(4)}, '
                       '${taameem.longitude.toStringAsFixed(4)}',
-                      style: GoogleFonts.cairo(
+                      style: const TextStyle(fontFamily: 'Tajawal',
                         fontSize: 10, color: AppColors.grey)),
                   ],
                 ),
@@ -579,14 +578,14 @@ class _MiniMapCard extends StatelessWidget {
                                         color: Colors.white, width: 2.5),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: color.withOpacity(0.4),
+                                        color: color.withValues(alpha: 0.4),
                                         blurRadius: 10,
                                       ),
                                     ],
                                   ),
                                   child: Center(
                                     child: Text(taameem.mapLabel,
-                                      style: GoogleFonts.cairo(
+                                      style: const TextStyle(fontFamily: 'Tajawal',
                                         fontSize: 7,
                                         fontWeight: FontWeight.w800,
                                         color: Colors.white),
@@ -692,9 +691,9 @@ class _Btn extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
+          color: color.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: color.withOpacity(0.3)),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -702,7 +701,7 @@ class _Btn extends StatelessWidget {
             Icon(icon, size: 16, color: color),
             const SizedBox(width: 6),
             Text(label,
-              style: GoogleFonts.cairo(
+              style: TextStyle(fontFamily: 'Tajawal',
                 fontSize: 12, fontWeight: FontWeight.w700, color: color)),
           ],
         ),

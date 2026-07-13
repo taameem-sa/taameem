@@ -43,3 +43,4 @@ class AppColors {
   static Color get mapOverlay => const Color(0xFF1A3028).withValues(alpha: 0.04);
   static Color get mapCardBg  => const Color(0xFFFDFCF8).withValues(alpha: 0.95);
 }
+
