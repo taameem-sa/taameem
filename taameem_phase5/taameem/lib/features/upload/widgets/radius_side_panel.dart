@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/services/location_service.dart';
@@ -163,7 +162,7 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
                       child: Text(
                         '🇸🇦\nالمملكة كاملة',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.tajawal(
+                        style: TextStyle(fontFamily: 'NotoNaskhArabic',
                           fontSize: 16, fontWeight: FontWeight.w800,
                           color: AppColors.error, height: 1.6),
                       ),

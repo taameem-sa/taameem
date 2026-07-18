@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -18,6 +19,7 @@ import 'package:taameem/features/home/widgets/side_panel.dart';
 import 'package:taameem/features/home/widgets/taameem_card_popup.dart';
 import 'package:taameem/features/home/screens/taameem_detail_screen.dart';
 import 'package:taameem/features/upload/screens/camera_screen.dart';
+import '../widgets/taameem_map_marker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,6 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // فلتر النوع النشط
   String? _activeFilter;
+
+  TaameemModel? _activePopup;
+  Offset _popupOffset = Offset.zero;
 
   @override
   void initState() {
@@ -54,6 +59,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _showPopup(BuildContext ctx, TaameemModel t) {
+    try {
+      final pt = _mapController.camera
+          .latLngToScreenPoint(LatLng(t.latitude, t.longitude));
+      setState(() {
+        _activePopup = t;
+        _popupOffset = Offset(pt.x.toDouble(), pt.y.toDouble());
+      });
+    } catch (_) {}
+  }
+
   void _onNavTap(int index) {
     setState(() {
       _currentIndex = index;
@@ -69,7 +85,13 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBody: true,
       bottomNavigationBar: TaameemBottomNav(
         currentIndex: _currentIndex,
-        onTap: _onNavTap,
+        onTap: (i) => setState(() => _currentIndex = i),
+        onAiTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const AiChatScreen(),
+          ),
+        ),
       ),
     );
   }
@@ -78,9 +100,8 @@ class _HomeScreenState extends State<HomeScreen> {
     switch (_currentIndex) {
       case 0: return _buildMapScreen();
       case 1: return const SearchScreen();
-      case 2: return const AiChatScreen();
-      case 3: return const NotificationsScreen();
-      case 4: return const ProfileScreen();
+      case 2: return const NotificationsScreen();
+      case 3: return const ProfileScreen();
       default: return _buildMapScreen();
     }
   }
@@ -128,20 +149,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(50),
                     maxZoom: 15,
                     markers: filtered.map((t) {
+                      if (t.imageUrls.isNotEmpty) {
+                        return Marker(
+                          point: LatLng(t.latitude, t.longitude),
+                          width: 62, height: 72,
+                          child: PhotoMarker(
+                            taameem: t,
+                            onTap: () => _showPopup(context, t),
+                          ),
+                        );
+                      }
                       return Marker(
                         point: LatLng(t.latitude, t.longitude),
-                        width: 70,
-                        height: 75,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() => _selectedTaameem = t);
-                            FirestoreService.instance.incrementView(t.id);
-                          },
-                          child: MapMarkerWidget(
-                            color: t.typeColor,
-                            label: t.mapLabel,
-                            isSelected: _selectedTaameem?.id == t.id,
-                          ),
+                        width: 50, height: 58,
+                        child: CategoryMarker(
+                          taameem: t,
+                          onTap: () => _showPopup(context, t),
                         ),
                       );
                     }).toList(),
@@ -179,6 +202,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // ─── شريط العنوان ─────────────────────────────────────────
             _buildTopBar(filtered.length),
+
+            if (_activePopup != null)
+              GestureDetector(
+                onTap: () => setState(() => _activePopup = null),
+                child: Container(color: Colors.transparent),
+              ),
+            if (_activePopup != null)
+              TaameemPopupCard(
+                taameem: _activePopup!,
+                markerScreenPos: _popupOffset,
+                onClose: () => setState(() => _activePopup = null),
+                onViewDetail: () {
+                  final t = _activePopup!;
+                  setState(() => _activePopup = null);
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (_) => TaameemDetailScreen(taameem: t)));
+                },
+              ),
 
             Positioned(
               right: 0,

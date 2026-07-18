@@ -1,8 +1,8 @@
-﻿import 'dart:io';
+import 'dart:io';
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -12,17 +12,19 @@ import '../../../core/models/taameem_model.dart';
 import '../../../core/services/firestore_service.dart';
 import '../../../core/services/location_service.dart';
 import '../../../core/services/storage_service.dart';
+import '../widgets/category_side_panel.dart';
+import '../widgets/radius_side_panel.dart';
+import '../widgets/duration_side_panel.dart';
 
-
-// â”€â”€ ط£ظٹ ظ„ظˆط­ط© ظ…ظپطھظˆط­ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── أي لوحة مفتوحة ────────────────────────────────────────────────────────
 enum _Panel { none, category, location, radius, duration, title, attachments }
 
-// â”€â”€ ط£ظ„ظˆط§ظ† ط§ظ„ط°ظ‡ط¨ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── ألوان الذهب ────────────────────────────────────────────────────────────
 const _gold     = Color(0xFFC9A84C);
 const _goldBg   = Color.fromRGBO(201, 168, 76, 0.18);
 const _goldGlow = Color.fromRGBO(201, 168, 76, 0.28);
 
-// â”€â”€ ط£ط¨ط¹ط§ط¯ ط§ظ„ط£ط²ط±ط§ط± (ظ…ط·ط§ط¨ظ‚ط© ظ„ظ„طھطµظ…ظٹظ…) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── أبعاد الأزرار (مطابقة للتصميم) ────────────────────────────────────────
 const _btnW  = 105.0;
 const _btnH  = 45.0;
 const _btnGap = 6.0;
@@ -37,7 +39,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen>
     with SingleTickerProviderStateMixin {
 
-  // â”€â”€ state ط§ظ„طھط¹ظ…ظٹظ… â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── state التعميم ─────────────────────────────────────────────────────────
   String?    _type;
   LatLng?    _location;
   double     _radius   = 10;
@@ -45,7 +47,7 @@ class _CameraScreenState extends State<CameraScreen>
   String     _title    = '';
   List<File> _media    = [];
 
-  // â”€â”€ state ط§ظ„ظˆط§ط¬ظ‡ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── state الواجهة ─────────────────────────────────────────────────────────
   _Panel _panel       = _Panel.none;
   bool   _publishing  = false;
 
@@ -54,18 +56,18 @@ class _CameraScreenState extends State<CameraScreen>
   final _titleCtrl = TextEditingController();
   final _picker    = ImagePicker();
 
-  // â”€â”€ ظپط¦ط§طھ ط§ظ„طھط¹ظ…ظٹظ… â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── فئات التعميم ──────────────────────────────────────────────────────────
   static const _cats = [
-    {'k':'missingPerson',  'n':'ظپظ‚ط¯ط§ظ† ط´ط®طµ',  'e':'ًں‘¤'},
-    {'k':'foundItem',      'n':'ط¥ظٹط¬ط§ط¯ ط´ظٹط،',  'e':'ًں“¦'},
-    {'k':'lostItem',       'n':'ظپظ‚ط¯ط§ظ† ط´ظٹط،',  'e':'ًں”چ'},
-    {'k':'theft',          'n':'ط³ط±ظ‚ط©',         'e':'ًںڑ¨'},
-    {'k':'helpRequest',    'n':'ط§ط³طھط؛ط§ط«ط©',      'e':'ًں†ک'},
-    {'k':'humanitarian',   'n':'ط¥ظ†ط³ط§ظ†ظٹ',       'e':'ًں¤‌'},
-    {'k':'emergency',      'n':'ط·ط§ط±ط¦',         'e':'ًںڑ‘'},
-    {'k':'generalWarning', 'n':'طھط­ط°ظٹط±',        'e':'âڑ ï¸ڈ'},
-    {'k':'lostAnimal',     'n':'ط­ظٹظˆط§ظ† ظ…ظپظ‚ظˆط¯', 'e':'ًںگ¾'},
-    {'k':'inquiry',        'n':'ط§ط³طھظپط³ط§ط±',      'e':'ًں’¬'},
+    {'k':'missingPerson',  'n':'فقدان شخص',  'e':'👤'},
+    {'k':'foundItem',      'n':'إيجاد شيء',  'e':'📦'},
+    {'k':'lostItem',       'n':'فقدان شيء',  'e':'🔍'},
+    {'k':'theft',          'n':'سرقة',         'e':'🚨'},
+    {'k':'helpRequest',    'n':'استغاثة',      'e':'🆘'},
+    {'k':'humanitarian',   'n':'إنساني',       'e':'🤝'},
+    {'k':'emergency',      'n':'طارئ',         'e':'🚑'},
+    {'k':'generalWarning', 'n':'تحذير',        'e':'⚠️'},
+    {'k':'lostAnimal',     'n':'حيوان مفقود', 'e':'🐾'},
+    {'k':'inquiry',        'n':'استفسار',      'e':'💬'},
   ];
 
   @override
@@ -91,7 +93,7 @@ class _CameraScreenState extends State<CameraScreen>
     if (mounted) setState(() => _location = loc);
   }
 
-  // â”€â”€ ظپطھط­ / ط¥ط؛ظ„ط§ظ‚ ظ„ظˆط­ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── فتح / إغلاق لوحة ─────────────────────────────────────────────────────
   void _open(_Panel p) {
     if (_panel == p) { _close(); return; }
     setState(() => _panel = p);
@@ -104,7 +106,7 @@ class _CameraScreenState extends State<CameraScreen>
     });
   }
 
-  // â”€â”€ ط§ظ„طھظ‚ط§ط· طµظˆط±ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── التقاط صورة ──────────────────────────────────────────────────────────
   Future<void> _capture() async {
     final f = await _picker.pickImage(
         source: ImageSource.camera, imageQuality: 90);
@@ -116,7 +118,7 @@ class _CameraScreenState extends State<CameraScreen>
     if (mounted) setState(() => _media.addAll(files.map((f) => File(f.path))));
   }
 
-  // â”€â”€ ظ†ط´ط± ط§ظ„طھط¹ظ…ظٹظ… â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── نشر التعميم ──────────────────────────────────────────────────────────
   Future<void> _publish() async {
     if (_publishing) return;
     setState(() => _publishing = true);
@@ -136,7 +138,7 @@ class _CameraScreenState extends State<CameraScreen>
         type:        _type ?? 'inquiry',
         title:       _title.isNotEmpty
             ? _title
-            : AppConstants.categoryNames[_type] ?? 'طھط¹ظ…ظٹظ…',
+            : AppConstants.categoryNames[_type] ?? 'تعميم',
         description: _title,
         latitude:    _location?.latitude  ?? 24.7136,
         longitude:   _location?.longitude ?? 46.6753,
@@ -164,14 +166,14 @@ class _CameraScreenState extends State<CameraScreen>
             borderRadius: BorderRadius.circular(22),
           ),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            const Text('âœ…', style: TextStyle(fontSize: 48)),
+            const Text('✅', style: TextStyle(fontSize: 48)),
             const SizedBox(height: 10),
-            Text('طھظ… ظ†ط´ط± ط§ظ„طھط¹ظ…ظٹظ…!',
-              style: GoogleFonts.cairo(fontSize: 19,
+            Text('تم نشر التعميم!',
+              style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 19,
                   fontWeight: FontWeight.w800, color: AppColors.nearBlack)),
             const SizedBox(height: 6),
-            Text('ظٹط¸ظ‡ط± ط§ظ„ط¢ظ† ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط©',
-              style: GoogleFonts.cairo(fontSize: 13, color: AppColors.forestGreen)),
+            Text('يظهر الآن على الخريطة',
+              style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 13, color: AppColors.forestGreen)),
             const SizedBox(height: 18),
             GestureDetector(
               onTap: () { Navigator.pop(context); Navigator.pop(context); },
@@ -181,8 +183,8 @@ class _CameraScreenState extends State<CameraScreen>
                   gradient: const LinearGradient(
                       colors: [AppColors.emerald, AppColors.forestGreen]),
                   borderRadius: BorderRadius.circular(13)),
-                child: Center(child: Text('ط§ظ„ط¹ظˆط¯ط© ظ„ظ„ط®ط±ظٹط·ط©',
-                  style: GoogleFonts.cairo(fontSize: 14,
+                child: Center(child: Text('العودة للخريطة',
+                  style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 14,
                       fontWeight: FontWeight.w700, color: Colors.white))),
               ),
             ),
@@ -197,9 +199,9 @@ class _CameraScreenState extends State<CameraScreen>
     return ['.jpg', '.jpeg', '.png', '.heic', '.webp'].any(e.endsWith);
   }
 
-  // â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+  // ══════════════════════════════════════════════════════════════════════════
   //  BUILD
-  // â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+  // ══════════════════════════════════════════════════════════════════════════
   @override
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
@@ -211,22 +213,22 @@ class _CameraScreenState extends State<CameraScreen>
         onTap: _panel != _Panel.none ? _close : null,
         child: Stack(children: [
 
-          // 1. ط®ظ„ظپظٹط© ط§ظ„ظƒط§ظ…ظٹط±ط§
+          // 1. خلفية الكاميرا
           const _CamBg(),
 
-          // 2. ط´ط±ظٹط· ط§ظ„ط£ط¹ظ„ظ‰
+          // 2. شريط الأعلى
           _topBar(top),
 
-          // 3. 5 ط£ط²ط±ط§ط± ط§ظ„ظٹظ…ظٹظ†
+          // 3. 5 أزرار اليمين
           _rightButtons(top),
 
-          // 4. ظ…ظ†ط·ظ‚ط© ط§ظ„ظ…ط±ظپظ‚ط§طھ
+          // 4. منطقة المرفقات
           _attArea(bot),
 
-          // 5. ط²ط± ط§ظ„طھطµظˆظٹط±
+          // 5. زر التصوير
           _shutterBtn(bot),
 
-          // 6. ظ„ظˆط­ط© ط§ظ„طھظ…ط±ظٹط±
+          // 6. لوحة التمرير
           if (_panel != _Panel.none)
             AnimatedBuilder(animation: _anim, builder: (_, __) => _panelLayer()),
         ]),
@@ -234,12 +236,12 @@ class _CameraScreenState extends State<CameraScreen>
     );
   }
 
-  // â”€â”€ ط´ط±ظٹط· ط§ظ„ط£ط¹ظ„ظ‰ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── شريط الأعلى ──────────────────────────────────────────────────────────
   Widget _topBar(double top) => Positioned(
     top: top + 10,
     left: 12, right: 12,
     child: Row(children: [
-      // ط¥ط؛ظ„ط§ظ‚
+      // إغلاق
       GestureDetector(
         onTap: () => Navigator.pop(context),
         child: Container(
@@ -252,11 +254,11 @@ class _CameraScreenState extends State<CameraScreen>
         ),
       ),
       const Spacer(),
-      Text('ط±ظپط¹ طھط¹ظ…ظٹظ…',
-        style: GoogleFonts.cairo(fontSize: 16, fontWeight: FontWeight.w700,
+      Text('رفع تعميم',
+        style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 16, fontWeight: FontWeight.w700,
             color: Colors.white)),
       const Spacer(),
-      // ظ†ط´ط±
+      // نشر
       GestureDetector(
         onTap: _publishing ? null : _publish,
         child: Container(
@@ -269,7 +271,7 @@ class _CameraScreenState extends State<CameraScreen>
               ? const SizedBox(width: 16, height: 16,
                   child: CircularProgressIndicator(
                       strokeWidth: 2, color: _gold))
-              : Text('ظ†ط´ط±', style: GoogleFonts.cairo(
+              : Text('نشر', style: TextStyle(fontFamily: 'NotoNaskhArabic',
                   fontSize: 14, fontWeight: FontWeight.w800, color: _gold)),
           ),
         ),
@@ -277,36 +279,36 @@ class _CameraScreenState extends State<CameraScreen>
     ]),
   );
 
-  // â”€â”€ 5 ط£ط²ط±ط§ط± ط§ظ„ظٹظ…ظٹظ† â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── 5 أزرار اليمين ───────────────────────────────────────────────────────
   Widget _rightButtons(double top) => Positioned(
     top: top + 64,
     right: _btnR,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        _OBtn(emoji: _catEmoji(), label: 'ظپط¦ط© ط§ظ„طھط¹ظ…ظٹظ…',
+        _OBtn(emoji: _catEmoji(), label: 'فئة التعميم',
           value:  _type != null ? _catName() : null,
           active: _panel == _Panel.category,
           onTap:  () => _open(_Panel.category)),
         const SizedBox(height: _btnGap),
-        _OBtn(emoji: 'ًں“چ', label: 'ظ…ظˆظ‚ط¹ ط§ظ„طھط¹ظ…ظٹظ…',
-          value:  _location != null ? 'ظ…ط­ط¯ط¯ âœ“' : null,
+        _OBtn(emoji: '📍', label: 'موقع التعميم',
+          value:  _location != null ? 'محدد ✓' : null,
           active: _panel == _Panel.location,
           onTap:  () => _open(_Panel.location)),
         const SizedBox(height: _btnGap),
-        _OBtn(emoji: 'ًں“،', label: 'ظ†ط·ط§ظ‚ ط§ظ„طھط¹ظ…ظٹظ…',
-          value:  '${_radius.round()} ظƒظ…',
+        _OBtn(emoji: '📡', label: 'نطاق التعميم',
+          value:  '${_radius.round()} كم',
           active: _panel == _Panel.radius,
           onTap:  () => _open(_Panel.radius)),
         const SizedBox(height: _btnGap),
-        _OBtn(emoji: 'âڈ±ï¸ڈ', label: 'ظ…ظڈط¯ط© ط§ظ„طھط¹ظ…ظٹظ…',
+        _OBtn(emoji: '⏱️', label: 'مُدة التعميم',
           value:  _durLabel(),
           active: _panel == _Panel.duration,
           onTap:  () => _open(_Panel.duration)),
         const SizedBox(height: _btnGap),
-        _OBtn(emoji: 'âœڈï¸ڈ', label: 'ط¹ظ†ظˆط§ظ† ط§ظ„طھط¹ظ…ظٹظ…',
+        _OBtn(emoji: '✏️', label: 'عنوان التعميم',
           value:  _title.isNotEmpty
-              ? (_title.length > 10 ? '${_title.substring(0, 10)}â€¦' : _title)
+              ? (_title.length > 10 ? '${_title.substring(0, 10)}…' : _title)
               : null,
           active: _panel == _Panel.title,
           onTap:  () => _open(_Panel.title)),
@@ -314,22 +316,22 @@ class _CameraScreenState extends State<CameraScreen>
     ),
   );
 
-  // â”€â”€ ظ…ظ†ط·ظ‚ط© ط§ظ„ظ…ط±ظپظ‚ط§طھ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  // â”€â”€ ط²ط± ط§ظ„ظ…ط±ظپظ‚ط§طھ ط§ظ„ط¬ط§ظ†ط¨ظٹ â€” 25أ—120px ط«ط§ط¨طھ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── منطقة المرفقات ────────────────────────────────────────────────────────
+  // ── زر المرفقات الجانبي — 25×120px ثابت ──────────────────────────────────
   Widget _attArea(double bot) => Positioned(
-    // ظ…ط±ظپظˆط¹ ظ‚ظ„ظٹظ„ط§ظ‹ ط¹ظ† ط§ظ„ط²ط± ط§ظ„ط³ط§ط¨ظ‚
+    // مرفوع قليلاً عن الزر السابق
     bottom: bot + 120,
     left: 10,
     child: GestureDetector(
       onTap: () => _open(_Panel.attachments),
       child: Container(
-        // ط§ظ„ط­ط¬ظ… ط«ط§ط¨طھ ظ„ط§ ظٹطھط؛ظٹط± ظ…ظ‡ظ…ط§ ظƒط§ظ† ط¹ط¯ط¯ ط§ظ„طµظˆط±
+        // الحجم ثابت لا يتغير مهما كان عدد الصور
         width: 25,
         height: 120,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: _gold, width: 1.5),
-          // ط®ظ„ظپظٹط©: ط£ط³ظˆط¯ ظƒط«ظٹظپ ط£ط¹ظ„ظ‰ â†’ ط´ظپط§ظپ ط£ط³ظپظ„
+          // خلفية: أسود كثيف أعلى → شفاف أسفل
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -344,10 +346,10 @@ class _CameraScreenState extends State<CameraScreen>
           clipBehavior: Clip.hardEdge,
           children: [
 
-            // â”€â”€ ط·ط¨ظ‚ط§طھ ط§ظ„طµظˆط± ط§ظ„ظ…طھط±ط§ظƒظ…ط© (ط§ظ„ط¬ط²ط، ط§ظ„ط¹ظ„ظˆظٹ ط«ط§ط¨طھ) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── طبقات الصور المتراكمة (الجزء العلوي ثابت) ──────────────────
             Positioned(
               top: 4, left: 2, right: 2,
-              // ط§ط±طھظپط§ط¹ ظ…ظ†ط·ظ‚ط© ط§ظ„طµظˆط± ط«ط§ط¨طھ â€” 78px
+              // ارتفاع منطقة الصور ثابت — 78px
               height: 78,
               child: Stack(
                 clipBehavior: Clip.hardEdge,
@@ -356,9 +358,9 @@ class _CameraScreenState extends State<CameraScreen>
                     .asMap()
                     .entries
                     .map((e) {
-                  final i   = e.key;   // 0=ط£ظ‚ط¯ظ…طŒ 2=ط£ط­ط¯ط«
+                  final i   = e.key;   // 0=أقدم، 2=أحدث
                   final f   = e.value;
-                  // ط§ظ„طµظˆط±ط© ط§ظ„ط£ط­ط¯ط« (i=2) طھظƒظˆظ† ظپظٹ ط§ظ„ط£ظ…ط§ظ… ظ…ط¹ offset ط£ظ‚ظ„
+                  // الصورة الأحدث (i=2) تكون في الأمام مع offset أقل
                   final offset = (2 - i) * 4.0;
                   return Positioned(
                     top: offset,
@@ -386,7 +388,7 @@ class _CameraScreenState extends State<CameraScreen>
               ),
             ),
 
-            // â”€â”€ ط¹ط¯ط§ط¯ ط§ظ„طµظˆط± â€” ط«ط§ط¨طھ ط£ط¹ظ„ظ‰ ط§ظ„ظٹظ…ظٹظ† â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── عداد الصور — ثابت أعلى اليمين ──────────────────────────────
             if (_media.isNotEmpty)
               Positioned(
                 top: 2, right: 0,
@@ -409,7 +411,7 @@ class _CameraScreenState extends State<CameraScreen>
                 ),
               ),
 
-            // â”€â”€ ط£ظٹظ‚ظˆظ†ط© ط§ظ„ظ…ط´ط¨ظƒ â€” ط«ط§ط¨طھط© ط¯ط§ط¦ظ…ط§ظ‹ ظپظٹ ط§ظ„ط£ط³ظپظ„ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── أيقونة المشبك — ثابتة دائماً في الأسفل ──────────────────────
             const Positioned(
               bottom: 6,
               left: 0, right: 0,
@@ -428,7 +430,7 @@ class _CameraScreenState extends State<CameraScreen>
     ),
   );
 
-  // â”€â”€ ط²ط± ط§ظ„طھطµظˆظٹط± â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── زر التصوير ───────────────────────────────────────────────────────────
   Widget _shutterBtn(double bot) => Positioned(
     bottom: bot + 26,
     left: 0, right: 0,
@@ -450,7 +452,7 @@ class _CameraScreenState extends State<CameraScreen>
     ),
   );
 
-  // â”€â”€ ط·ط¨ظ‚ط© ط§ظ„ظ„ظˆط­ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── طبقة اللوحة ──────────────────────────────────────────────────────────
   Widget _panelLayer() {
     final fromLeft = _panel == _Panel.attachments;
     final w = MediaQuery.of(context).size.width;
@@ -458,7 +460,7 @@ class _CameraScreenState extends State<CameraScreen>
     return GestureDetector(
       onTap: _close,
       child: Stack(children: [
-        // طھط¯ط±ط¬ ط§ظ„ط®ظ„ظپظٹط©
+        // تدرج الخلفية
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -476,7 +478,7 @@ class _CameraScreenState extends State<CameraScreen>
             ),
           ),
         ),
-        // ظ…ط­طھظˆظ‰ ط§ظ„ظ„ظˆط­ط©
+        // محتوى اللوحة
         Positioned(
           top: 0, bottom: 0,
           right: fromLeft ? null : 0,
@@ -507,7 +509,12 @@ class _CameraScreenState extends State<CameraScreen>
           onSave: (k) { setState(() => _type = k); _close(); });
       case _Panel.location:
         return _LocPanel(location: _location, topPad: top,
-          onSave: (l) { setState(() => _location = l); _close(); });
+          onSave: (d) {
+            setState(() {
+              _location = d['location'] as LatLng?;
+            });
+            _close();
+          });
       case _Panel.radius:
         return _RadPanel(radius: _radius, topPad: top,
           onSave: (r) { setState(() => _radius = r); _close(); });
@@ -526,28 +533,28 @@ class _CameraScreenState extends State<CameraScreen>
     }
   }
 
-  // â”€â”€ ظ…ط³ط§ط¹ط¯ط§طھ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── مساعدات ───────────────────────────────────────────────────────────────
   String _catEmoji() => _type != null
     ? (_cats.firstWhere((c) => c['k'] == _type,
-        orElse: () => const {'e': 'ًںڈ·ï¸ڈ'})['e'] as String)
-    : 'ًںڈ·ï¸ڈ';
+        orElse: () => const {'e': '🏷️'})['e'] as String)
+    : '🏷️';
 
   String _catName() => _cats
     .firstWhere((c) => c['k'] == _type, orElse: () => const {'n': ''})['n'] as String;
 
   String _durLabel() {
     final d = _duration;
-    if (d.inDays >= 365) return 'ط³ظ†ط©';
-    if (d.inDays >= 30)  return '${d.inDays ~/ 30} ط´ظ‡ط±';
-    if (d.inDays >= 7)   return '${d.inDays ~/ 7} ط£ط³ط§ط¨ظٹط¹';
-    if (d.inDays >= 1)   return '${d.inDays} ظٹظˆظ…';
-    return '${d.inHours} ط³ط§ط¹ط©';
+    if (d.inDays >= 365) return 'سنة';
+    if (d.inDays >= 30)  return '${d.inDays ~/ 30} شهر';
+    if (d.inDays >= 7)   return '${d.inDays ~/ 7} أسابيع';
+    if (d.inDays >= 1)   return '${d.inDays} يوم';
+    return '${d.inHours} ساعة';
   }
 }
 
-// â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
-//  _OBtn â€” ط²ط± ط§ظ„ط®ظٹط§ط± (ط§ظ„ط£ط¨ط¹ط§ط¯ ط§ظ„ظ…ظڈط­ط¯ط¯ط©)
-// â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+// ══════════════════════════════════════════════════════════════════════════════
+//  _OBtn — زر الخيار (الأبعاد المُحددة)
+// ══════════════════════════════════════════════════════════════════════════════
 class _OBtn extends StatelessWidget {
   final String emoji, label;
   final String? value;
@@ -575,23 +582,23 @@ class _OBtn extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // ظ†طµ ط§ظ„ظٹط³ط§ط±
+          // نص اليسار
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: GoogleFonts.cairo(
+                Text(label, style: TextStyle(fontFamily: 'NotoNaskhArabic',
                   fontSize: 8.5, color: Colors.white.withOpacity(0.58)),
                   maxLines: 1, overflow: TextOverflow.ellipsis),
                 if (value != null)
-                  Text(value!, style: GoogleFonts.cairo(
+                  Text(value!, style: TextStyle(fontFamily: 'NotoNaskhArabic',
                     fontSize: 10.5, fontWeight: FontWeight.w800, color: _gold),
                     maxLines: 1, overflow: TextOverflow.ellipsis),
               ],
             ),
           ),
-          // ط¥ظٹظ…ظˆط¬ظٹ ط§ظ„ظٹظ…ظٹظ†
+          // إيموجي اليمين
           Text(emoji, style: const TextStyle(fontSize: 17)),
         ],
       ),
@@ -599,9 +606,9 @@ class _OBtn extends StatelessWidget {
   );
 }
 
-// â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
-//  ط®ظ„ظپظٹط© ط§ظ„ظƒط§ظ…ظٹط±ط§ ط§ظ„ظ…طھط­ط±ظƒط©
-// â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+// ══════════════════════════════════════════════════════════════════════════════
+//  خلفية الكاميرا المتحركة
+// ══════════════════════════════════════════════════════════════════════════════
 class _CamBg extends StatefulWidget {
   const _CamBg();
   @override State<_CamBg> createState() => _CamBgState();
@@ -640,9 +647,9 @@ class _GridP extends CustomPainter {
   @override bool shouldRepaint(_GridP o) => false;
 }
 
-// â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
-//  ظ„ظˆط­ط© ظ…ط´طھط±ظƒط©
-// â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+// ══════════════════════════════════════════════════════════════════════════════
+//  لوحة مشتركة
+// ══════════════════════════════════════════════════════════════════════════════
 class _PanelBase extends StatelessWidget {
   final String title;
   final double topPad;
@@ -656,7 +663,7 @@ class _PanelBase extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: EdgeInsets.fromLTRB(12, topPad + 56, 12, 20),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(title, style: GoogleFonts.cairo(
+      Text(title, style: TextStyle(fontFamily: 'NotoNaskhArabic',
         fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
       const SizedBox(height: 14),
       Expanded(child: SingleChildScrollView(child: child)),
@@ -672,8 +679,8 @@ class _PanelBase extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(13),
         border: Border.all(color: _gold, width: 1.8)),
-      child: Center(child: Text('ط­ظپط¸',
-        style: GoogleFonts.cairo(fontSize: 14,
+      child: Center(child: Text('حفظ',
+        style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 14,
             fontWeight: FontWeight.w800, color: _gold))),
     ),
   );
@@ -689,7 +696,7 @@ Widget _goldCard(Widget child) => Container(
   child: child,
 );
 
-// â”€â”€ ظ„ظˆط­ط© ط§ظ„ظپط¦ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── لوحة الفئة ────────────────────────────────────────────────────────────
 class _CatPanel extends StatefulWidget {
   final List<Map<String, String>> cats;
   final String? selected;
@@ -704,7 +711,7 @@ class _CatPanelState extends State<_CatPanel> {
   @override void initState() { super.initState(); _tmp = widget.selected; }
   @override
   Widget build(BuildContext context) => _PanelBase(
-    title: 'ظپط¦ط© ط§ظ„طھط¹ظ…ظٹظ…', topPad: widget.topPad,
+    title: 'فئة التعميم', topPad: widget.topPad,
     onSave: () => widget.onSave(_tmp),
     child: Column(children: widget.cats.map((c) {
       final sel = _tmp == c['k'];
@@ -723,7 +730,7 @@ class _CatPanelState extends State<_CatPanel> {
           child: Row(children: [
             Text(c['e']!, style: const TextStyle(fontSize: 20)),
             const SizedBox(width: 10),
-            Expanded(child: Text(c['n']!, style: GoogleFonts.cairo(
+            Expanded(child: Text(c['n']!, style: TextStyle(fontFamily: 'NotoNaskhArabic',
               fontSize: 13, fontWeight: sel ? FontWeight.w700 : FontWeight.w400,
               color: Colors.white))),
             if (sel) const Icon(Icons.check_rounded, color: _gold, size: 15),
@@ -734,64 +741,339 @@ class _CatPanelState extends State<_CatPanel> {
   );
 }
 
-// â”€â”€ ظ„ظˆط­ط© ط§ظ„ظ…ظˆظ‚ط¹ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ══════════════════════════════════════════════════════════════════════════════
+//  لوحة الموقع — خريطة كبيرة + crosshair + اختيار نوع العلامة
+// ══════════════════════════════════════════════════════════════════════════════
+enum MarkerStyle { photo, category }
+
 class _LocPanel extends StatefulWidget {
   final LatLng? location;
   final double topPad;
-  final ValueChanged<LatLng?> onSave;
-  const _LocPanel({required this.location, required this.topPad, required this.onSave});
+  final ValueChanged<Map<String, dynamic>> onSave;
+  const _LocPanel({
+    required this.location,
+    required this.topPad,
+    required this.onSave,
+  });
   @override State<_LocPanel> createState() => _LocPanelState();
 }
+
 class _LocPanelState extends State<_LocPanel> {
-  LatLng? _loc;
-  @override void initState() { super.initState(); _loc = widget.location; }
+  LatLng        _loc        = LocationService.defaultLocation;
+  MarkerStyle   _style      = MarkerStyle.photo;
+  bool          _hintShown  = true;
+  final MapController _mapCtrl = MapController();
+
   @override
-  Widget build(BuildContext context) => _PanelBase(
-    title: 'ظ…ظˆظ‚ط¹ ط§ظ„طھط¹ظ…ظٹظ…', topPad: widget.topPad,
-    onSave: () => widget.onSave(_loc ?? LocationService.defaultLocation),
-    child: Column(children: [
-      _goldCard(SizedBox(
-        height: 200,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: FlutterMap(
-            options: MapOptions(
-              initialCenter: _loc ?? LocationService.defaultLocation,
-              initialZoom: 14,
-              onTap: (_, pt) => setState(() => _loc = pt),
-              interactionOptions: const InteractionOptions(
-                  flags: InteractiveFlag.all)),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.taameem.app'),
-              if (_loc != null)
-                MarkerLayer(markers: [Marker(
-                  point: _loc!, width: 40, height: 48,
-                  child: Column(children: [
-                    Container(
-                      width: 32, height: 32,
-                      decoration: BoxDecoration(
-                        color: _gold, shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2.5),
-                        boxShadow: [BoxShadow(color: _goldGlow, blurRadius: 8)]),
-                      child: const Icon(Icons.location_on_rounded,
-                          color: Colors.white, size: 16)),
-                    CustomPaint(size: const Size(10, 6),
-                        painter: _TriP()),
-                  ]),
-                )]),
-            ],
+  void initState() {
+    super.initState();
+    if (widget.location != null) _loc = widget.location!;
+  }
+
+  void _onMapEvent(MapEvent _) {
+    final c = _mapCtrl.camera.center;
+    setState(() {
+      _loc = c;
+      _hintShown = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, widget.topPad + 50, 0, 0),
+      child: Column(children: [
+
+        // ── رأس ─────────────────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(children: [
+              Text('موقع التعميم',
+                style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                  fontSize: 17, fontWeight: FontWeight.w800,
+                  color: Colors.white)),
+              const Spacer(),
+              GestureDetector(
+                onTap: () => widget.onSave(
+                    {'location': _loc, 'markerStyle': _style}),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 18, vertical: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: _gold, width: 1.8)),
+                  child: Text('حفظ',
+                    style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                      fontSize: 13, fontWeight: FontWeight.w800,
+                      color: _gold)),
+                ),
+              ),
+            ]),
+            const SizedBox(height: 4),
+            // إحداثيات دقيقة
+            Text(
+              '${_loc.latitude.toStringAsFixed(6)}°  '
+              '${_loc.longitude.toStringAsFixed(6)}°',
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 10,
+                color: Color(0xFFC9A84C),
+                letterSpacing: 0.3,
+              ),
+            ),
+          ]),
+        ),
+
+        // ── الخريطة الكبيرة ─────────────────────────────────────────────────
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                      color: _gold.withOpacity(0.4), width: 1.5)),
+                child: Stack(children: [
+
+                  // الخريطة
+                  FlutterMap(
+                    mapController: _mapCtrl,
+                    options: MapOptions(
+                      initialCenter: _loc,
+                      initialZoom: 16, // دقة عالية
+                      interactionOptions: const InteractionOptions(
+                          flags: InteractiveFlag.all),
+                      onMapEvent: _onMapEvent,
+                      onTap: (_, pt) {
+                        setState(() { _loc = pt; _hintShown = false; });
+                        _mapCtrl.move(pt, _mapCtrl.camera.zoom);
+                      },
+                    ),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'com.taameem.app',
+                        maxZoom: 19,
+                      ),
+                    ],
+                  ),
+
+                  // Crosshair ذهبي ثابت في المركز
+                  const Center(child: _Crosshair()),
+
+                  // تلميح يختفي بعد أول تفاعل
+                  if (_hintShown)
+                    Positioned(
+                      bottom: 8, left: 0, right: 0,
+                      child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.65),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                                color: _gold.withOpacity(0.3))),
+                          child: Text(
+                            'اسحب الخريطة أو اضغط لتحديد الموقع',
+                            style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                              fontSize: 10,
+                              color: Colors.white.withOpacity(0.8)),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                ]),
+              ),
+            ),
           ),
         ),
-      )),
-      Text(_loc != null
-        ? 'ط§ط¶ط؛ط· ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط© ظ„طھط؛ظٹظٹط± ط§ظ„ظ…ظˆظ‚ط¹'
-        : 'ط§ط¶ط؛ط· ط¹ظ„ظ‰ ط§ظ„ط®ط±ظٹط·ط© ظ„طھط­ط¯ظٹط¯ ط§ظ„ظ…ظˆظ‚ط¹',
-        style: GoogleFonts.cairo(fontSize: 11,
-            color: Colors.white.withOpacity(0.5))),
-    ]),
-  );
+
+        const SizedBox(height: 8),
+
+        // ── اختيار نوع العلامة ───────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.45),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                  color: _gold.withOpacity(0.25), width: 1.5)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('نوع العلامة على الخريطة',
+                  style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                    fontSize: 10, color: Colors.white.withOpacity(0.45))),
+                const SizedBox(height: 8),
+                Row(children: [
+
+                  // نوع 1: صورة
+                  Expanded(child: GestureDetector(
+                    onTap: () => setState(() => _style = MarkerStyle.photo),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: _style == MarkerStyle.photo
+                              ? _gold : _gold.withOpacity(0.3),
+                          width: _style == MarkerStyle.photo ? 2 : 1.5),
+                        color: _style == MarkerStyle.photo
+                            ? _goldBg : Colors.transparent),
+                      child: Column(children: [
+                        Container(
+                          width: 44, height: 44,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                                color: Colors.white, width: 2),
+                            color: Colors.grey.shade800),
+                          child: const Icon(Icons.image_rounded,
+                              color: Colors.white70, size: 20)),
+                        const SizedBox(height: 6),
+                        Text('صورة من المرفقات',
+                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                            fontSize: 10, fontWeight: FontWeight.w700,
+                            color: _style == MarkerStyle.photo
+                                ? _gold : Colors.white70),
+                          textAlign: TextAlign.center),
+                        const SizedBox(height: 4),
+                        if (_style == MarkerStyle.photo)
+                          const Icon(Icons.check_circle_rounded,
+                              color: _gold, size: 14),
+                      ]),
+                    ),
+                  )),
+
+                  const SizedBox(width: 10),
+
+                  // نوع 2: علامة الفئة
+                  Expanded(child: GestureDetector(
+                    onTap: () => setState(() => _style = MarkerStyle.category),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: _style == MarkerStyle.category
+                              ? _gold : _gold.withOpacity(0.3),
+                          width: _style == MarkerStyle.category ? 2 : 1.5),
+                        color: _style == MarkerStyle.category
+                            ? _goldBg : Colors.transparent),
+                      child: Column(children: [
+                        Container(
+                          width: 44, height: 44,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.missingPerson,
+                            border: Border.all(
+                                color: Colors.white, width: 2.5)),
+                          child: Center(
+                            child: Text('مفقود',
+                              style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                                fontSize: 8, fontWeight: FontWeight.w800,
+                                color: Colors.white),
+                              textAlign: TextAlign.center)),
+                        ),
+                        const SizedBox(height: 6),
+                        Text('علامة فئة التعميم',
+                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                            fontSize: 10, fontWeight: FontWeight.w700,
+                            color: _style == MarkerStyle.category
+                                ? _gold : Colors.white70),
+                          textAlign: TextAlign.center),
+                        const SizedBox(height: 4),
+                        if (_style == MarkerStyle.category)
+                          const Icon(Icons.check_circle_rounded,
+                              color: _gold, size: 14),
+                      ]),
+                    ),
+                  )),
+
+                ]),
+              ],
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        // ── زر موقعي الحالي ─────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+          child: GestureDetector(
+            onTap: () async {
+              final loc = await LocationService.instance.getCurrentLocation();
+              if (mounted) {
+                setState(() => _loc = loc);
+                _mapCtrl.move(loc, 17);
+              }
+            },
+            child: Container(
+              width: double.infinity, height: 38,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                    color: _gold.withOpacity(0.45), width: 1.5)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.my_location_rounded,
+                      color: _gold, size: 14),
+                  const SizedBox(width: 8),
+                  Text('موقعي الحالي',
+                    style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                      fontSize: 12, fontWeight: FontWeight.w700,
+                      color: _gold)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+}
+
+// Crosshair ذهبي في مركز الخريطة
+class _Crosshair extends StatelessWidget {
+  const _Crosshair();
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 44, height: 44,
+      child: Stack(alignment: Alignment.center, children: [
+        // خط عمودي
+        Container(
+          width: 1.5, height: 44,
+          color: const Color(0xFFC9A84C)),
+        // خط أفقي
+        Container(
+          width: 44, height: 1.5,
+          color: const Color(0xFFC9A84C)),
+        // نقطة المركز
+        Container(
+          width: 8, height: 8,
+          decoration: BoxDecoration(
+            color: const Color(0xFFC9A84C),
+            shape: BoxShape.circle,
+            boxShadow: [BoxShadow(
+              color: const Color(0xFFC9A84C).withOpacity(0.8),
+              blurRadius: 8)]),
+        ),
+      ]),
+    );
+  }
 }
 
 class _TriP extends CustomPainter {
@@ -803,92 +1085,813 @@ class _TriP extends CustomPainter {
   @override bool shouldRepaint(_TriP o) => false;
 }
 
-// â”€â”€ ظ„ظˆط­ط© ط§ظ„ظ†ط·ط§ظ‚ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── لوحة النطاق ───────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+//  لوحة نطاق التعميم — خريطة تفاعلية حرة كاملة
+// ══════════════════════════════════════════════════════════════════════════════
 class _RadPanel extends StatefulWidget {
-  final double radius; final double topPad; final ValueChanged<double> onSave;
-  const _RadPanel({required this.radius, required this.topPad, required this.onSave});
+  final double radius;
+  final double topPad;
+  final ValueChanged<double> onSave;
+  const _RadPanel({
+    required this.radius,
+    required this.topPad,
+    required this.onSave,
+  });
   @override State<_RadPanel> createState() => _RadPanelState();
 }
+
 class _RadPanelState extends State<_RadPanel> {
-  late double _r; bool _ksa = false;
-  @override void initState() { super.initState(); _r = widget.radius; }
+  // ── state ─────────────────────────────────────────────────────────────────
+  late double  _radiusKm;
+  late LatLng  _center;
+  bool         _ksaMode = false;
+  bool         _draggingCenter = false;
+  bool         _draggingEdge   = false;
+
+  final MapController _mapCtrl = MapController();
+
+  // نقطة المركز على الشاشة
+  Offset _centerScreen = Offset.zero;
+  Offset _edgeScreen   = Offset.zero;
+
+  static const _quickPicks = [2.0, 5.0, 10.0, 25.0, 50.0];
+  static const _saCenter   = LatLng(23.8859, 45.0792);
+
+  // ── init ──────────────────────────────────────────────────────────────────
   @override
-  Widget build(BuildContext context) => _PanelBase(
-    title: 'ظ†ط·ط§ظ‚ ط§ظ„طھط¹ظ…ظٹظ…', topPad: widget.topPad,
-    onSave: () => widget.onSave(_ksa ? 999 : _r),
-    child: Column(children: [
-      _goldCard(Column(children: [
-        Text('${_r.round()} ظƒظ…', style: GoogleFonts.cairo(
-          fontSize: 30, fontWeight: FontWeight.w800, color: _gold)),
-        SliderTheme(
-          data: SliderTheme.of(context).copyWith(
-            activeTrackColor: _gold, thumbColor: _gold,
-            inactiveTrackColor: Colors.white24,
-            overlayColor: _goldGlow),
-          child: Slider(value: _r, min: 1, max: 500,
-            onChanged: (v) => setState(() => _r = v))),
-      ])),
-      GestureDetector(
-        onTap: () => setState(() => _ksa = !_ksa),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          width: double.infinity, height: 44,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(13),
-            border: Border.all(
-              color: _ksa ? Colors.red : Colors.red.withOpacity(0.45)),
-            color: _ksa ? Colors.red.withOpacity(0.2) : Colors.transparent),
-          child: Center(child: Text('ًں‡¸ًں‡¦  ط§ظ„ظ…ظ…ظ„ظƒط© ظƒط§ظ…ظ„ط©',
-            style: GoogleFonts.cairo(fontSize: 14,
-                fontWeight: FontWeight.w800, color: Colors.red.shade300))),
+  void initState() {
+    super.initState();
+    _radiusKm = widget.radius.clamp(1, 500);
+    _center   = LocationService.defaultLocation;
+
+    // نستمع لحركة الخريطة لتحديث مواضع العلامات
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _mapCtrl.mapEventStream.listen((_) => _recalcScreenPositions());
+    });
+  }
+
+  // ── حساب نقطة الحافة الشرقية ──────────────────────────────────────────────
+  LatLng get _edgeLatLng {
+    final lngOffset = (_radiusKm / 111.32) /
+        math.cos(_center.latitude * math.pi / 180);
+    return LatLng(_center.latitude, _center.longitude + lngOffset);
+  }
+
+  // ── تحديث إحداثيات الشاشة ────────────────────────────────────────────────
+  void _recalcScreenPositions() {
+    if (!mounted) return;
+    try {
+      final cam = _mapCtrl.camera;
+      final c = cam.latLngToScreenPoint(_center);
+      final e = cam.latLngToScreenPoint(_edgeLatLng);
+      setState(() {
+        _centerScreen = Offset(c.x.toDouble(), c.y.toDouble());
+        _edgeScreen   = Offset(e.x.toDouble(), e.y.toDouble());
+      });
+    } catch (_) {}
+  }
+
+  // ── تحويل نقطة شاشة إلى latLng ───────────────────────────────────────────
+  LatLng? _screenToLatLng(Offset pos) {
+    try {
+      return _mapCtrl.camera.pointToLatLng(
+          math.Point(pos.dx, pos.dy));
+    } catch (_) { return null; }
+  }
+
+  // ── تحديث كل شيء ─────────────────────────────────────────────────────────
+  void _updateRadius(double km, {bool moveMap = false}) {
+    setState(() => _radiusKm = km.clamp(0.5, 900));
+    if (moveMap && km < 200) {
+      final zoom = km < 2  ? 13.0 : km < 5  ? 12.0 : km < 12 ? 11.0
+                 : km < 30 ? 10.0 : km < 70 ?  9.0 : km < 150 ? 8.0 : 7.0;
+      _mapCtrl.move(_center, zoom);
+    }
+  }
+
+  // ── المملكة كاملة ────────────────────────────────────────────────────────
+  void _toggleKSA() {
+    setState(() => _ksaMode = !_ksaMode);
+    if (_ksaMode) {
+      _center = _saCenter;
+      _radiusKm = 900;
+      _mapCtrl.move(_saCenter, 5);
+    } else {
+      _radiusKm = 10;
+      _updateRadius(10, moveMap: true);
+    }
+  }
+
+  // ── zoom مناسب للنطاق ─────────────────────────────────────────────────────
+  double _zoomFor(double km) {
+    if (km < 2)   return 13;
+    if (km < 5)   return 12;
+    if (km < 12)  return 11;
+    if (km < 30)  return 10;
+    if (km < 70)  return 9;
+    if (km < 150) return 8;
+    return 7;
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  @override
+  Widget build(BuildContext context) {
+    final topPad = widget.topPad;
+    final radTxt = _ksaMode
+        ? '🇸🇦 المملكة كاملة'
+        : '${_radiusKm < 10
+            ? _radiusKm.toStringAsFixed(1)
+            : _radiusKm.round()} كم';
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, topPad + 50, 0, 0),
+      child: Column(children: [
+
+        // ── رأس اللوحة ──────────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('نطاق التعميم',
+              style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 17,
+                  fontWeight: FontWeight.w800, color: Colors.white)),
+            const SizedBox(height: 3),
+            Row(children: [
+              Text('سيصل للمستخدمين داخل ',
+                style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 10,
+                    color: Colors.white.withOpacity(0.45))),
+              Text(radTxt,
+                style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 11,
+                    fontWeight: FontWeight.w800, color: _gold)),
+            ]),
+          ]),
         ),
-      ),
-    ]),
-  );
+
+        // ── الخريطة التفاعلية ───────────────────────────────────────────────
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: _gold.withOpacity(0.4), width: 1.5),
+                ),
+                child: Stack(children: [
+
+                  // ── الخريطة ─────────────────────────────────────────────
+                  FlutterMap(
+                    mapController: _mapCtrl,
+                    options: MapOptions(
+                      initialCenter: _center,
+                      initialZoom: _zoomFor(_radiusKm),
+                      // تمكين كل أنواع التفاعل
+                      interactionOptions: const InteractionOptions(
+                        flags: InteractiveFlag.all),
+                      onMapReady: () =>
+                          Future.delayed(
+                            const Duration(milliseconds: 100),
+                            _recalcScreenPositions),
+                      onMapEvent: (_) => _recalcScreenPositions(),
+                    ),
+                    children: [
+                      // طبقة الخريطة الداكنة
+                      TileLayer(
+                        urlTemplate:
+                          'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+                        subdomains: const ['a', 'b', 'c', 'd'],
+                        userAgentPackageName: 'com.taameem.app',
+                      ),
+                      // دائرة النطاق
+                      CircleLayer(circles: [
+                        CircleMarker(
+                          point: _center,
+                          radius: _radiusKm * 1000,
+                          useRadiusInMeter: true,
+                          color: _gold.withOpacity(0.10),
+                          borderColor: _gold.withOpacity(0.65),
+                          borderStrokeWidth: 2.5,
+                        ),
+                      ]),
+                    ],
+                  ),
+
+                  // ── علامة المركز (قابلة للسحب) ──────────────────────────
+                  Positioned(
+                    left: _centerScreen.dx - 14,
+                    top:  _centerScreen.dy - 14,
+                    child: GestureDetector(
+                      onPanStart: (_) =>
+                          setState(() => _draggingCenter = true),
+                      onPanUpdate: (d) {
+                        final ll = _screenToLatLng(
+                            _centerScreen + d.delta);
+                        if (ll != null) {
+                          setState(() => _center = ll);
+                          _recalcScreenPositions();
+                        }
+                      },
+                      onPanEnd: (_) =>
+                          setState(() => _draggingCenter = false),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 100),
+                        width: 28, height: 28,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _draggingCenter
+                              ? _gold.withOpacity(0.5)
+                              : _gold.withOpacity(0.25),
+                          border: Border.all(color: _gold, width: 2),
+                          boxShadow: [BoxShadow(
+                            color: _gold.withOpacity(0.6),
+                            blurRadius: 10)],
+                        ),
+                        child: Center(
+                          child: Container(
+                            width: 8, height: 8,
+                            decoration: const BoxDecoration(
+                              color: _gold, shape: BoxShape.circle),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // ── علامة الحافة (لتغيير الحجم) ─────────────────────────
+                  Positioned(
+                    left: _edgeScreen.dx - 9,
+                    top:  _edgeScreen.dy - 9,
+                    child: GestureDetector(
+                      onPanStart: (_) =>
+                          setState(() => _draggingEdge = true),
+                      onPanUpdate: (d) {
+                        final ll = _screenToLatLng(
+                            _edgeScreen + d.delta);
+                        if (ll != null) {
+                          final dist = const Distance()
+                              .as(LengthUnit.Kilometer, _center, ll);
+                          _updateRadius(dist, moveMap: false);
+                          setState(() => _ksaMode = false);
+                          _recalcScreenPositions();
+                        }
+                      },
+                      onPanEnd: (_) =>
+                          setState(() => _draggingEdge = false),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 100),
+                        width: 18, height: 18,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _draggingEdge ? _gold : Colors.white,
+                          border: Border.all(
+                            color: _draggingEdge ? Colors.white : _gold,
+                            width: 2.5),
+                          boxShadow: [BoxShadow(
+                            color: _gold.withOpacity(0.7),
+                            blurRadius: 8)],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // ── تلميح ───────────────────────────────────────────────
+                  Positioned(
+                    bottom: 8, left: 0, right: 0,
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.6),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              color: _gold.withOpacity(0.3))),
+                        child: Text(
+                          '⬤ اسحب المركز • ⬤ اسحب الحافة لتغيير الحجم',
+                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                            fontSize: 8.5,
+                            color: Colors.white.withOpacity(0.7)),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                ]),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 8),
+
+        // ── شريط التحكم ──────────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                  color: _gold.withOpacity(0.25), width: 1.5)),
+            child: Column(children: [
+
+              // قيمة النطاق
+              Text(radTxt,
+                style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                  fontSize: 22, fontWeight: FontWeight.w800,
+                  color: _gold,
+                  shadows: [Shadow(
+                    color: _gold.withOpacity(0.4), blurRadius: 12)],
+                )),
+
+              const SizedBox(height: 8),
+
+              // السلايدر
+              SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  activeTrackColor: _gold,
+                  thumbColor: _gold,
+                  inactiveTrackColor: Colors.white.withOpacity(0.15),
+                  overlayColor: _goldGlow,
+                  trackHeight: 3,
+                ),
+                child: Slider(
+                  value: _radiusKm.clamp(1, 200),
+                  min: 1, max: 200,
+                  onChanged: (v) {
+                    setState(() => _ksaMode = false);
+                    _updateRadius(v, moveMap: true);
+                  },
+                ),
+              ),
+
+              // أزرار سريعة
+              Row(children: _quickPicks.map((km) {
+                final sel = !_ksaMode &&
+                    (_radiusKm - km).abs() < 0.5;
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() => _ksaMode = false);
+                      _updateRadius(km, moveMap: true);
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 180),
+                      margin: const EdgeInsets.only(left: 5),
+                      height: 28,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: sel
+                              ? _gold
+                              : _gold.withOpacity(0.3)),
+                        color: sel
+                            ? _goldBg
+                            : Colors.transparent,
+                      ),
+                      child: Center(
+                        child: Text('${km < 10 ? km.toInt() : km.toInt()} كم',
+                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: sel ? _gold : Colors.white54)),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList()),
+
+              const SizedBox(height: 8),
+
+              // المملكة كاملة
+              GestureDetector(
+                onTap: _toggleKSA,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: double.infinity, height: 36,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: _ksaMode
+                          ? Colors.red.shade400
+                          : Colors.red.withOpacity(0.4)),
+                    color: _ksaMode
+                        ? Colors.red.withOpacity(0.18)
+                        : Colors.transparent,
+                  ),
+                  child: Center(
+                    child: Text('🇸🇦   المملكة كاملة',
+                      style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.red.shade300)),
+                  ),
+                ),
+              ),
+            ]),
+          ),
+        ),
+
+        const SizedBox(height: 8),
+
+        // ── زر الحفظ ────────────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+          child: GestureDetector(
+            onTap: () => widget.onSave(_ksaMode ? 999 : _radiusKm),
+            child: Container(
+              width: double.infinity, height: 42,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(13),
+                border: Border.all(color: _gold, width: 1.8)),
+              child: Center(
+                child: Text('حفظ النطاق',
+                  style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                    fontSize: 14, fontWeight: FontWeight.w800,
+                    color: _gold)),
+              ),
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
 }
 
-// â”€â”€ ظ„ظˆط­ط© ط§ظ„ظ…ط¯ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── لوحة المدة ────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+//  لوحة مُدة التعميم — عجلات تمرير (من اليمين: ساعات، أيام، أسابيع، سنوات)
+// ══════════════════════════════════════════════════════════════════════════════
 class _DurPanel extends StatefulWidget {
-  final Duration duration; final double topPad; final ValueChanged<Duration> onSave;
-  const _DurPanel({required this.duration, required this.topPad, required this.onSave});
+  final Duration duration;
+  final double topPad;
+  final ValueChanged<Duration> onSave;
+  const _DurPanel({
+    required this.duration,
+    required this.topPad,
+    required this.onSave,
+  });
   @override State<_DurPanel> createState() => _DurPanelState();
 }
+
 class _DurPanelState extends State<_DurPanel> {
-  late int _d;
-  static const _picks = [1, 3, 7, 14, 30, 90];
-  @override void initState() { super.initState(); _d = widget.duration.inDays.clamp(1, 365); }
+  // ── قيم الأعمدة ───────────────────────────────────────────────────────────
+  int _hours = 0, _days = 3, _weeks = 0, _years = 0;
+
+  // ── controllers ───────────────────────────────────────────────────────────
+  late FixedExtentScrollController _hCtrl, _dCtrl, _wCtrl, _yCtrl;
+
+  // ── اختصارات سريعة (y, w, d, h) ─────────────────────────────────────────
+  static const _quick = [
+    {'l': 'ساعة',    'y': 0, 'w': 0, 'd': 0, 'h': 1},
+    {'l': 'يوم',     'y': 0, 'w': 0, 'd': 1, 'h': 0},
+    {'l': '3 أيام',  'y': 0, 'w': 0, 'd': 3, 'h': 0},
+    {'l': 'أسبوع',   'y': 0, 'w': 1, 'd': 0, 'h': 0},
+    {'l': 'أسبوعان', 'y': 0, 'w': 2, 'd': 0, 'h': 0},
+    {'l': 'شهر',     'y': 0, 'w': 4, 'd': 0, 'h': 0},
+    {'l': 'سنة',     'y': 1, 'w': 0, 'd': 0, 'h': 0},
+  ];
+
   @override
-  Widget build(BuildContext context) => _PanelBase(
-    title: 'ظ…ظڈط¯ط© ط§ظ„طھط¹ظ…ظٹظ…', topPad: widget.topPad,
-    onSave: () => widget.onSave(Duration(days: _d)),
-    child: _goldCard(Column(children: [
-      Text('$_d ظٹظˆظ…', style: GoogleFonts.cairo(
-        fontSize: 28, fontWeight: FontWeight.w800, color: _gold)),
-      const SizedBox(height: 14),
-      Wrap(spacing: 8, runSpacing: 8, children: _picks.map((d) {
-        final sel = _d == d;
-        return GestureDetector(
-          onTap: () => setState(() => _d = d),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: sel ? _gold : _gold.withOpacity(0.4)),
-              color: sel ? _goldBg : Colors.transparent),
-            child: Text('$d ${d == 1 ? 'ظٹظˆظ…' : d < 11 ? 'ط£ظٹط§ظ…' : 'ظٹظˆظ…'}',
-              style: GoogleFonts.cairo(fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: sel ? _gold : Colors.white70)),
+  void initState() {
+    super.initState();
+    // تحليل المدة الأولية
+    final d = widget.duration;
+    _years  = d.inDays ~/ 365;
+    final rem = d.inDays % 365;
+    _weeks  = rem ~/ 7;
+    _days   = rem % 7;
+    _hours  = d.inHours % 24;
+
+    _hCtrl = FixedExtentScrollController(initialItem: _hours);
+    _dCtrl = FixedExtentScrollController(initialItem: _days);
+    _wCtrl = FixedExtentScrollController(initialItem: _weeks);
+    _yCtrl = FixedExtentScrollController(initialItem: _years);
+  }
+
+  @override
+  void dispose() {
+    _hCtrl.dispose(); _dCtrl.dispose();
+    _wCtrl.dispose(); _yCtrl.dispose();
+    super.dispose();
+  }
+
+  // ── الإجمالي ──────────────────────────────────────────────────────────────
+  Duration get _total => Duration(
+    hours: _hours,
+    days:  _days + _weeks * 7 + _years * 365,
+  );
+
+  // ── نص ملخص المدة ────────────────────────────────────────────────────────
+  String get _label {
+    final p = <String>[];
+    if (_years > 0)  p.add('$_years ${_years  == 1 ? "سنة"   : "سنوات"}');
+    if (_weeks > 0)  p.add('$_weeks ${_weeks  == 1 ? "أسبوع" : "أسابيع"}');
+    if (_days  > 0)  p.add('$_days  ${_days   == 1 ? "يوم"   : "أيام"}');
+    if (_hours > 0)  p.add('$_hours ${_hours  == 1 ? "ساعة"  : "ساعات"}');
+    return p.isEmpty ? 'لم تُحدد' : p.join(' و ');
+  }
+
+  // ── ضبط سريع ─────────────────────────────────────────────────────────────
+  void _applyQuick(Map q) {
+    _years = q['y'] as int; _weeks = q['w'] as int;
+    _days  = q['d'] as int; _hours = q['h'] as int;
+    _hCtrl.animateToItem(_hours, duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut);
+    _dCtrl.animateToItem(_days,  duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut);
+    _wCtrl.animateToItem(_weeks, duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut);
+    _yCtrl.animateToItem(_years, duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut);
+    setState(() {});
+  }
+
+  // ── بناء عمود عجلة واحدة ─────────────────────────────────────────────────
+  Widget _col({
+    required String label,
+    required int maxVal,
+    required int curVal,
+    required FixedExtentScrollController ctrl,
+    required ValueChanged<int> onChange,
+  }) {
+    return Expanded(
+      child: Column(children: [
+        // عنوان العمود
+        Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 4),
+          child: Text(label,
+            style: TextStyle(fontFamily: 'NotoNaskhArabic',
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: Colors.white.withOpacity(0.45)),
           ),
-        );
-      }).toList()),
-    ])),
+        ),
+        // العجلة
+        Expanded(
+          child: ListWheelScrollView.useDelegate(
+            controller: ctrl,
+            itemExtent: 52,
+            physics: const FixedExtentScrollPhysics(),
+            perspective: 0.003,
+            onSelectedItemChanged: (i) {
+              onChange(i);
+              setState(() {});
+            },
+            childDelegate: ListWheelChildBuilderDelegate(
+              childCount: maxVal + 1,
+              builder: (_, i) {
+                final diff = (i - curVal).abs();
+                final isActive = diff == 0;
+                final isNear   = diff == 1;
+                return Center(
+                  child: AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 150),
+                    style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                      fontSize: isActive ? 26 : isNear ? 20 : 16,
+                      fontWeight: isActive
+                          ? FontWeight.w800
+                          : FontWeight.w400,
+                      color: isActive
+                          ? _gold
+                          : isNear
+                              ? Colors.white.withOpacity(0.55)
+                              : Colors.white.withOpacity(0.2),
+                    ),
+                    child: Text(i.toString().padLeft(2, '0')),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, widget.topPad + 50, 0, 0),
+      child: Column(children: [
+
+        // ── رأس ────────────────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('مُدة التعميم',
+              style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                fontSize: 17, fontWeight: FontWeight.w800, color: Colors.white)),
+            const SizedBox(height: 3),
+            Row(children: [
+              Text('ينتهي التعميم بعد ',
+                style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                  fontSize: 10, color: Colors.white.withOpacity(0.45))),
+              Flexible(
+                child: Text(_label,
+                  style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                    fontSize: 11, fontWeight: FontWeight.w800, color: _gold)),
+              ),
+            ]),
+          ]),
+        ),
+
+        // ── عجلات التمرير ──────────────────────────────────────────────────
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: _gold.withOpacity(0.3), width: 1.5),
+              ),
+              child: Stack(children: [
+
+                // الصف بالأعمدة
+                Positioned.fill(
+                  child: Row(
+                    children: [
+                      // ساعات (يمين)
+                      _col(label: 'ساعات', maxVal: 23,
+                        curVal: _hours, ctrl: _hCtrl,
+                        onChange: (v) => _hours = v),
+                      _Divider(),
+                      // أيام
+                      _col(label: 'أيام', maxVal: 6,
+                        curVal: _days, ctrl: _dCtrl,
+                        onChange: (v) => _days = v),
+                      _Divider(),
+                      // أسابيع
+                      _col(label: 'أسابيع', maxVal: 51,
+                        curVal: _weeks, ctrl: _wCtrl,
+                        onChange: (v) => _weeks = v),
+                      _Divider(),
+                      // سنوات (يسار)
+                      _col(label: 'سنوات', maxVal: 1,
+                        curVal: _years, ctrl: _yCtrl,
+                        onChange: (v) => _years = v),
+                    ],
+                  ),
+                ),
+
+                // إطار العنصر المحدد
+                IgnorePointer(
+                  child: Center(
+                    child: Container(
+                      height: 52,
+                      margin: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: _gold.withOpacity(0.09),
+                        border: Border(
+                          top: BorderSide(
+                            color: _gold.withOpacity(0.4), width: 1.5),
+                          bottom: BorderSide(
+                            color: _gold.withOpacity(0.4), width: 1.5),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // تدرج العلوي
+                IgnorePointer(
+                  child: Positioned(
+                    top: 0, left: 0, right: 0, height: 90,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(16)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.85),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // تدرج السفلي
+                IgnorePointer(
+                  child: Positioned(
+                    bottom: 0, left: 0, right: 0, height: 90,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(16)),
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.85),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ]),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        // ── اختصارات سريعة ─────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('اختيار سريع',
+                style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                  fontSize: 10, color: Colors.white.withOpacity(0.4))),
+              const SizedBox(height: 7),
+              Wrap(
+                spacing: 7, runSpacing: 7,
+                children: _quick.map((q) {
+                  // هل هو محدد؟
+                  final sel = _years == q['y'] && _weeks == q['w'] &&
+                      _days  == q['d'] && _hours == q['h'];
+                  return GestureDetector(
+                    onTap: () => _applyQuick(q),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 180),
+                      height: 30,
+                      padding: const EdgeInsets.symmetric(horizontal: 13),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: sel
+                              ? _gold
+                              : _gold.withOpacity(0.3)),
+                        color: sel ? _goldBg : Colors.transparent,
+                      ),
+                      child: Center(
+                        child: Text(q['l'] as String,
+                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: sel
+                                ? _gold
+                                : Colors.white.withOpacity(0.65)),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        // ── زر الحفظ ────────────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+          child: GestureDetector(
+            onTap: () => widget.onSave(_total),
+            child: Container(
+              width: double.infinity, height: 42,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(13),
+                border: Border.all(color: _gold, width: 1.8),
+              ),
+              child: Center(
+                child: Text('حفظ المدة',
+                  style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                    fontSize: 14, fontWeight: FontWeight.w800,
+                    color: _gold)),
+              ),
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+}
+
+// فاصل رفيع بين الأعمدة
+class _Divider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Container(
+    width: 1,
+    margin: const EdgeInsets.symmetric(vertical: 20),
+    color: const Color(0xFFC9A84C).withOpacity(0.2),
   );
 }
 
-// â”€â”€ ظ„ظˆط­ط© ط§ظ„ط¹ظ†ظˆط§ظ† â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── لوحة العنوان ──────────────────────────────────────────────────────────
 class _TitlePanel extends StatelessWidget {
   final TextEditingController ctrl;
   final String initial, topPad2 = '';
@@ -900,7 +1903,7 @@ class _TitlePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     if (ctrl.text.isEmpty && initial.isNotEmpty) ctrl.text = initial;
     return _PanelBase(
-      title: 'ط¹ظ†ظˆط§ظ† ط§ظ„طھط¹ظ…ظٹظ…', topPad: topPad,
+      title: 'عنوان التعميم', topPad: topPad,
       onSave: () => onSave(ctrl.text.trim()),
       child: Container(
         decoration: BoxDecoration(
@@ -915,10 +1918,10 @@ class _TitlePanel extends StatelessWidget {
                 topLeft: Radius.circular(14),
                 topRight: Radius.circular(14))),
             child: Row(children: [
-              const Text('âœڈï¸ڈ', style: TextStyle(fontSize: 16)),
+              const Text('✏️', style: TextStyle(fontSize: 16)),
               const SizedBox(width: 8),
-              Text('ط¹ظ†ظˆط§ظ† / ظˆطµظپ ط§ظ„طھط¹ظ…ظٹظ…',
-                style: GoogleFonts.cairo(
+              Text('عنوان / وصف التعميم',
+                style: TextStyle(fontFamily: 'NotoNaskhArabic',
                     fontSize: 12, color: Colors.white.withOpacity(0.55))),
             ]),
           ),
@@ -927,11 +1930,11 @@ class _TitlePanel extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             child: TextField(
               controller: ctrl,
-              style: GoogleFonts.cairo(fontSize: 14, color: Colors.white),
+              style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 14, color: Colors.white),
               maxLines: 4, minLines: 3,
               decoration: InputDecoration(
-                hintText: 'ط§ظƒطھط¨ ط¹ظ†ظˆط§ظ† ط£ظˆ ظˆطµظپ ط§ظ„طھط¹ظ…ظٹظ…...',
-                hintStyle: GoogleFonts.cairo(
+                hintText: 'اكتب عنوان أو وصف التعميم...',
+                hintStyle: TextStyle(fontFamily: 'NotoNaskhArabic',
                     fontSize: 13, color: Colors.white.withOpacity(0.3)),
                 border: InputBorder.none),
             ),
@@ -942,10 +1945,10 @@ class _TitlePanel extends StatelessWidget {
   }
 }
 
-// â”€â”€ ظ„ظˆط­ط© ط§ظ„ظ…ط±ظپظ‚ط§طھ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
-//  ظ„ظˆط­ط© ط§ظ„ظ…ط±ظپظ‚ط§طھ â€” ط¹ط±ط¶ ط¹ظ…ظˆط¯ظٹ ط¨ظ†ط³ط¨ط© 14:22 ظ…ط¹ طھظƒط¨ظٹط± ط¹ظ†ط¯ ط§ظ„ط¶ط؛ط·
-// â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+// ── لوحة المرفقات ─────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+//  لوحة المرفقات — عرض عمودي بنسبة 14:22 مع تكبير عند الضغط
+// ══════════════════════════════════════════════════════════════════════════════
 class _AttPanel extends StatelessWidget {
   final List<File> media;
   final double topPad;
@@ -965,7 +1968,7 @@ class _AttPanel extends StatelessWidget {
     return ['.jpg', '.jpeg', '.png', '.heic', '.webp'].any(e.endsWith);
   }
 
-  // â”€â”€ طھظƒط¨ظٹط± ط§ظ„طµظˆط±ط© ظƒط§ظ…ظ„ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── تكبير الصورة كاملة ─────────────────────────────────────────────────
   void _showFullscreen(BuildContext context, File f) {
     Navigator.push(
       context,
@@ -975,7 +1978,7 @@ class _AttPanel extends StatelessWidget {
         pageBuilder: (_, __, ___) => Scaffold(
           backgroundColor: Colors.black.withOpacity(0.95),
           body: Stack(children: [
-            // ط§ظ„طµظˆط±ط© ظ‚ط§ط¨ظ„ط© ظ„ظ„طھظƒط¨ظٹط± ظˆط§ظ„طھطµط؛ظٹط±
+            // الصورة قابلة للتكبير والتصغير
             Center(
               child: InteractiveViewer(
                 minScale: 0.5,
@@ -991,7 +1994,7 @@ class _AttPanel extends StatelessWidget {
                           Icon(Icons.videocam_rounded,
                               color: Colors.white54, size: 64),
                           SizedBox(height: 12),
-                          Text('ظپظٹط¯ظٹظˆ',
+                          Text('فيديو',
                             style: TextStyle(color: Colors.white54,
                                 fontSize: 14)),
                         ],
@@ -999,7 +2002,7 @@ class _AttPanel extends StatelessWidget {
                     ),
               ),
             ),
-            // ط²ط± ط§ظ„ط¥ط؛ظ„ط§ظ‚
+            // زر الإغلاق
             Positioned(
               top: 52, right: 16,
               child: GestureDetector(
@@ -1030,13 +2033,13 @@ class _AttPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          // â”€â”€ ط±ط£ط³ ط§ظ„ظ„ظˆط­ط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── رأس اللوحة ───────────────────────────────────────────────────
           Row(children: [
             const Icon(Icons.perm_media_outlined,
                 color: _gold, size: 18),
             const SizedBox(width: 8),
-            Text('ط§ظ„ظ…ط±ظپظ‚ط§طھ',
-              style: GoogleFonts.cairo(
+            Text('المرفقات',
+              style: TextStyle(fontFamily: 'NotoNaskhArabic',
                 fontSize: 16, fontWeight: FontWeight.w800,
                 color: Colors.white)),
             const SizedBox(width: 8),
@@ -1048,7 +2051,7 @@ class _AttPanel extends StatelessWidget {
                   color: Colors.red.withOpacity(0.85),
                   borderRadius: BorderRadius.circular(10)),
                 child: Text('${media.length}',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(fontFamily: 'NotoNaskhArabic',
                     fontSize: 11, fontWeight: FontWeight.w800,
                     color: Colors.white)),
               ),
@@ -1056,22 +2059,22 @@ class _AttPanel extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          // â”€â”€ ط£ط²ط±ط§ط± ط§ظ„ط¥ط¶ط§ظپط© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── أزرار الإضافة ─────────────────────────────────────────────────
           Row(children: [
             Expanded(child: _actionBtn(
               icon: Icons.camera_alt_outlined,
-              label: 'ط§ظ„طھظ‚ط·',
+              label: 'التقط',
               onTap: onCapture)),
             const SizedBox(width: 8),
             Expanded(child: _actionBtn(
               icon: Icons.photo_library_outlined,
-              label: 'ط§ظ„ظ…ط¹ط±ط¶',
+              label: 'المعرض',
               onTap: onGallery)),
           ]),
 
           const SizedBox(height: 10),
 
-          // â”€â”€ ظ‚ط§ط¦ظ…ط© ط§ظ„ظ…ط±ظپظ‚ط§طھ ط§ظ„ط¹ظ…ظˆط¯ظٹط© ط¨ظ†ط³ط¨ط© 14:22 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── قائمة المرفقات العمودية بنسبة 14:22 ──────────────────────────
           Expanded(
             child: media.isEmpty
               ? Center(child: Column(
@@ -1080,8 +2083,8 @@ class _AttPanel extends StatelessWidget {
                     const Icon(Icons.add_photo_alternate_outlined,
                         color: Colors.white24, size: 44),
                     const SizedBox(height: 8),
-                    Text('ظ„ط§ طھظˆط¬ط¯ ظ…ط±ظپظ‚ط§طھ',
-                      style: GoogleFonts.cairo(
+                    Text('لا توجد مرفقات',
+                      style: TextStyle(fontFamily: 'NotoNaskhArabic',
                         fontSize: 12, color: Colors.white30)),
                   ],
                 ))
@@ -1092,13 +2095,13 @@ class _AttPanel extends StatelessWidget {
                     onTap: () => _showFullscreen(ctx, media[i]),
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 8),
-                      // ظ†ط³ط¨ط© 14:22 (ط¹ط±ط¶:ط§ط±طھظپط§ط¹) â€” طµظˆط±ط© ط·ظˆظ„ظٹط© ظ…طµط؛ظ‘ط±ط©
+                      // نسبة 14:22 (عرض:ارتفاع) — صورة طولية مصغّرة
                       child: AspectRatio(
                         aspectRatio: 14 / 22,
                         child: Stack(
                           clipBehavior: Clip.hardEdge,
                           children: [
-                            // ط§ظ„طµظˆط±ط©
+                            // الصورة
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: _isImg(media[i])
@@ -1115,7 +2118,7 @@ class _AttPanel extends StatelessWidget {
                                         Icon(Icons.videocam_rounded,
                                             color: Colors.white54, size: 28),
                                         SizedBox(height: 4),
-                                        Text('ظپظٹط¯ظٹظˆ',
+                                        Text('فيديو',
                                           style: TextStyle(
                                             color: Colors.white38,
                                             fontSize: 11)),
@@ -1124,7 +2127,7 @@ class _AttPanel extends StatelessWidget {
                                   ),
                             ),
 
-                            // ط­ط¯ظˆط¯ ط°ظ‡ط¨ظٹط© ط®ظپظٹظپط©
+                            // حدود ذهبية خفيفة
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Container(
@@ -1136,7 +2139,7 @@ class _AttPanel extends StatelessWidget {
                               ),
                             ),
 
-                            // ط£ظٹظ‚ظˆظ†ط© ط§ظ„طھظƒط¨ظٹط± (ط£ط³ظپظ„ ط§ظ„ظٹظ…ظٹظ†)
+                            // أيقونة التكبير (أسفل اليمين)
                             Positioned(
                               bottom: 6, right: 6,
                               child: Container(
@@ -1151,7 +2154,7 @@ class _AttPanel extends StatelessWidget {
                               ),
                             ),
 
-                            // ط²ط± ط§ظ„ط­ط°ظپ (ط£ط¹ظ„ظ‰ ط§ظ„ظٹظ…ظٹظ†)
+                            // زر الحذف (أعلى اليمين)
                             Positioned(
                               top: 6, right: 6,
                               child: GestureDetector(
@@ -1194,7 +2197,7 @@ class _AttPanel extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Icon(icon, color: _gold, size: 14),
         const SizedBox(width: 5),
-        Text(label, style: GoogleFonts.cairo(
+        Text(label, style: TextStyle(fontFamily: 'NotoNaskhArabic',
           fontSize: 12, fontWeight: FontWeight.w700, color: _gold)),
       ]),
     ),

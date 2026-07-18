@@ -1,107 +1,183 @@
-import 'dart:ui';
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  شريط التنقل السفلي — مع زر AI مركزي بشعار تعميم
+// ══════════════════════════════════════════════════════════════════════════════
 class TaameemBottomNav extends StatelessWidget {
-  final int currentIndex;
-  final Function(int) onTap;
+  final int            currentIndex;   // 0=خريطة 1=تعاميم 2=إشعارات 3=حسابي
+  final ValueChanged<int> onTap;
+  final VoidCallback   onAiTap;        // زر AI المركزي
 
   const TaameemBottomNav({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    required this.onAiTap,
   });
 
-  static const List<_NavItem> _items = [
-    _NavItem(icon: Icons.map_rounded, label: 'الخريطة', routeIndex: 0),
-    _NavItem(icon: Icons.grid_view_rounded, label: 'التعاميم', routeIndex: 1),
-    _NavItem(icon: Icons.notifications_rounded, label: 'الإشعارات', routeIndex: 3),
-    _NavItem(icon: Icons.person_rounded, label: 'حسابي', routeIndex: 4),
+  static const _left = [               // يمين (RTL)
+    _Item(Icons.map_outlined,           Icons.map_rounded,            'الخريطة',   0),
+    _Item(Icons.grid_view_outlined,     Icons.grid_view_rounded,      'التعاميم',  1),
+  ];
+  static const _right = [              // يسار (RTL)
+    _Item(Icons.notifications_outlined, Icons.notifications_rounded,  'الإشعارات', 2),
+    _Item(Icons.person_outline_rounded, Icons.person_rounded,         'حسابي',     3),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-        child: Container(
-          height: 72 + MediaQuery.of(context).padding.bottom,
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.glassBackground,
-            border: Border(
-              top: BorderSide(
-                color: AppColors.glassBorder,
-                width: 1,
-              ),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(_items.length, (i) {
-              return _buildNavItem(i);
-            }),
-          ),
+    final bottom = MediaQuery.of(context).padding.bottom;
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(40, 0, 40, bottom + 10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.82),
+          borderRadius: BorderRadius.circular(26),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.12),
+              blurRadius: 24, offset: const Offset(0, 6)),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 8,  offset: const Offset(0, 2)),
+          ],
+          border: Border.all(
+              color: Colors.white.withOpacity(0.6), width: 1),
         ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index) {
-    final item = _items[index];
-    final isSelected = currentIndex == item.routeIndex;
-
-    return GestureDetector(
-      onTap: () => onTap(item.routeIndex),
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 60,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
           children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? AppColors.emerald.withValues(alpha: 0.12)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                item.icon,
-                size: 22,
-                color: isSelected ? AppColors.emerald : AppColors.grey,
+
+            // ── أزرار اليمين (خريطة + تعاميم) ───────────────────────────
+            ..._left.map((item) => _NavItem(
+              item: item,
+              currentIndex: currentIndex,
+              onTap: onTap)),
+
+            // ── زر AI المركزي ─────────────────────────────────────────────
+            Expanded(
+              child: GestureDetector(
+                onTap: onAiTap,
+                behavior: HitTestBehavior.opaque,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // الشعار — درع تعميم مضيء
+                    Container(
+                      width: 42, height: 42,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppColors.emerald,
+                            AppColors.forestGreen,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.emerald.withOpacity(0.45),
+                            blurRadius: 12, offset: const Offset(0, 4)),
+                        ],
+                        border: Border.all(
+                          color: AppColors.gold.withOpacity(0.5),
+                          width: 1.5),
+                      ),
+                      child: const Center(
+                        child: Text('ت',
+                          style: TextStyle(
+                            fontFamily: 'NotoNaskhArabic',
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                            height: 1),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    const Text('تعميم AI',
+                      style: TextStyle(
+                        fontFamily: 'NotoNaskhArabic',
+                        fontSize: 9,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.emerald)),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 2),
-            Text(
-              item.label,
-              style: TextStyle(fontFamily: 'Tajawal',
-                fontSize: 10,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected ? AppColors.emerald : AppColors.grey,
-              ),
-            ),
+
+            // ── أزرار اليسار (إشعارات + حسابي) ──────────────────────────
+            ..._right.map((item) => _NavItem(
+              item: item,
+              currentIndex: currentIndex,
+              onTap: onTap)),
+
           ],
         ),
       ),
     );
   }
-
 }
 
-class _NavItem {
-  final IconData? icon;
-  final String label;
-  final int routeIndex;
+// ── بيانات العنصر ─────────────────────────────────────────────────────────────
+class _Item {
+  final IconData icon, activeIcon;
+  final String   label;
+  final int      index;
+  const _Item(this.icon, this.activeIcon, this.label, this.index);
+}
 
+// ── عنصر تنقل ────────────────────────────────────────────────────────────────
+class _NavItem extends StatelessWidget {
+  final _Item item;
+  final int   currentIndex;
+  final ValueChanged<int> onTap;
   const _NavItem({
-    required this.icon,
-    required this.label,
-    required this.routeIndex,
-  });
-}
+    required this.item,
+    required this.currentIndex,
+    required this.onTap});
 
+  @override
+  Widget build(BuildContext context) {
+    final a = item.index == currentIndex;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => onTap(item.index),
+        behavior: HitTestBehavior.opaque,
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+            padding: const EdgeInsets.symmetric(
+                horizontal: 12, vertical: 7),
+            decoration: BoxDecoration(
+              color: a
+                  ? AppColors.emerald.withOpacity(0.13)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Icon(
+              a ? item.activeIcon : item.icon,
+              size: 21,
+              color: a ? AppColors.emerald : const Color(0xFF9E9E9E),
+            ),
+          ),
+          const SizedBox(height: 3),
+          AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 200),
+            style: TextStyle(
+              fontFamily: 'NotoNaskhArabic',
+              fontSize: 9.5,
+              fontWeight: a ? FontWeight.w700 : FontWeight.w500,
+              color: a ? AppColors.emerald : const Color(0xFF9E9E9E),
+            ),
+            child: Text(item.label),
+          ),
+        ]),
+      ),
+    );
+  }
+}
