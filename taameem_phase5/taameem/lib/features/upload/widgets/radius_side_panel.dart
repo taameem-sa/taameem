@@ -158,7 +158,7 @@ class _RadiusSidePanelState extends State<RadiusSidePanel> {
                   ),
                   // نص المملكة
                   if (_allKingdom)
-                    Center(
+                    const Center(
                       child: Text(
                         '🇸🇦\nالمملكة كاملة',
                         textAlign: TextAlign.center,

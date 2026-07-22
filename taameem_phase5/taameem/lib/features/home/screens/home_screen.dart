@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -14,12 +12,10 @@ import 'package:taameem/features/search/screens/search_screen.dart';
 import 'package:taameem/features/ai_chat/screens/ai_chat_screen.dart';
 import 'package:taameem/features/notifications/screens/notifications_screen.dart';
 import 'package:taameem/features/profile/screens/profile_screen.dart';
-import 'package:taameem/features/home/widgets/map_marker_widget.dart';
 import 'package:taameem/features/home/widgets/side_panel.dart';
 import 'package:taameem/features/home/widgets/taameem_card_popup.dart';
 import 'package:taameem/features/home/screens/taameem_detail_screen.dart';
 import 'package:taameem/features/upload/screens/camera_screen.dart';
-import '../widgets/taameem_map_marker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -68,13 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _popupOffset = Offset(pt.x.toDouble(), pt.y.toDouble());
       });
     } catch (_) {}
-  }
-
-  void _onNavTap(int index) {
-    setState(() {
-      _currentIndex = index;
-      _selectedTaameem = null;
-    });
   }
 
   @override

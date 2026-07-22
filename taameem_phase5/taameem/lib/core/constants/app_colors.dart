@@ -9,6 +9,7 @@ class AppColors {
   static const Color gold         = Color(0xFFB8943A); // الشعار والخطوط المضيئة
   static const Color lightGold    = Color(0xFFD4A84B); // التفاصيل والأيقونات
   static const Color mint         = Color(0xFF7BBFB0); // الأكوار الخلفية
+  static const Color teal         = Color(0xFF4FA3A0); // لون تفاعلي
   static const Color emerald      = Color(0xFF3D8F7E); // الأزرار والعناصر الرئيسية
   static const Color forestGreen  = Color(0xFF235C4E); // النصوص والعناوين
   static const Color nearBlack    = Color(0xFF1A3028); // العناوين الكبيرة

@@ -1,15 +1,34 @@
+import 'dart:convert';
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:uuid/uuid.dart';
 
 class StorageService {
   StorageService._();
   static final StorageService instance = StorageService._();
 
-  final FirebaseStorage _storage = FirebaseStorage.instance;
+  static const String _cloudName = 'wenh15me';
+  static const String _uploadPreset = 'taameem_preset';
+
   final ImagePicker _picker = ImagePicker();
-  final Uuid _uuid = const Uuid();
+
+  void initialize() {}
+
+  Uri get _imageEndpoint =>
+      Uri.parse('https://api.cloudinary.com/v1_1/$_cloudName/image/upload');
+
+  Uri get _autoEndpoint =>
+      Uri.parse('https://api.cloudinary.com/v1_1/$_cloudName/auto/upload');
+
+  void _ensureConfigured() {
+    if (_cloudName == 'YOUR_CLOUD_NAME' ||
+        _uploadPreset == 'YOUR_UPLOAD_PRESET') {
+      throw Exception(
+        'إعدادات Cloudinary غير مضبوطة — عدّل _cloudName و _uploadPreset في storage_service.dart',
+      );
+    }
+  }
 
   // ─── اختيار صورة من المعرض ────────────────────────────────────────────────
   Future<File?> pickImage({bool fromCamera = false}) async {
@@ -33,109 +52,94 @@ class StorageService {
     return picked.map((f) => File(f.path)).toList();
   }
 
-  // ─── رفع صورة واحدة ──────────────────────────────────────────────────────
   Future<String> uploadImage(File image, String folder) async {
-    final fileName = '${_uuid.v4()}.jpg';
-    final ref = _storage.ref().child('$folder/$fileName');
-
-    final uploadTask = ref.putFile(
-      image,
-      SettableMetadata(contentType: 'image/jpeg'),
+    _ensureConfigured();
+    return _uploadFile(
+      file: image,
+      folder: folder,
+      endpoint: _imageEndpoint,
+      missingUrlMessage:
+          'لم يُرجع Cloudinary رابط صورة — تحقق من إعدادات upload preset',
     );
-
-    final snapshot = await uploadTask;
-    return await snapshot.ref.getDownloadURL();
   }
 
-  // ─── رفع عدة صور ─────────────────────────────────────────────────────────
-  Future<List<String>> uploadImages(
-      List<File> images, String taameemId) async {
+  Future<List<String>> uploadImages(List<File> images, String taameemId) async {
+    if (images.isEmpty) return [];
     final urls = <String>[];
     for (final image in images) {
-      final url = await uploadImage(image, 'taameems/$taameemId');
-      urls.add(url);
+      try {
+        final url = await uploadImage(image, taameemId);
+        urls.add(url);
+      } catch (e) {
+        // ignore: avoid_print
+        print('فشل رفع ${image.path}: $e');
+      }
     }
     return urls;
   }
 
-  // ─── رفع مرفق واحد (صورة / فيديو / ملف) ───────────────────────────────
   Future<String> uploadAttachment(File file, String folder) async {
-    final ext = _extension(file.path);
-    final fileName = '${_uuid.v4()}$ext';
-    final ref = _storage.ref().child('$folder/$fileName');
-
-    final uploadTask = ref.putFile(
-      file,
-      SettableMetadata(contentType: _contentTypeForExt(ext)),
+    _ensureConfigured();
+    return _uploadFile(
+      file: file,
+      folder: folder,
+      endpoint: _autoEndpoint,
+      missingUrlMessage:
+          'لم يُرجع Cloudinary رابط مرفق — تحقق من إعدادات upload preset',
     );
-
-    final snapshot = await uploadTask;
-    return await snapshot.ref.getDownloadURL();
   }
 
-  // ─── رفع جميع المرفقات ─────────────────────────────────────────────────
-  Future<List<String>> uploadMediaFiles(
-      List<File> files, String taameemId) async {
+  Future<List<String>> uploadMediaFiles(List<File> files, String taameemId) async {
+    if (files.isEmpty) return [];
     final urls = <String>[];
     for (final file in files) {
-      final url = await uploadAttachment(file, 'taameems/$taameemId');
-      urls.add(url);
+      try {
+        final url = await uploadAttachment(file, taameemId);
+        urls.add(url);
+      } catch (e) {
+        // ignore: avoid_print
+        print('فشل رفع ${file.path}: $e');
+      }
     }
     return urls;
   }
 
-  // ─── حذف صورة ────────────────────────────────────────────────────────────
-  Future<void> deleteImage(String url) async {
-    try {
-      final ref = _storage.refFromURL(url);
-      await ref.delete();
-    } catch (_) {
-      // تجاهل خطأ إذا الصورة غير موجودة
+  Future<void> deleteMedia(String url) async {}
+
+  Future<String> _uploadFile({
+    required File file,
+    required String folder,
+    required Uri endpoint,
+    required String missingUrlMessage,
+  }) async {
+    if (!await file.exists()) {
+      throw Exception('الملف غير موجود: ${file.path}');
     }
+
+    final request = http.MultipartRequest('POST', endpoint)
+      ..fields['upload_preset'] = _uploadPreset
+      ..fields['folder'] = 'taameem/$folder'
+      ..files.add(await http.MultipartFile.fromPath('file', file.path));
+
+    final streamed = await request.send().timeout(const Duration(seconds: 60));
+    final body = await streamed.stream.bytesToString();
+
+    if (streamed.statusCode != 200) {
+      String reason = 'رمز الحالة ${streamed.statusCode}';
+      try {
+        final err = jsonDecode(body) as Map<String, dynamic>;
+        reason = err['error']?['message']?.toString() ?? reason;
+      } catch (_) {}
+      throw Exception('رفض Cloudinary الرفع: $reason');
+    }
+
+    final data = jsonDecode(body) as Map<String, dynamic>;
+    final url = data['secure_url'] ?? data['url'];
+    if (url == null || url.toString().isEmpty) {
+      throw Exception(missingUrlMessage);
+    }
+
+    return url.toString();
   }
 
-  String _extension(String path) {
-    final idx = path.lastIndexOf('.');
-    if (idx < 0 || idx == path.length - 1) return '';
-    return path.substring(idx).toLowerCase();
-  }
-
-  String _contentTypeForExt(String ext) {
-    switch (ext) {
-      case '.jpg':
-      case '.jpeg':
-        return 'image/jpeg';
-      case '.png':
-        return 'image/png';
-      case '.webp':
-        return 'image/webp';
-      case '.heic':
-        return 'image/heic';
-      case '.mp4':
-        return 'video/mp4';
-      case '.mov':
-        return 'video/quicktime';
-      case '.avi':
-        return 'video/x-msvideo';
-      case '.pdf':
-        return 'application/pdf';
-      case '.doc':
-        return 'application/msword';
-      case '.docx':
-        return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-      case '.xls':
-        return 'application/vnd.ms-excel';
-      case '.xlsx':
-        return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-      case '.ppt':
-        return 'application/vnd.ms-powerpoint';
-      case '.pptx':
-        return 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-      case '.txt':
-        return 'text/plain';
-      default:
-        return 'application/octet-stream';
-    }
-  }
 }
-

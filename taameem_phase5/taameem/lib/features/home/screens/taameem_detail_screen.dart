@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -9,7 +9,6 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/models/comment_model.dart';
 import '../../../core/models/taameem_model.dart';
 import '../../../core/services/comments_service.dart';
-import '../../../core/services/firestore_service.dart';
 import '../../messages/screens/direct_message_screen.dart';
 import '../widgets/taameem_action_buttons.dart';
 
@@ -54,9 +53,9 @@ class TaameemDetailScreen extends StatelessWidget {
               margin: const EdgeInsets.only(left: 12),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: color.withOpacity(0.3))),
+                border: Border.all(color: color.withValues(alpha: 0.3))),
               child: Text(taameem.mapLabel,
                 style: GoogleFonts.cairo(
                   fontSize: 12, fontWeight: FontWeight.w800, color: color)),
@@ -129,10 +128,10 @@ class _PublisherCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.glassBackground,
+            color: AppColors.warmBeige.withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppColors.glassBorder)),
           child: Column(children: [
@@ -146,7 +145,7 @@ class _PublisherCard extends StatelessWidget {
                       colors: [AppColors.emerald, AppColors.forestGreen]),
                     shape: BoxShape.circle,
                     border: Border.all(
-                        color: AppColors.gold.withOpacity(0.4), width: 1.5)),
+                        color: AppColors.gold.withValues(alpha: 0.4), width: 1.5)),
                   child: const Center(child: Text('👤',
                       style: TextStyle(fontSize: 20))),
                 ),
@@ -165,7 +164,7 @@ class _PublisherCard extends StatelessWidget {
                       const Icon(Icons.access_time_rounded,
                           size: 12, color: AppColors.grey),
                       const SizedBox(width: 4),
-                      Text('نشر \${taameem.timeAgo}',
+                      Text('نشر ${taameem.timeAgo}',
                         style: GoogleFonts.cairo(
                             fontSize: 11, color: AppColors.grey)),
                       if (taameem.city.isNotEmpty) ...[
@@ -184,9 +183,9 @@ class _PublisherCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.gold.withOpacity(0.1),
+                    color: AppColors.gold.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.gold.withOpacity(0.3))),
+                    border: Border.all(color: AppColors.gold.withValues(alpha: 0.3))),
                   child: Text('عضو',
                     style: GoogleFonts.cairo(
                       fontSize: 10, fontWeight: FontWeight.w700,
@@ -211,10 +210,10 @@ class _PublisherCard extends StatelessWidget {
                 margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppColors.emerald.withOpacity(0.07),
+                  color: AppColors.emerald.withValues(alpha: 0.07),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                      color: AppColors.emerald.withOpacity(0.3))),
+                      color: AppColors.emerald.withValues(alpha: 0.3))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -249,10 +248,10 @@ class _TaameemContent extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.glassBackground,
+            color: AppColors.warmBeige.withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: AppColors.glassBorder)),
           child: Column(children: [
@@ -261,7 +260,7 @@ class _TaameemContent extends StatelessWidget {
                 borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(18)),
                 gradient: LinearGradient(colors: [
-                  color.withOpacity(0), color, color.withOpacity(0)]))),
+                  color.withValues(alpha: 0), color, color.withValues(alpha: 0)]))),
             Padding(
               padding: const EdgeInsets.all(18),
               child: Column(
@@ -279,32 +278,35 @@ class _TaameemContent extends StatelessWidget {
                         height: 1.75)),
                   ],
                   const SizedBox(height: 14),
-                  Row(children: [
-                    _InfoChip(icon: Icons.access_time_rounded,
-                        label: taameem.timeAgo),
-                    const SizedBox(width: 10),
-                    _InfoChip(icon: Icons.visibility_rounded,
-                        label: '\${taameem.viewCount} مشاهدة'),
-                    const Spacer(),
-                    if (!taameem.isExpired)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: AppColors.emerald.withOpacity(0.08),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              color: AppColors.emerald.withOpacity(0.2))),
-                        child: Row(children: [
-                          const Icon(Icons.timer_outlined,
-                              size: 11, color: AppColors.emerald),
-                          const SizedBox(width: 4),
-                          Text('\${taameem.timeLeft.inDays} أيام متبقية',
-                            style: GoogleFonts.cairo(
-                              fontSize: 10, fontWeight: FontWeight.w700,
-                              color: AppColors.emerald)),
-                        ])),
-                  ]),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      _InfoChip(icon: Icons.access_time_rounded,
+                          label: taameem.timeAgo),
+                      _InfoChip(icon: Icons.visibility_rounded,
+                          label: '${taameem.viewCount} مشاهدة'),
+                      if (!taameem.isExpired)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.emerald.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                                color: AppColors.emerald.withValues(alpha: 0.2))),
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
+                            const Icon(Icons.timer_outlined,
+                                size: 11, color: AppColors.emerald),
+                            const SizedBox(width: 4),
+                            Text('${taameem.timeLeft.inDays} أيام متبقية',
+                              style: GoogleFonts.cairo(
+                                fontSize: 10, fontWeight: FontWeight.w700,
+                                color: AppColors.emerald)),
+                          ])),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -347,10 +349,10 @@ class _MediaGalleryState extends State<_MediaGallery> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.glassBackground,
+            color: AppColors.warmBeige.withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: AppColors.glassBorder)),
           child: Column(children: [
@@ -368,9 +370,9 @@ class _MediaGalleryState extends State<_MediaGallery> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppColors.emerald.withOpacity(0.1),
+                    color: AppColors.emerald.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8)),
-                  child: Text('\${widget.urls.length}',
+                  child: Text('${widget.urls.length}',
                     style: GoogleFonts.cairo(
                       fontSize: 11, fontWeight: FontWeight.w700,
                       color: AppColors.emerald))),
@@ -458,10 +460,10 @@ class _MiniMapCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.glassBackground,
+            color: AppColors.warmBeige.withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: AppColors.glassBorder)),
           child: Column(children: [
@@ -477,8 +479,8 @@ class _MiniMapCard extends StatelessWidget {
                     color: AppColors.forestGreen)),
                 const Spacer(),
                 Text(
-                  '\${taameem.latitude.toStringAsFixed(4)}, '
-                  '\${taameem.longitude.toStringAsFixed(4)}',
+                  '${taameem.latitude.toStringAsFixed(4)}, '
+                  '${taameem.longitude.toStringAsFixed(4)}',
                   style: GoogleFonts.cairo(fontSize: 10, color: AppColors.grey)),
               ]),
             ),
@@ -508,7 +510,7 @@ class _MiniMapCard extends StatelessWidget {
                               color: color, shape: BoxShape.circle,
                               border: Border.all(color: Colors.white, width: 2.5),
                               boxShadow: [BoxShadow(
-                                color: color.withOpacity(0.4), blurRadius: 10)]),
+                                color: color.withValues(alpha: 0.4), blurRadius: 10)]),
                             child: Center(child: Text(taameem.mapLabel,
                               style: GoogleFonts.cairo(
                                 fontSize: 7, fontWeight: FontWeight.w800,
@@ -535,58 +537,10 @@ class _Tri extends CustomPainter {
   const _Tri(this.c);
   @override
   void paint(Canvas cv, Size s) => cv.drawPath(
-    Path()..moveTo(0,0)..lineTo(s.width,0)
+    ui.Path()..moveTo(0,0)..lineTo(s.width,0)
           ..lineTo(s.width/2,s.height)..close(),
     Paint()..color = c);
   @override bool shouldRepaint(_Tri o) => o.c != c;
-}
-
-// ════════════════════════════════════════════════════════════
-//  أزرار التفاعل
-// ════════════════════════════════════════════════════════════
-class _ActionButtons extends StatelessWidget {
-  final TaameemModel taameem;
-  final Color color;
-  const _ActionButtons({required this.taameem, required this.color});
-  @override
-  Widget build(BuildContext context) => Row(children: [
-    Expanded(child: _Btn(label: 'مشاركة',
-      icon: Icons.share_rounded, color: AppColors.emerald, onTap: () {})),
-    const SizedBox(width: 8),
-    Expanded(child: _Btn(label: 'تم الحل',
-      icon: Icons.check_circle_outline_rounded, color: AppColors.gold,
-      onTap: () async {
-        await FirestoreService.instance.updateStatus(taameem.id, 'resolved');
-        if (context.mounted) Navigator.pop(context);
-      })),
-    const SizedBox(width: 8),
-    _Btn(label: 'إبلاغ',
-      icon: Icons.flag_outlined, color: AppColors.error, onTap: () {}),
-  ]);
-}
-
-class _Btn extends StatelessWidget {
-  final String label; final IconData icon;
-  final Color color;  final VoidCallback onTap;
-  const _Btn({required this.label, required this.icon,
-    required this.color, required this.onTap});
-  @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
-    child: Container(
-      height: 44,
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withOpacity(0.3))),
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Icon(icon, size: 15, color: color),
-        const SizedBox(width: 5),
-        Text(label, style: GoogleFonts.cairo(
-            fontSize: 12, fontWeight: FontWeight.w700, color: color)),
-      ]),
-    ),
-  );
 }
 
 // ════════════════════════════════════════════════════════════
@@ -622,10 +576,10 @@ class _CommentsSectionState extends State<_CommentsSection> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.glassBackground,
+            color: AppColors.warmBeige.withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: AppColors.glassBorder)),
           child: Column(children: [
@@ -650,9 +604,9 @@ class _CommentsSectionState extends State<_CommentsSection> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
-                        color: AppColors.emerald.withOpacity(0.1),
+                        color: AppColors.emerald.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8)),
-                      child: Text('\$n',
+                      child: Text('$n',
                         style: GoogleFonts.cairo(
                           fontSize: 11, fontWeight: FontWeight.w700,
                           color: AppColors.emerald))),
@@ -678,7 +632,7 @@ class _CommentsSectionState extends State<_CommentsSection> {
                     padding: const EdgeInsets.symmetric(vertical: 24),
                     child: Column(children: [
                       Icon(Icons.chat_bubble_outline_rounded, size: 42,
-                          color: AppColors.grey.withOpacity(0.3)),
+                          color: AppColors.grey.withValues(alpha: 0.3)),
                       const SizedBox(height: 8),
                       Text('كن أول من يعلّق',
                         style: GoogleFonts.cairo(
@@ -753,7 +707,7 @@ class _CommentsSectionState extends State<_CommentsSection> {
                       gradient: const LinearGradient(
                           colors: [AppColors.emerald, AppColors.forestGreen]),
                       boxShadow: [BoxShadow(
-                        color: AppColors.emerald.withOpacity(0.35),
+                        color: AppColors.emerald.withValues(alpha: 0.35),
                         blurRadius: 8, offset: const Offset(0, 2))]),
                     child: const Icon(Icons.send_rounded,
                         color: Colors.white, size: 16)),
@@ -787,7 +741,7 @@ class _CommentTile extends StatelessWidget {
     padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
     decoration: BoxDecoration(
       border: Border(bottom: BorderSide(
-          color: AppColors.glassBorder.withOpacity(0.5)))),
+          color: AppColors.glassBorder.withValues(alpha: 0.5)))),
     child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
         width: 32, height: 32,
@@ -813,7 +767,7 @@ class _CommentTile extends StatelessWidget {
                 size: 13,
                 color: isLiked ? AppColors.error : AppColors.grey),
               const SizedBox(width: 3),
-              Text('\${comment.likes}',
+              Text('${comment.likes}',
                 style: GoogleFonts.cairo(
                   fontSize: 10,
                   color: isLiked ? AppColors.error : AppColors.grey)),

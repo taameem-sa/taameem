@@ -115,10 +115,10 @@ class _DirectMessageScreenState extends State<DirectMessageScreen> {
           margin: const EdgeInsets.fromLTRB(12, 10, 12, 0),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: AppColors.emerald.withOpacity(0.06),
+            color: AppColors.emerald.withValues(alpha: 0.06),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-                color: AppColors.emerald.withOpacity(0.2))),
+                color: AppColors.emerald.withValues(alpha: 0.2))),
           child: Row(children: [
             const Icon(Icons.push_pin_rounded,
                 color: AppColors.emerald, size: 14),
@@ -159,7 +159,7 @@ class _DirectMessageScreenState extends State<DirectMessageScreen> {
                     children: [
                       Icon(Icons.chat_bubble_outline_rounded,
                           size: 52,
-                          color: AppColors.grey.withOpacity(0.3)),
+                          color: AppColors.grey.withValues(alpha: 0.3)),
                       const SizedBox(height: 10),
                       Text('ابدأ المحادثة',
                         style: GoogleFonts.cairo(
@@ -224,7 +224,7 @@ class _DirectMessageScreenState extends State<DirectMessageScreen> {
                         color: AppColors.glassBorder)),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                         color: AppColors.emerald)),
                   contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16, vertical: 10),
@@ -245,7 +245,7 @@ class _DirectMessageScreenState extends State<DirectMessageScreen> {
                   gradient: const LinearGradient(
                     colors: [AppColors.emerald, AppColors.forestGreen]),
                   boxShadow: [BoxShadow(
-                    color: AppColors.emerald.withOpacity(0.35),
+                    color: AppColors.emerald.withValues(alpha: 0.35),
                     blurRadius: 10, offset: const Offset(0, 3))],
                 ),
                 child: const Icon(Icons.send_rounded,
@@ -293,7 +293,7 @@ class _MessageBubble extends StatelessWidget {
               border: isMe ? null : Border.all(
                   color: AppColors.glassBorder),
               boxShadow: [BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withValues(alpha: 0.06),
                 blurRadius: 6, offset: const Offset(0, 2))],
             ),
             child: Text(message.text,

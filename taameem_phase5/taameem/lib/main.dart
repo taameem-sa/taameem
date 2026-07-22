@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/theme/app_theme.dart';
+import 'core/services/storage_service.dart';
 import 'features/auth/screens/splash_screen.dart';
 import 'features/onboarding/screens/onboarding_screen.dart';
 
@@ -45,6 +46,13 @@ void main() async {
     // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   } catch (e) {
     debugPrint('Firebase init: $e');
+  }
+
+  // تهيئة Cloudinary
+  try {
+    StorageService.instance.initialize();
+  } catch (e) {
+    debugPrint('Cloudinary init: $e');
   }
 
   // فحص Onboarding

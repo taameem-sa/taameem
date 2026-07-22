@@ -1,10 +1,8 @@
 import 'dart:math' as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/models/taameem_model.dart';
-import '../screens/taameem_detail_screen.dart';
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  علامة الصورة المصغرة على الخريطة
@@ -34,10 +32,10 @@ class PhotoMarker extends StatelessWidget {
               border: Border.all(color: Colors.white, width: 2.5),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.35),
+                  color: Colors.black.withValues(alpha: 0.35),
                   blurRadius: 12, offset: const Offset(0, 3)),
                 BoxShadow(
-                  color: taameem.typeColor.withOpacity(0.35),
+                  color: taameem.typeColor.withValues(alpha: 0.35),
                   blurRadius: 8),
               ],
             ),
@@ -47,19 +45,19 @@ class PhotoMarker extends StatelessWidget {
                 imageUrl: taameem.imageUrls.first,
                 fit: BoxFit.cover,
                 placeholder: (_, __) => Container(
-                  color: taameem.typeColor.withOpacity(0.2),
+                  color: taameem.typeColor.withValues(alpha: 0.2),
                   child: Icon(Icons.image_rounded,
                       color: taameem.typeColor, size: 22)),
                 errorWidget: (_, __, ___) => Container(
-                  color: taameem.typeColor.withOpacity(0.15),
+                  color: taameem.typeColor.withValues(alpha: 0.15),
                   child: Icon(Icons.broken_image_rounded,
                       color: taameem.typeColor, size: 20)),
               ),
             ),
           ),
           // ذيل المثلث
-          CustomPaint(
-            size: const Size(14, 9),
+          const CustomPaint(
+            size: Size(14, 9),
             painter: _TailPainter(Colors.white),
           ),
         ],
@@ -96,17 +94,17 @@ class CategoryMarker extends StatelessWidget {
               border: Border.all(color: Colors.white, width: 2.5),
               boxShadow: [
                 BoxShadow(
-                  color: taameem.typeColor.withOpacity(0.45),
+                  color: taameem.typeColor.withValues(alpha: 0.45),
                   blurRadius: 10, spreadRadius: 1),
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   blurRadius: 6, offset: const Offset(0, 2)),
               ],
             ),
             child: Center(
               child: Text(
                 taameem.mapLabel,
-                style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                style: const TextStyle(fontFamily: 'NotoNaskhArabic',
                   fontSize: 8.5,
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
@@ -194,7 +192,7 @@ class TaameemPopupCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   blurRadius: 24, offset: const Offset(0, 8)),
               ],
             ),
@@ -215,13 +213,13 @@ class TaameemPopupCard extends StatelessWidget {
                             width: double.infinity,
                             height: double.infinity,
                             placeholder: (_, __) => Container(
-                              color: taameem.typeColor.withOpacity(0.15)),
+                              color: taameem.typeColor.withValues(alpha: 0.15)),
                             errorWidget: (_, __, ___) => Container(
-                              color: taameem.typeColor.withOpacity(0.15),
+                              color: taameem.typeColor.withValues(alpha: 0.15),
                               child: Icon(Icons.image_rounded,
                                   color: taameem.typeColor, size: 40)),
                           )
-                        : Container(color: taameem.typeColor.withOpacity(0.2)),
+                        : Container(color: taameem.typeColor.withValues(alpha: 0.2)),
                     ),
                   ),
 
@@ -253,10 +251,10 @@ class TaameemPopupCard extends StatelessWidget {
                       child: Container(
                         width: 26, height: 26,
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.55),
+                          color: Colors.black.withValues(alpha: 0.55),
                           shape: BoxShape.circle,
                           border: Border.all(
-                              color: Colors.white.withOpacity(0.3))),
+                              color: Colors.white.withValues(alpha: 0.3))),
                         child: const Icon(Icons.close_rounded,
                             color: Colors.white, size: 14),
                       ),
@@ -273,7 +271,7 @@ class TaameemPopupCard extends StatelessWidget {
                         color: taameem.typeColor,
                         borderRadius: BorderRadius.circular(8)),
                       child: Text(taameem.mapLabel,
-                        style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                        style: const TextStyle(fontFamily: 'NotoNaskhArabic',
                           fontSize: 10, fontWeight: FontWeight.w800,
                           color: Colors.white)),
                     ),
@@ -286,21 +284,21 @@ class TaameemPopupCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(taameem.title,
-                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                          style: const TextStyle(fontFamily: 'NotoNaskhArabic',
                             fontSize: 13, fontWeight: FontWeight.w800,
                             color: Colors.white, height: 1.3,
-                            shadows: [const Shadow(
+                            shadows: [Shadow(
                               color: Colors.black54, blurRadius: 4)]),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis),
                         const SizedBox(height: 3),
                         Row(children: [
                           const Icon(Icons.access_time_rounded,
-                              color: Colors.white70, size: 10),
+                              color: AppColors.forestGreen, size: 10),
                           const SizedBox(width: 4),
                           Text(taameem.timeAgo,
-                            style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                              fontSize: 10, color: Colors.white70)),
+                            style: const TextStyle(fontFamily: 'NotoNaskhArabic',
+                              fontSize: 10, color: AppColors.forestGreen)),
                         ]),
                       ],
                     ),
@@ -319,7 +317,7 @@ class TaameemPopupCard extends StatelessWidget {
                         child: Text(
                           taameem.city.isNotEmpty
                               ? taameem.city : 'الرياض',
-                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                          style: const TextStyle(fontFamily: 'NotoNaskhArabic',
                             fontSize: 10, color: AppColors.grey),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis)),
@@ -327,7 +325,7 @@ class TaameemPopupCard extends StatelessWidget {
                           color: AppColors.grey, size: 12),
                       const SizedBox(width: 4),
                       Text('${taameem.viewCount} مشاهدة',
-                        style: TextStyle(fontFamily: 'NotoNaskhArabic',
+                        style: const TextStyle(fontFamily: 'NotoNaskhArabic',
                           fontSize: 10, color: AppColors.grey)),
                     ]),
                     const SizedBox(height: 8),
@@ -339,12 +337,12 @@ class TaameemPopupCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           gradient: const LinearGradient(
                             colors: [AppColors.emerald, AppColors.forestGreen])),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.open_in_new_rounded,
+                            Icon(Icons.open_in_new_rounded,
                                 color: Colors.white, size: 13),
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6),
                             Text('عرض التعميم كاملاً',
                               style: TextStyle(fontFamily: 'NotoNaskhArabic',
                                 fontSize: 12, fontWeight: FontWeight.w700,

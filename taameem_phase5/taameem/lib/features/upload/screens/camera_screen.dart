@@ -1,406 +1,1134 @@
 import 'dart:io';
-import 'dart:math' as math;
-import 'dart:ui' as ui;
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_constants.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart' hide Path;
+import 'package:permission_handler/permission_handler.dart';
+
 import '../../../core/models/taameem_model.dart';
 import '../../../core/services/firestore_service.dart';
 import '../../../core/services/location_service.dart';
 import '../../../core/services/storage_service.dart';
-import '../widgets/category_side_panel.dart';
-import '../widgets/radius_side_panel.dart';
-import '../widgets/duration_side_panel.dart';
+import 'ai_processing_screen.dart';
 
-// ── أي لوحة مفتوحة ────────────────────────────────────────────────────────
-enum _Panel { none, category, location, radius, duration, title, attachments }
+const _gold = Color(0xFFC9A84C);
+const _emerald = Color(0xFF3D8F7E);
+const _forest = Color(0xFF235C4E);
+const _camBg1 = Color(0xFF0A1A0C);
 
-// ── ألوان الذهب ────────────────────────────────────────────────────────────
-const _gold     = Color(0xFFC9A84C);
-const _goldBg   = Color.fromRGBO(201, 168, 76, 0.18);
-const _goldGlow = Color.fromRGBO(201, 168, 76, 0.28);
+enum _Panel { cat, loc, rad, dur, ttl, att }
 
-// ── أبعاد الأزرار (مطابقة للتصميم) ────────────────────────────────────────
-const _btnW  = 105.0;
-const _btnH  = 45.0;
-const _btnGap = 6.0;
-const _btnR  = 5.0;
-const _btnRadius = 20.0;
+const _cats = [
+  {'k': 'missingPerson', 'n': 'فقدان شخص', 'c': Color(0xFFB8A000)},
+  {'k': 'foundItem', 'n': 'إيجاد شيء', 'c': Color(0xFF4A9A44)},
+  {'k': 'lostItem', 'n': 'فقدان شيء', 'c': Color(0xFFA0287A)},
+  {'k': 'theft', 'n': 'سرقة', 'c': Color(0xFFC09010)},
+  {'k': 'helpRequest', 'n': 'استغاثة', 'c': Color(0xFFC84C10)},
+  {'k': 'humanitarian', 'n': 'إنساني', 'c': Color(0xFF8A7040)},
+  {'k': 'emergency', 'n': 'طارئ', 'c': Color(0xFFC03030)},
+  {'k': 'generalWarning', 'n': 'تحذير', 'c': Color(0xFFB07820)},
+  {'k': 'lostAnimal', 'n': 'حيوان مفقود', 'c': Color(0xFF808010)},
+  {'k': 'inquiry', 'n': 'استفسار', 'c': Color(0xFF7A6020)},
+];
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
-  @override State<CameraScreen> createState() => _CameraScreenState();
+
+  @override
+  State<CameraScreen> createState() => _CameraScreenState();
 }
 
 class _CameraScreenState extends State<CameraScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
+  String? _type;
+  String _title = '';
+  LatLng? _location;
+  double _radius = 10;
+  Duration _duration = const Duration(days: 3);
+  final List<File> _media = [];
+  bool _flashOn = false;
+  bool _frontCam = false;
+  bool _cameraReady = false;
+  bool _cameraDenied = false;
+  bool _publishing = false;
+  _Panel? _panel;
 
-  // ── state التعميم ─────────────────────────────────────────────────────────
-  String?    _type;
-  LatLng?    _location;
-  double     _radius   = 10;
-  Duration   _duration = const Duration(days: 3);
-  String     _title    = '';
-  List<File> _media    = [];
+  CameraController? _cameraController;
+  List<CameraDescription> _cameras = [];
+  int _cameraIndex = 0;
 
-  // ── state الواجهة ─────────────────────────────────────────────────────────
-  _Panel _panel       = _Panel.none;
-  bool   _publishing  = false;
+  late AnimationController _bgCtrl;
+  late AnimationController _glowCtrl;
+  late AnimationController _shutterCtrl;
+  late AnimationController _panelCtrl;
 
-  late AnimationController _animCtrl;
-  late Animation<double>   _anim;
-  final _titleCtrl = TextEditingController();
-  final _picker    = ImagePicker();
-
-  // ── فئات التعميم ──────────────────────────────────────────────────────────
-  static const _cats = [
-    {'k':'missingPerson',  'n':'فقدان شخص',  'e':'👤'},
-    {'k':'foundItem',      'n':'إيجاد شيء',  'e':'📦'},
-    {'k':'lostItem',       'n':'فقدان شيء',  'e':'🔍'},
-    {'k':'theft',          'n':'سرقة',         'e':'🚨'},
-    {'k':'helpRequest',    'n':'استغاثة',      'e':'🆘'},
-    {'k':'humanitarian',   'n':'إنساني',       'e':'🤝'},
-    {'k':'emergency',      'n':'طارئ',         'e':'🚑'},
-    {'k':'generalWarning', 'n':'تحذير',        'e':'⚠️'},
-    {'k':'lostAnimal',     'n':'حيوان مفقود', 'e':'🐾'},
-    {'k':'inquiry',        'n':'استفسار',      'e':'💬'},
-  ];
+  final _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    _animCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 280));
-    _anim = CurvedAnimation(parent: _animCtrl, curve: Curves.easeOut);
+    _bgCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 14),
+    )..repeat(reverse: true);
+    _glowCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat(reverse: true);
+    _shutterCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
+    _panelCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 280),
+    );
     _fetchLocation();
+    _initCamera();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   @override
   void dispose() {
-    _animCtrl.dispose();
-    _titleCtrl.dispose();
+    _cameraController?.dispose();
+    _bgCtrl.dispose();
+    _glowCtrl.dispose();
+    _shutterCtrl.dispose();
+    _panelCtrl.dispose();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
   }
 
   Future<void> _fetchLocation() async {
     final loc = await LocationService.instance.getCurrentLocation();
-    if (mounted) setState(() => _location = loc);
+    if (mounted) {
+      setState(() => _location = loc);
+    }
   }
 
-  // ── فتح / إغلاق لوحة ─────────────────────────────────────────────────────
-  void _open(_Panel p) {
-    if (_panel == p) { _close(); return; }
-    setState(() => _panel = p);
-    _animCtrl.forward(from: 0);
+  void _openPanel(_Panel panel) {
+    setState(() => _panel = panel);
+    _panelCtrl.forward(from: 0);
   }
 
-  void _close() {
-    _animCtrl.reverse().then((_) {
-      if (mounted) setState(() => _panel = _Panel.none);
+  void _closePanel() {
+    _panelCtrl.reverse().then((_) {
+      if (mounted) {
+        setState(() => _panel = null);
+      }
     });
   }
 
-  // ── التقاط صورة ──────────────────────────────────────────────────────────
   Future<void> _capture() async {
-    final f = await _picker.pickImage(
-        source: ImageSource.camera, imageQuality: 90);
-    if (f != null && mounted) setState(() => _media.add(File(f.path)));
+    if (_cameraReady &&
+        _cameraController != null &&
+        _cameraController!.value.isInitialized) {
+      try {
+        final shot = await _cameraController!.takePicture();
+        if (mounted) {
+          setState(() => _media.add(File(shot.path)));
+        }
+        return;
+      } catch (_) {
+        _showErr('تعذر التقاط الصورة من الكاميرا');
+      }
+    }
+
+    final status = await Permission.camera.request();
+    if (!status.isGranted) {
+      _showErr('يرجى السماح بالوصول للكاميرا');
+      return;
+    }
+
+    final file = await _picker.pickImage(source: ImageSource.camera, imageQuality: 90);
+    if (file != null && mounted) {
+      setState(() => _media.add(File(file.path)));
+    }
   }
 
   Future<void> _pickGallery() async {
     final files = await _picker.pickMultipleMedia(imageQuality: 90);
-    if (mounted) setState(() => _media.addAll(files.map((f) => File(f.path))));
-  }
-
-  // ── نشر التعميم ──────────────────────────────────────────────────────────
-  Future<void> _publish() async {
-    if (_publishing) return;
-    setState(() => _publishing = true);
-    try {
-      List<String> urls = [];
-      try {
-        if (_media.isNotEmpty) {
-          final id = '${DateTime.now().millisecondsSinceEpoch}';
-          urls = await StorageService.instance
-              .uploadImages(_media.where(_isImg).toList(), id);
-        }
-      } catch (_) {}
-
-      final now = DateTime.now();
-      await FirestoreService.instance.uploadTaameem(TaameemModel(
-        id: '', userId: 'temp_user', userPhone: '+9665XXXXXXXX',
-        type:        _type ?? 'inquiry',
-        title:       _title.isNotEmpty
-            ? _title
-            : AppConstants.categoryNames[_type] ?? 'تعميم',
-        description: _title,
-        latitude:    _location?.latitude  ?? 24.7136,
-        longitude:   _location?.longitude ?? 46.6753,
-        imageUrls:   urls,
-        createdAt:   now,
-        expiresAt:   now.add(_duration),
-        status:      'active',
-      ));
-      if (mounted) _showSuccess();
-    } catch (_) {
-      if (mounted) setState(() => _publishing = false);
+    if (mounted) {
+      setState(() => _media.addAll(files.map((file) => File(file.path))));
     }
   }
 
-  void _showSuccess() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(26),
-          decoration: BoxDecoration(
-            color: AppColors.creamWhite,
-            borderRadius: BorderRadius.circular(22),
-          ),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            const Text('✅', style: TextStyle(fontSize: 48)),
-            const SizedBox(height: 10),
-            Text('تم نشر التعميم!',
-              style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 19,
-                  fontWeight: FontWeight.w800, color: AppColors.nearBlack)),
-            const SizedBox(height: 6),
-            Text('يظهر الآن على الخريطة',
-              style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 13, color: AppColors.forestGreen)),
-            const SizedBox(height: 18),
-            GestureDetector(
-              onTap: () { Navigator.pop(context); Navigator.pop(context); },
-              child: Container(
-                width: double.infinity, height: 44,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                      colors: [AppColors.emerald, AppColors.forestGreen]),
-                  borderRadius: BorderRadius.circular(13)),
-                child: Center(child: Text('العودة للخريطة',
-                  style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 14,
-                      fontWeight: FontWeight.w700, color: Colors.white))),
-              ),
-            ),
-          ]),
+  Future<void> _toggleFlash() async {
+    final next = !_flashOn;
+    setState(() => _flashOn = next);
+    if (_cameraController != null && _cameraController!.value.isInitialized) {
+      try {
+        await _cameraController!.setFlashMode(next ? FlashMode.torch : FlashMode.off);
+      } catch (_) {
+        if (mounted) {
+          setState(() => _flashOn = false);
+        }
+      }
+    }
+    HapticFeedback.lightImpact();
+  }
+
+  Future<void> _flipCamera() async {
+    if (_cameras.length < 2) {
+      _showErr('لا توجد كاميرا أخرى متاحة');
+      return;
+    }
+    setState(() {
+      _cameraReady = false;
+      _cameraIndex = (_cameraIndex + 1) % _cameras.length;
+    });
+    await _initCamera();
+    HapticFeedback.lightImpact();
+  }
+
+  Future<void> _initCamera() async {
+    final status = await Permission.camera.request();
+    if (!status.isGranted) {
+      if (mounted) {
+        setState(() {
+          _cameraDenied = true;
+          _cameraReady = false;
+        });
+      }
+      return;
+    }
+
+    try {
+      if (_cameras.isEmpty) {
+        _cameras = await availableCameras();
+      }
+      if (_cameras.isEmpty) {
+        if (mounted) {
+          setState(() {
+            _cameraDenied = true;
+            _cameraReady = false;
+          });
+        }
+        return;
+      }
+
+      if (_cameraIndex >= _cameras.length) {
+        _cameraIndex = 0;
+      }
+
+      await _cameraController?.dispose();
+
+      final controller = CameraController(
+        _cameras[_cameraIndex],
+        ResolutionPreset.high,
+        enableAudio: false,
+        imageFormatGroup: ImageFormatGroup.jpeg,
+      );
+
+      await controller.initialize();
+      try {
+        await controller.setFlashMode(_flashOn ? FlashMode.torch : FlashMode.off);
+      } catch (_) {}
+
+      if (!mounted) {
+        await controller.dispose();
+        return;
+      }
+
+      setState(() {
+        _cameraController = controller;
+        _cameraReady = true;
+        _cameraDenied = false;
+        _frontCam = _cameras[_cameraIndex].lensDirection == CameraLensDirection.front;
+      });
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _cameraReady = false;
+          _cameraDenied = true;
+        });
+      }
+    }
+  }
+
+  Future<void> _publish() async {
+    if (_media.isEmpty && _title.isEmpty) {
+      _showErr('أضف صورة أو عنواناً للتعميم أولاً');
+      return;
+    }
+
+    final result = await Navigator.push<AiAnalysisResult>(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => AiProcessingScreen(
+          media: _media,
+          manualType: _type,
+          manualTitle: _title.isNotEmpty ? _title : null,
+          location: _location,
+          radius: _radius,
+          duration: _duration,
         ),
+        transitionsBuilder: (_, animation, __, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        transitionDuration: const Duration(milliseconds: 350),
+      ),
+    );
+
+    if (result == null || !mounted) {
+      return;
+    }
+
+    setState(() => _publishing = true);
+    try {
+      List<String> urls = [];
+      if (_media.isNotEmpty) {
+        final imageFiles = _media.where(_isImg).toList();
+        if (imageFiles.isNotEmpty) {
+          final id = '${DateTime.now().millisecondsSinceEpoch}';
+          urls = await StorageService.instance.uploadImages(imageFiles, id);
+          if (urls.isEmpty) {
+            throw Exception('فشل رفع الصور، لم يتم حفظ أي رابط صورة.');
+          }
+        }
+      }
+
+      final now = DateTime.now();
+      await FirestoreService.instance.uploadTaameem(
+        TaameemModel(
+          id: '',
+          userId: 'current_user',
+          userPhone: '+9665XXXXXXXX',
+          type: result.type,
+          title: result.title,
+          description: result.description,
+          latitude: _location?.latitude ?? 24.7136,
+          longitude: _location?.longitude ?? 46.6753,
+          imageUrls: urls,
+          createdAt: now,
+          expiresAt: now.add(_duration),
+          status: 'active',
+        ),
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() => _publishing = false);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => _SuccessScreen(radius: _radius)),
+      );
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() => _publishing = false);
+      _showErr(error.toString().replaceFirst('Exception: ', ''));
+    }
+  }
+
+  static bool _isImg(File file) {
+    final ext = file.path.toLowerCase();
+    return ['.jpg', '.jpeg', '.png', '.heic', '.webp'].any(ext.endsWith);
+  }
+
+  void _showErr(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(
+              Icons.error_outline_rounded,
+              color: Colors.white,
+              size: 15,
+            ),
+            const SizedBox(width: 8),
+            Text(msg, style: GoogleFonts.cairo()),
+          ],
+        ),
+        backgroundColor: const Color(0xFFC03030),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
 
-  bool _isImg(File f) {
-    final e = f.path.toLowerCase();
-    return ['.jpg', '.jpeg', '.png', '.heic', '.webp'].any(e.endsWith);
+  String get _catLabel {
+    if (_type == null) {
+      return 'اختياري';
+    }
+    return _cats.firstWhere(
+      (cat) => cat['k'] == _type,
+      orElse: () => {'n': 'اختياري'},
+    )['n']! as String;
   }
 
-  // ══════════════════════════════════════════════════════════════════════════
-  //  BUILD
-  // ══════════════════════════════════════════════════════════════════════════
+  String get _locLabel => _location != null ? 'محدد ✓' : 'اختياري';
+
+  String get _radLabel => '${_radius.round()} كم';
+
+  String get _durLabel {
+    if (_duration.inDays >= 365) {
+      return '${_duration.inDays ~/ 365} سنة';
+    }
+    if (_duration.inDays >= 7) {
+      return '${_duration.inDays ~/ 7} أسابيع';
+    }
+    if (_duration.inDays >= 1) {
+      return '${_duration.inDays} أيام';
+    }
+    return '${_duration.inHours} ساعة';
+  }
+
+  String get _ttlLabel {
+    if (_title.isEmpty) {
+      return 'اختياري';
+    }
+    return _title.length > 10 ? '${_title.substring(0, 10)}…' : _title;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final top = MediaQuery.of(context).padding.top;
-    final bot = MediaQuery.of(context).padding.bottom;
+    final mq = MediaQuery.of(context);
+    final top = mq.padding.top;
+    final bot = mq.padding.bottom;
 
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: GestureDetector(
-        onTap: _panel != _Panel.none ? _close : null,
-        child: Stack(children: [
-
-          // 1. خلفية الكاميرا
-          const _CamBg(),
-
-          // 2. شريط الأعلى
-          _topBar(top),
-
-          // 3. 5 أزرار اليمين
-          _rightButtons(top),
-
-          // 4. منطقة المرفقات
-          _attArea(bot),
-
-          // 5. زر التصوير
-          _shutterBtn(bot),
-
-          // 6. لوحة التمرير
-          if (_panel != _Panel.none)
-            AnimatedBuilder(animation: _anim, builder: (_, __) => _panelLayer()),
-        ]),
+      backgroundColor: _camBg1,
+      body: Stack(
+        children: [
+          if (_cameraReady &&
+              _cameraController != null &&
+              _cameraController!.value.isInitialized &&
+              _cameraController!.value.previewSize != null)
+            Positioned.fill(
+              child: ColoredBox(
+                color: Colors.black,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: _cameraController!.value.previewSize!.height,
+                    height: _cameraController!.value.previewSize!.width,
+                    child: CameraPreview(_cameraController!),
+                  ),
+                ),
+              ),
+            )
+          else
+            _CamBackground(bg: _bgCtrl, glow: _glowCtrl),
+          if (!_cameraReady && _cameraDenied)
+            Positioned.fill(
+              child: IgnorePointer(
+                ignoring: true,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.45),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: _gold.withValues(alpha: 0.45)),
+                    ),
+                    child: Text(
+                      'تعذر فتح الكاميرا',
+                      style: GoogleFonts.cairo(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          const _FocusFrame(),
+          const _Vignette(),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: _TopBar(
+              top: top,
+              onClose: () => Navigator.pop(context),
+              onPublish: _publish,
+            ),
+          ),
+          Positioned(
+            right: 5,
+            top: top + 58,
+            child: _RightButtons(
+              catLabel: _catLabel,
+              catActive: _type != null,
+              locLabel: _locLabel,
+              locActive: _location != null,
+              radLabel: _radLabel,
+              durLabel: _durLabel,
+              ttlLabel: _ttlLabel,
+              ttlActive: _title.isNotEmpty,
+              onTap: _openPanel,
+            ),
+          ),
+          Positioned(
+            left: 10,
+            bottom: 120 + bot,
+            child: _AttBtn(media: _media, onTap: () => _openPanel(_Panel.att)),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _BottomControls(
+              bot: bot,
+              flashOn: _flashOn,
+              frontCam: _frontCam,
+              shutterAnim: _shutterCtrl,
+              onFlash: _toggleFlash,
+              onFlip: _flipCamera,
+              onCapture: _capture,
+            ),
+          ),
+          if (_publishing)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.75),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      width: 42,
+                      height: 42,
+                      child: CircularProgressIndicator(
+                        color: _gold,
+                        strokeWidth: 3,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'جاري نشر التعميم...',
+                      style: GoogleFonts.cairo(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          if (_panel != null) ...[
+            GestureDetector(
+              onTap: _closePanel,
+              child: AnimatedBuilder(
+                animation: _panelCtrl,
+                builder: (_, __) => Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withValues(alpha: 0.72 * _panelCtrl.value),
+                        Colors.black.withValues(alpha: 0.94 * _panelCtrl.value),
+                      ],
+                      stops: const [0, 0.48, 1],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              bottom: 0,
+              width: MediaQuery.of(context).size.width * 0.82,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(1, 0),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(parent: _panelCtrl, curve: Curves.easeOut),
+                ),
+                child: _buildPanel(top),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
 
-  // ── شريط الأعلى ──────────────────────────────────────────────────────────
-  Widget _topBar(double top) => Positioned(
-    top: top + 10,
-    left: 12, right: 12,
-    child: Row(children: [
-      // إغلاق
-      GestureDetector(
-        onTap: () => Navigator.pop(context),
-        child: Container(
-          width: 38, height: 38,
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.58),
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withOpacity(0.2))),
-          child: const Icon(Icons.close_rounded, color: Colors.white, size: 18),
+  Widget _buildPanel(double top) {
+    switch (_panel) {
+      case _Panel.cat:
+        return _CatPanel(
+          top: top,
+          selected: _type,
+          onSave: (value) {
+            setState(() => _type = value);
+            _closePanel();
+          },
+        );
+      case _Panel.loc:
+        return _LocPanel(
+          top: top,
+          location: _location,
+          onSave: (value) {
+            setState(() => _location = value);
+            _closePanel();
+          },
+        );
+      case _Panel.rad:
+        return _RadPanel(
+          top: top,
+          radius: _radius,
+          center: _location,
+          onSave: (value) {
+            setState(() => _radius = value);
+            _closePanel();
+          },
+        );
+      case _Panel.dur:
+        return _DurPanel(
+          top: top,
+          duration: _duration,
+          onSave: (value) {
+            setState(() => _duration = value);
+            _closePanel();
+          },
+        );
+      case _Panel.ttl:
+        return _TtlPanel(
+          top: top,
+          initial: _title,
+          onSave: (value) {
+            setState(() => _title = value);
+            _closePanel();
+          },
+        );
+      case _Panel.att:
+        return _AttPanel(
+          top: top,
+          media: _media,
+          onCapture: () async {
+            await _capture();
+            setState(() {});
+          },
+          onGallery: () async {
+            await _pickGallery();
+            setState(() {});
+          },
+          onRemove: (index) => setState(() => _media.removeAt(index)),
+          onSave: _closePanel,
+        );
+      case null:
+        return const SizedBox.shrink();
+    }
+  }
+}
+
+class _CamBackground extends StatelessWidget {
+  final AnimationController bg;
+  final AnimationController glow;
+
+  const _CamBackground({required this.bg, required this.glow});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        AnimatedBuilder(
+          animation: bg,
+          builder: (_, __) => Container(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: const Alignment(0, -0.24),
+                radius: 1.4,
+                colors: [
+                  Color.lerp(
+                    const Color(0xFF1C3A20),
+                    const Color(0xFF142A16),
+                    bg.value,
+                  )!,
+                  const Color(0xFF070F08),
+                ],
+              ),
+            ),
+          ),
+        ),
+        CustomPaint(painter: _GridPainter(), size: Size.infinite),
+        AnimatedBuilder(
+          animation: glow,
+          builder: (_, __) {
+            final value = glow.value;
+            return Center(
+              child: Transform.translate(
+                offset: const Offset(0, -80),
+                child: Transform.scale(
+                  scale: 1 + value * 0.2,
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          _gold.withValues(alpha: 0.06 * (0.5 + value * 0.5)),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _GridPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.028)
+      ..strokeWidth = 1;
+    const step = 46.0;
+    for (double x = 0; x < size.width; x += step) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    for (double y = 0; y < size.height; y += step) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_GridPainter oldDelegate) => false;
+}
+
+class _FocusFrame extends StatelessWidget {
+  const _FocusFrame();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Transform.translate(
+        offset: const Offset(0, -80),
+        child: SizedBox(
+          width: 160,
+          height: 160,
+          child: CustomPaint(painter: _FocusPainter()),
         ),
       ),
-      const Spacer(),
-      Text('رفع تعميم',
-        style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 16, fontWeight: FontWeight.w700,
-            color: Colors.white)),
-      const Spacer(),
-      // نشر
-      GestureDetector(
-        onTap: _publishing ? null : _publish,
-        child: Container(
-          height: 36, padding: const EdgeInsets.symmetric(horizontal: 18),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: _gold, width: 1.8)),
-          child: Center(
-            child: _publishing
-              ? const SizedBox(width: 16, height: 16,
-                  child: CircularProgressIndicator(
-                      strokeWidth: 2, color: _gold))
-              : Text('نشر', style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                  fontSize: 14, fontWeight: FontWeight.w800, color: _gold)),
+    );
+  }
+}
+
+class _FocusPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = _gold.withValues(alpha: 0.7)
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke;
+    const len = 20.0;
+    canvas.drawPath(
+      Path()
+        ..moveTo(size.width - len, 0)
+        ..lineTo(size.width, 0)
+        ..lineTo(size.width, len),
+      paint,
+    );
+    canvas.drawPath(
+      Path()
+        ..moveTo(len, 0)
+        ..lineTo(0, 0)
+        ..lineTo(0, len),
+      paint,
+    );
+    canvas.drawPath(
+      Path()
+        ..moveTo(size.width - len, size.height)
+        ..lineTo(size.width, size.height)
+        ..lineTo(size.width, size.height - len),
+      paint,
+    );
+    canvas.drawPath(
+      Path()
+        ..moveTo(len, size.height)
+        ..lineTo(0, size.height)
+        ..lineTo(0, size.height - len),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_FocusPainter oldDelegate) => false;
+}
+
+class _Vignette extends StatelessWidget {
+  const _Vignette();
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            radius: 1.2,
+            colors: [Colors.transparent, Colors.black.withValues(alpha: 0.6)],
+            stops: const [0.4, 1],
           ),
         ),
       ),
-    ]),
-  );
+    );
+  }
+}
 
-  // ── 5 أزرار اليمين ───────────────────────────────────────────────────────
-  Widget _rightButtons(double top) => Positioned(
-    top: top + 64,
-    right: _btnR,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        _OBtn(emoji: _catEmoji(), label: 'فئة التعميم',
-          value:  _type != null ? _catName() : null,
-          active: _panel == _Panel.category,
-          onTap:  () => _open(_Panel.category)),
-        const SizedBox(height: _btnGap),
-        _OBtn(emoji: '📍', label: 'موقع التعميم',
-          value:  _location != null ? 'محدد ✓' : null,
-          active: _panel == _Panel.location,
-          onTap:  () => _open(_Panel.location)),
-        const SizedBox(height: _btnGap),
-        _OBtn(emoji: '📡', label: 'نطاق التعميم',
-          value:  '${_radius.round()} كم',
-          active: _panel == _Panel.radius,
-          onTap:  () => _open(_Panel.radius)),
-        const SizedBox(height: _btnGap),
-        _OBtn(emoji: '⏱️', label: 'مُدة التعميم',
-          value:  _durLabel(),
-          active: _panel == _Panel.duration,
-          onTap:  () => _open(_Panel.duration)),
-        const SizedBox(height: _btnGap),
-        _OBtn(emoji: '✏️', label: 'عنوان التعميم',
-          value:  _title.isNotEmpty
-              ? (_title.length > 10 ? '${_title.substring(0, 10)}…' : _title)
-              : null,
-          active: _panel == _Panel.title,
-          onTap:  () => _open(_Panel.title)),
-      ],
-    ),
-  );
+class _TopBar extends StatelessWidget {
+  final double top;
+  final VoidCallback onClose;
+  final VoidCallback onPublish;
 
-  // ── منطقة المرفقات ────────────────────────────────────────────────────────
-  // ── زر المرفقات الجانبي — 25×120px ثابت ──────────────────────────────────
-  Widget _attArea(double bot) => Positioned(
-    // مرفوع قليلاً عن الزر السابق
-    bottom: bot + 120,
-    left: 10,
-    child: GestureDetector(
-      onTap: () => _open(_Panel.attachments),
+  const _TopBar({
+    required this.top,
+    required this.onClose,
+    required this.onPublish,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(14, top + 12, 14, 16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.black.withValues(alpha: 0.65), Colors.transparent],
+        ),
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: onClose,
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: 0.1),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+              ),
+              child: const Icon(
+                Icons.close_rounded,
+                color: Colors.white,
+                size: 16,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              'رفع تعميم',
+              style: GoogleFonts.cairo(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: Colors.white.withValues(alpha: 0.9),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          GestureDetector(
+            onTap: onPublish,
+            child: Container(
+              height: 34,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(17),
+                border: Border.all(color: _gold, width: 1.5),
+              ),
+              child: Center(
+                child: Text(
+                  'نشر',
+                  style: GoogleFonts.cairo(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: _gold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RightButtons extends StatelessWidget {
+  final String catLabel;
+  final String locLabel;
+  final String radLabel;
+  final String durLabel;
+  final String ttlLabel;
+  final bool catActive;
+  final bool locActive;
+  final bool ttlActive;
+  final ValueChanged<_Panel> onTap;
+
+  const _RightButtons({
+    required this.catLabel,
+    required this.catActive,
+    required this.locLabel,
+    required this.locActive,
+    required this.radLabel,
+    required this.durLabel,
+    required this.ttlLabel,
+    required this.ttlActive,
+    required this.onTap,
+  });
+
+  static const _btns = [
+    {'p': _Panel.cat, 'lbl': 'فئة التعميم'},
+    {'p': _Panel.loc, 'lbl': 'موقع التعميم'},
+    {'p': _Panel.rad, 'lbl': 'نطاق التعميم'},
+    {'p': _Panel.dur, 'lbl': 'مُدة التعميم'},
+    {'p': _Panel.ttl, 'lbl': 'عنوان التعميم'},
+  ];
+
+  IconData _icon(_Panel panel) {
+    switch (panel) {
+      case _Panel.cat:
+        return Icons.label_outline_rounded;
+      case _Panel.loc:
+        return Icons.location_on_outlined;
+      case _Panel.rad:
+        return Icons.radar_rounded;
+      case _Panel.dur:
+        return Icons.schedule_rounded;
+      case _Panel.ttl:
+        return Icons.short_text_rounded;
+      case _Panel.att:
+        return Icons.attach_file_rounded;
+    }
+  }
+
+  String _valFor(_Panel panel) {
+    switch (panel) {
+      case _Panel.cat:
+        return catLabel;
+      case _Panel.loc:
+        return locLabel;
+      case _Panel.rad:
+        return radLabel;
+      case _Panel.dur:
+        return durLabel;
+      case _Panel.ttl:
+        return ttlLabel;
+      case _Panel.att:
+        return '';
+    }
+  }
+
+  bool _activeFor(_Panel panel) {
+    switch (panel) {
+      case _Panel.cat:
+        return catActive;
+      case _Panel.loc:
+        return locActive;
+      case _Panel.rad:
+        return true;
+      case _Panel.dur:
+        return true;
+      case _Panel.ttl:
+        return ttlActive;
+      case _Panel.att:
+        return false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: _btns.map((button) {
+        final panel = button['p']! as _Panel;
+        final active = _activeFor(panel);
+        final value = _valFor(panel);
+        final label = button['lbl']! as String;
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 6),
+          child: GestureDetector(
+            onTap: () => onTap(panel),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: const Cubic(0.34, 1.2, 0.64, 1),
+              width: 105,
+              height: 45,
+              transform: Matrix4.translationValues(active ? -2 : 0, 0, 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: active
+                    ? Colors.black.withValues(alpha: 0.45)
+                    : Colors.black.withValues(alpha: 0.35),
+                border: Border.all(
+                  color: active ? _gold : _gold.withValues(alpha: 0.4),
+                  width: 1.5,
+                ),
+                boxShadow: active
+                    ? [
+                        BoxShadow(
+                          color: _gold.withValues(alpha: 0.25),
+                          blurRadius: 20,
+                          spreadRadius: 0,
+                        ),
+                        BoxShadow(
+                          color: _gold.withValues(alpha: 0.15),
+                          blurRadius: 0,
+                          spreadRadius: 1,
+                        ),
+                      ]
+                    : [],
+              ),
+              child: Row(
+                children: [
+                  const SizedBox(width: 8),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    width: 26,
+                    height: 26,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: active
+                          ? _gold.withValues(alpha: 0.15)
+                          : Colors.white.withValues(alpha: 0.06),
+                    ),
+                    child: Icon(
+                      _icon(panel),
+                      size: 14,
+                      color: active ? _gold : Colors.white.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          label,
+                          style: GoogleFonts.cairo(
+                            fontSize: 9,
+                            color: Colors.white.withValues(alpha: 0.45),
+                            height: 1.2,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 1),
+                        Text(
+                          value,
+                          style: GoogleFonts.cairo(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color:
+                                active ? _gold : Colors.white.withValues(alpha: 0.25),
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class _AttBtn extends StatelessWidget {
+  final List<File> media;
+  final VoidCallback onTap;
+
+  const _AttBtn({required this.media, required this.onTap});
+
+  static const _bgColors = [
+    Color(0xFF1A3520),
+    Color(0xFF2A1A35),
+    Color(0xFF1A2535),
+    Color(0xFF35201A),
+    Color(0xFF1A3530),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
       child: Container(
-        // الحجم ثابت لا يتغير مهما كان عدد الصور
-        width: 25,
+        width: 36,
         height: 120,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: _gold, width: 1.5),
-          // خلفية: أسود كثيف أعلى → شفاف أسفل
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: _gold.withValues(alpha: 0.35), width: 1.5),
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.black.withOpacity(0.82),
-              Colors.black.withOpacity(0.50),
-              Colors.black.withOpacity(0.18),
+              Colors.black.withValues(alpha: 0.82),
+              Colors.black.withValues(alpha: 0.45),
+              Colors.black.withValues(alpha: 0.15),
             ],
           ),
         ),
         child: Stack(
-          clipBehavior: Clip.hardEdge,
           children: [
-
-            // ── طبقات الصور المتراكمة (الجزء العلوي ثابت) ──────────────────
             Positioned(
-              top: 4, left: 2, right: 2,
-              // ارتفاع منطقة الصور ثابت — 78px
+              top: 4,
+              left: 3,
+              right: 3,
               height: 78,
               child: Stack(
-                clipBehavior: Clip.hardEdge,
-                children: _media.take(3).toList().reversed
-                    .toList()
-                    .asMap()
-                    .entries
-                    .map((e) {
-                  final i   = e.key;   // 0=أقدم، 2=أحدث
-                  final f   = e.value;
-                  // الصورة الأحدث (i=2) تكون في الأمام مع offset أقل
-                  final offset = (2 - i) * 4.0;
-                  return Positioned(
-                    top: offset,
-                    left: 0, right: 0,
+                children: List.generate(
+                  media.length.clamp(0, 3),
+                  (index) => Positioned(
+                    top: (4 + index * 4).toDouble(),
+                    left: 0,
+                    right: 0,
+                    height: (70 - index * 4).toDouble(),
                     child: Opacity(
-                      opacity: 1.0 - (2 - i) * 0.18,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
-                        child: SizedBox(
-                          width: 21,
-                          height: 70 - offset,
-                          child: _isImg(f)
-                            ? Image.file(f, fit: BoxFit.cover)
-                            : Container(
-                                color: Colors.grey.shade800,
-                                child: const Icon(
-                                  Icons.videocam_rounded,
-                                  color: Colors.white54,
-                                  size: 12)),
+                      opacity: 1 - index * 0.18,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.15),
+                          ),
+                          color: _bgColors[index % _bgColors.length],
                         ),
                       ),
                     ),
-                  );
-                }).toList(),
+                  ),
+                ),
               ),
             ),
-
-            // ── عداد الصور — ثابت أعلى اليمين ──────────────────────────────
-            if (_media.isNotEmpty)
+            if (media.isNotEmpty)
               Positioned(
-                top: 2, right: 0,
+                top: 3,
+                right: 1,
                 child: Container(
-                  width: 12, height: 12,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
+                  width: 11,
+                  height: 11,
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
+                    color: const Color(0xFFE53E3E),
+                    border: Border.all(color: Colors.black.withValues(alpha: 0.4)),
                   ),
                   child: Center(
                     child: Text(
-                      '${_media.length > 9 ? '9+' : _media.length}',
+                      media.length > 9 ? '9+' : '${media.length}',
                       style: const TextStyle(
                         fontSize: 6,
                         fontWeight: FontWeight.w800,
@@ -410,1796 +1138,1444 @@ class _CameraScreenState extends State<CameraScreen>
                   ),
                 ),
               ),
-
-            // ── أيقونة المشبك — ثابتة دائماً في الأسفل ──────────────────────
-            const Positioned(
-              bottom: 6,
-              left: 0, right: 0,
-              child: Center(
-                child: Icon(
-                  Icons.attach_file_rounded,
-                  color: Colors.white,
-                  size: 14,
-                ),
+            Positioned(
+              bottom: 7,
+              left: 0,
+              right: 0,
+              child: Icon(
+                Icons.attach_file_rounded,
+                color: Colors.white.withValues(alpha: 0.7),
+                size: 13,
               ),
             ),
-
           ],
         ),
       ),
-    ),
-  );
-
-  // ── زر التصوير ───────────────────────────────────────────────────────────
-  Widget _shutterBtn(double bot) => Positioned(
-    bottom: bot + 26,
-    left: 0, right: 0,
-    child: Center(
-      child: GestureDetector(
-        onTap: _capture,
-        child: Container(
-          width: 72, height: 72,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-                color: Colors.white.withOpacity(0.88), width: 3.5)),
-          child: Container(
-            margin: const EdgeInsets.all(6),
-            decoration: const BoxDecoration(
-                color: Colors.white, shape: BoxShape.circle)),
-        ),
-      ),
-    ),
-  );
-
-  // ── طبقة اللوحة ──────────────────────────────────────────────────────────
-  Widget _panelLayer() {
-    final fromLeft = _panel == _Panel.attachments;
-    final w = MediaQuery.of(context).size.width;
-
-    return GestureDetector(
-      onTap: _close,
-      child: Stack(children: [
-        // تدرج الخلفية
-        Positioned.fill(
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: fromLeft
-                    ? Alignment.centerLeft : Alignment.centerRight,
-                end: fromLeft
-                    ? Alignment.centerRight : Alignment.centerLeft,
-                colors: [
-                  Colors.black.withOpacity(0.90 * _anim.value),
-                  Colors.black.withOpacity(0.50 * _anim.value),
-                  Colors.transparent,
-                ],
-              ),
-            ),
-          ),
-        ),
-        // محتوى اللوحة
-        Positioned(
-          top: 0, bottom: 0,
-          right: fromLeft ? null : 0,
-          left:  fromLeft ? 0 : null,
-          width: w * 0.74,
-          child: Transform.translate(
-            offset: Offset(
-              fromLeft
-                ? -w * (1 - _anim.value)
-                : w  * (1 - _anim.value),
-              0),
-            child: GestureDetector(
-              onTap: () {},
-              child: _panelContent(),
-            ),
-          ),
-        ),
-      ]),
     );
-  }
-
-  Widget _panelContent() {
-    final top = MediaQuery.of(context).padding.top;
-    switch (_panel) {
-      case _Panel.category:
-        return _CatPanel(cats: _cats, selected: _type,
-          topPad: top,
-          onSave: (k) { setState(() => _type = k); _close(); });
-      case _Panel.location:
-        return _LocPanel(location: _location, topPad: top,
-          onSave: (d) {
-            setState(() {
-              _location = d['location'] as LatLng?;
-            });
-            _close();
-          });
-      case _Panel.radius:
-        return _RadPanel(radius: _radius, topPad: top,
-          onSave: (r) { setState(() => _radius = r); _close(); });
-      case _Panel.duration:
-        return _DurPanel(duration: _duration, topPad: top,
-          onSave: (d) { setState(() => _duration = d); _close(); });
-      case _Panel.title:
-        return _TitlePanel(ctrl: _titleCtrl, initial: _title, topPad: top,
-          onSave: (t) { setState(() => _title = t); _close(); });
-      case _Panel.attachments:
-        return _AttPanel(media: _media, topPad: top,
-          onCapture: () { _close(); _capture(); },
-          onGallery: _pickGallery,
-          onRemove:  (i) => setState(() => _media.removeAt(i)));
-      default: return const SizedBox.shrink();
-    }
-  }
-
-  // ── مساعدات ───────────────────────────────────────────────────────────────
-  String _catEmoji() => _type != null
-    ? (_cats.firstWhere((c) => c['k'] == _type,
-        orElse: () => const {'e': '🏷️'})['e'] as String)
-    : '🏷️';
-
-  String _catName() => _cats
-    .firstWhere((c) => c['k'] == _type, orElse: () => const {'n': ''})['n'] as String;
-
-  String _durLabel() {
-    final d = _duration;
-    if (d.inDays >= 365) return 'سنة';
-    if (d.inDays >= 30)  return '${d.inDays ~/ 30} شهر';
-    if (d.inDays >= 7)   return '${d.inDays ~/ 7} أسابيع';
-    if (d.inDays >= 1)   return '${d.inDays} يوم';
-    return '${d.inHours} ساعة';
   }
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  _OBtn — زر الخيار (الأبعاد المُحددة)
-// ══════════════════════════════════════════════════════════════════════════════
-class _OBtn extends StatelessWidget {
-  final String emoji, label;
-  final String? value;
+class _BottomControls extends StatelessWidget {
+  final double bot;
+  final bool flashOn;
+  final bool frontCam;
+  final AnimationController shutterAnim;
+  final VoidCallback onFlash;
+  final VoidCallback onFlip;
+  final VoidCallback onCapture;
+
+  const _BottomControls({
+    required this.bot,
+    required this.flashOn,
+    required this.frontCam,
+    required this.shutterAnim,
+    required this.onFlash,
+    required this.onFlip,
+    required this.onCapture,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(24, 0, 24, bot + 28),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          colors: [Colors.black.withValues(alpha: 0.75), Colors.transparent],
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _CamActionBtn(
+                icon:
+                    flashOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
+                active: flashOn,
+                onTap: onFlash,
+              ),
+              const SizedBox(height: 10),
+              _CamActionBtn(
+                icon: Icons.flip_camera_ios_rounded,
+                active: frontCam,
+                onTap: onFlip,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Center(
+              child: GestureDetector(
+                onTap: onCapture,
+                child: AnimatedBuilder(
+                  animation: shutterAnim,
+                  child: Container(
+                    width: 74,
+                    height: 74,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.75),
+                        width: 3.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.white, Color(0xFFE8E8E8)],
+                        ),
+                      ),
+                    ),
+                  ),
+                  builder: (_, child) => Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 86,
+                        height: 86,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withValues(
+                              alpha: 0.2 + shutterAnim.value * 0.4,
+                            ),
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                      child!,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(width: 46, height: 46),
+              SizedBox(height: 10),
+              SizedBox(width: 46, height: 46),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CamActionBtn extends StatelessWidget {
+  final IconData icon;
   final bool active;
   final VoidCallback onTap;
 
-  const _OBtn({required this.emoji, required this.label,
-    this.value, required this.active, required this.onTap});
+  const _CamActionBtn({
+    required this.icon,
+    required this.active,
+    required this.onTap,
+  });
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
-    child: AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      width: _btnW,
-      height: _btnH,
-      padding: const EdgeInsets.symmetric(horizontal: 9),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(_btnRadius),
-        border: Border.all(color: _gold, width: 1.8),
-        color: active ? _goldBg : Colors.transparent,
-        boxShadow: active ? [BoxShadow(
-          color: _goldGlow, blurRadius: 14)] : [],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // نص اليسار
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(label, style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                  fontSize: 8.5, color: Colors.white.withOpacity(0.58)),
-                  maxLines: 1, overflow: TextOverflow.ellipsis),
-                if (value != null)
-                  Text(value!, style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                    fontSize: 10.5, fontWeight: FontWeight.w800, color: _gold),
-                    maxLines: 1, overflow: TextOverflow.ellipsis),
-              ],
-            ),
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        width: 46,
+        height: 46,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: active ? _gold.withValues(alpha: 0.25) : Colors.black.withValues(alpha: 0.4),
+          border: Border.all(
+            color: active ? _gold : Colors.white.withValues(alpha: 0.15),
           ),
-          // إيموجي اليمين
-          Text(emoji, style: const TextStyle(fontSize: 17)),
-        ],
-      ),
-    ),
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════════════
-//  خلفية الكاميرا المتحركة
-// ══════════════════════════════════════════════════════════════════════════════
-class _CamBg extends StatefulWidget {
-  const _CamBg();
-  @override State<_CamBg> createState() => _CamBgState();
-}
-
-class _CamBgState extends State<_CamBg> with SingleTickerProviderStateMixin {
-  late AnimationController _c;
-  @override void initState() { super.initState();
-    _c = AnimationController(vsync: this,
-        duration: const Duration(seconds: 10))..repeat(reverse: true); }
-  @override void dispose() { _c.dispose(); super.dispose(); }
-  @override
-  Widget build(BuildContext context) => AnimatedBuilder(
-    animation: _c,
-    builder: (_, __) => Container(
-      decoration: BoxDecoration(
-        gradient: RadialGradient(
-          center: Alignment(_c.value * 0.4 - 0.2, _c.value * 0.3 - 0.15),
-          radius: 1.2,
-          colors: const [
-            Color(0xFF1A3520), Color(0xFF0C1A10), Color(0xFF050D07)],
+        ),
+        child: Icon(
+          icon,
+          size: 20,
+          color: active ? _gold : Colors.white.withValues(alpha: 0.85),
         ),
       ),
-      child: CustomPaint(size: Size.infinite, painter: _GridP()),
-    ),
-  );
-}
-
-class _GridP extends CustomPainter {
-  @override
-  void paint(Canvas c, Size s) {
-    final p = Paint()..color = Colors.white.withOpacity(0.04)..strokeWidth = .8;
-    for (double x = 0; x < s.width;  x += 52) c.drawLine(Offset(x,0), Offset(x,s.height), p);
-    for (double y = 0; y < s.height; y += 52) c.drawLine(Offset(0,y), Offset(s.width,y), p);
+    );
   }
-  @override bool shouldRepaint(_GridP o) => false;
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  لوحة مشتركة
-// ══════════════════════════════════════════════════════════════════════════════
 class _PanelBase extends StatelessWidget {
+  final double top;
   final String title;
-  final double topPad;
+  final String subtitle;
   final Widget child;
   final VoidCallback onSave;
 
-  const _PanelBase({required this.title, required this.topPad,
-    required this.child, required this.onSave});
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.fromLTRB(12, topPad + 56, 12, 20),
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(title, style: TextStyle(fontFamily: 'NotoNaskhArabic',
-        fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
-      const SizedBox(height: 14),
-      Expanded(child: SingleChildScrollView(child: child)),
-      const SizedBox(height: 10),
-      _goldSave(onSave),
-    ]),
-  );
-
-  static Widget _goldSave(VoidCallback fn) => GestureDetector(
-    onTap: fn,
-    child: Container(
-      width: double.infinity, height: 44,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(13),
-        border: Border.all(color: _gold, width: 1.8)),
-      child: Center(child: Text('حفظ',
-        style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 14,
-            fontWeight: FontWeight.w800, color: _gold))),
-    ),
-  );
-}
-
-Widget _goldCard(Widget child) => Container(
-  padding: const EdgeInsets.all(14),
-  margin: const EdgeInsets.only(bottom: 10),
-  decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(16),
-    border: Border.all(color: _gold, width: 1.8),
-    color: Colors.black.withOpacity(0.4)),
-  child: child,
-);
-
-// ── لوحة الفئة ────────────────────────────────────────────────────────────
-class _CatPanel extends StatefulWidget {
-  final List<Map<String, String>> cats;
-  final String? selected;
-  final double topPad;
-  final ValueChanged<String?> onSave;
-  const _CatPanel({required this.cats, required this.selected,
-    required this.topPad, required this.onSave});
-  @override State<_CatPanel> createState() => _CatPanelState();
-}
-class _CatPanelState extends State<_CatPanel> {
-  String? _tmp;
-  @override void initState() { super.initState(); _tmp = widget.selected; }
-  @override
-  Widget build(BuildContext context) => _PanelBase(
-    title: 'فئة التعميم', topPad: widget.topPad,
-    onSave: () => widget.onSave(_tmp),
-    child: Column(children: widget.cats.map((c) {
-      final sel = _tmp == c['k'];
-      return GestureDetector(
-        onTap: () => setState(() => _tmp = sel ? null : c['k']),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          margin: const EdgeInsets.only(bottom: 7),
-          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(13),
-            border: Border.all(
-              color: sel ? _gold : _gold.withOpacity(0.35),
-              width: sel ? 2 : 1.5),
-            color: sel ? _goldBg : Colors.transparent),
-          child: Row(children: [
-            Text(c['e']!, style: const TextStyle(fontSize: 20)),
-            const SizedBox(width: 10),
-            Expanded(child: Text(c['n']!, style: TextStyle(fontFamily: 'NotoNaskhArabic',
-              fontSize: 13, fontWeight: sel ? FontWeight.w700 : FontWeight.w400,
-              color: Colors.white))),
-            if (sel) const Icon(Icons.check_rounded, color: _gold, size: 15),
-          ]),
-        ),
-      );
-    }).toList()),
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════════════
-//  لوحة الموقع — خريطة كبيرة + crosshair + اختيار نوع العلامة
-// ══════════════════════════════════════════════════════════════════════════════
-enum MarkerStyle { photo, category }
-
-class _LocPanel extends StatefulWidget {
-  final LatLng? location;
-  final double topPad;
-  final ValueChanged<Map<String, dynamic>> onSave;
-  const _LocPanel({
-    required this.location,
-    required this.topPad,
+  const _PanelBase({
+    required this.top,
+    required this.title,
+    required this.subtitle,
+    required this.child,
     required this.onSave,
   });
-  @override State<_LocPanel> createState() => _LocPanelState();
-}
-
-class _LocPanelState extends State<_LocPanel> {
-  LatLng        _loc        = LocationService.defaultLocation;
-  MarkerStyle   _style      = MarkerStyle.photo;
-  bool          _hintShown  = true;
-  final MapController _mapCtrl = MapController();
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.location != null) _loc = widget.location!;
-  }
-
-  void _onMapEvent(MapEvent _) {
-    final c = _mapCtrl.camera.center;
-    setState(() {
-      _loc = c;
-      _hintShown = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, widget.topPad + 50, 0, 0),
-      child: Column(children: [
-
-        // ── رأس ─────────────────────────────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(children: [
-              Text('موقع التعميم',
-                style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                  fontSize: 17, fontWeight: FontWeight.w800,
-                  color: Colors.white)),
-              const Spacer(),
-              GestureDetector(
-                onTap: () => widget.onSave(
-                    {'location': _loc, 'markerStyle': _style}),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 18, vertical: 8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: _gold, width: 1.8)),
-                  child: Text('حفظ',
-                    style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                      fontSize: 13, fontWeight: FontWeight.w800,
-                      color: _gold)),
-                ),
-              ),
-            ]),
-            const SizedBox(height: 4),
-            // إحداثيات دقيقة
-            Text(
-              '${_loc.latitude.toStringAsFixed(6)}°  '
-              '${_loc.longitude.toStringAsFixed(6)}°',
-              style: const TextStyle(
-                fontFamily: 'monospace',
-                fontSize: 10,
-                color: Color(0xFFC9A84C),
-                letterSpacing: 0.3,
-              ),
-            ),
-          ]),
-        ),
-
-        // ── الخريطة الكبيرة ─────────────────────────────────────────────────
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                      color: _gold.withOpacity(0.4), width: 1.5)),
-                child: Stack(children: [
-
-                  // الخريطة
-                  FlutterMap(
-                    mapController: _mapCtrl,
-                    options: MapOptions(
-                      initialCenter: _loc,
-                      initialZoom: 16, // دقة عالية
-                      interactionOptions: const InteractionOptions(
-                          flags: InteractiveFlag.all),
-                      onMapEvent: _onMapEvent,
-                      onTap: (_, pt) {
-                        setState(() { _loc = pt; _hintShown = false; });
-                        _mapCtrl.move(pt, _mapCtrl.camera.zoom);
-                      },
-                    ),
+      color: const Color(0xF5050C06),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, top + 12, 16, 14),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TileLayer(
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'com.taameem.app',
-                        maxZoom: 19,
+                      Text(
+                        title,
+                        style: GoogleFonts.cairo(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
                       ),
-                    ],
-                  ),
-
-                  // Crosshair ذهبي ثابت في المركز
-                  const Center(child: _Crosshair()),
-
-                  // تلميح يختفي بعد أول تفاعل
-                  if (_hintShown)
-                    Positioned(
-                      bottom: 8, left: 0, right: 0,
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.65),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                                color: _gold.withOpacity(0.3))),
-                          child: Text(
-                            'اسحب الخريطة أو اضغط لتحديد الموقع',
-                            style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                              fontSize: 10,
-                              color: Colors.white.withOpacity(0.8)),
+                      if (subtitle.isNotEmpty)
+                        Text(
+                          subtitle,
+                          style: GoogleFonts.cairo(
+                            fontSize: 11,
+                            color: Colors.white.withValues(alpha: 0.4),
                           ),
                         ),
-                      ),
-                    ),
-
-                ]),
-              ),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        // ── اختيار نوع العلامة ───────────────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.45),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                  color: _gold.withOpacity(0.25), width: 1.5)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('نوع العلامة على الخريطة',
-                  style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                    fontSize: 10, color: Colors.white.withOpacity(0.45))),
-                const SizedBox(height: 8),
-                Row(children: [
-
-                  // نوع 1: صورة
-                  Expanded(child: GestureDetector(
-                    onTap: () => setState(() => _style = MarkerStyle.photo),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: _style == MarkerStyle.photo
-                              ? _gold : _gold.withOpacity(0.3),
-                          width: _style == MarkerStyle.photo ? 2 : 1.5),
-                        color: _style == MarkerStyle.photo
-                            ? _goldBg : Colors.transparent),
-                      child: Column(children: [
-                        Container(
-                          width: 44, height: 44,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                                color: Colors.white, width: 2),
-                            color: Colors.grey.shade800),
-                          child: const Icon(Icons.image_rounded,
-                              color: Colors.white70, size: 20)),
-                        const SizedBox(height: 6),
-                        Text('صورة من المرفقات',
-                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                            fontSize: 10, fontWeight: FontWeight.w700,
-                            color: _style == MarkerStyle.photo
-                                ? _gold : Colors.white70),
-                          textAlign: TextAlign.center),
-                        const SizedBox(height: 4),
-                        if (_style == MarkerStyle.photo)
-                          const Icon(Icons.check_circle_rounded,
-                              color: _gold, size: 14),
-                      ]),
-                    ),
-                  )),
-
-                  const SizedBox(width: 10),
-
-                  // نوع 2: علامة الفئة
-                  Expanded(child: GestureDetector(
-                    onTap: () => setState(() => _style = MarkerStyle.category),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: _style == MarkerStyle.category
-                              ? _gold : _gold.withOpacity(0.3),
-                          width: _style == MarkerStyle.category ? 2 : 1.5),
-                        color: _style == MarkerStyle.category
-                            ? _goldBg : Colors.transparent),
-                      child: Column(children: [
-                        Container(
-                          width: 44, height: 44,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.missingPerson,
-                            border: Border.all(
-                                color: Colors.white, width: 2.5)),
-                          child: Center(
-                            child: Text('مفقود',
-                              style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                                fontSize: 8, fontWeight: FontWeight.w800,
-                                color: Colors.white),
-                              textAlign: TextAlign.center)),
-                        ),
-                        const SizedBox(height: 6),
-                        Text('علامة فئة التعميم',
-                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                            fontSize: 10, fontWeight: FontWeight.w700,
-                            color: _style == MarkerStyle.category
-                                ? _gold : Colors.white70),
-                          textAlign: TextAlign.center),
-                        const SizedBox(height: 4),
-                        if (_style == MarkerStyle.category)
-                          const Icon(Icons.check_circle_rounded,
-                              color: _gold, size: 14),
-                      ]),
-                    ),
-                  )),
-
-                ]),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-        ),
-
-        const SizedBox(height: 10),
-
-        // ── زر موقعي الحالي ─────────────────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-          child: GestureDetector(
-            onTap: () async {
-              final loc = await LocationService.instance.getCurrentLocation();
-              if (mounted) {
-                setState(() => _loc = loc);
-                _mapCtrl.move(loc, 17);
-              }
-            },
-            child: Container(
-              width: double.infinity, height: 38,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                    color: _gold.withOpacity(0.45), width: 1.5)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.my_location_rounded,
-                      color: _gold, size: 14),
-                  const SizedBox(width: 8),
-                  Text('موقعي الحالي',
-                    style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                      fontSize: 12, fontWeight: FontWeight.w700,
-                      color: _gold)),
-                ],
+          const Divider(height: 1, color: Color(0x18FFFFFF)),
+          Expanded(child: child),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 8, 14, 20),
+            child: GestureDetector(
+              onTap: onSave,
+              child: Container(
+                height: 44,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: _gold, width: 1.5),
+                  color: _gold.withValues(alpha: 0.08),
+                ),
+                child: Center(
+                  child: Text(
+                    'حفظ',
+                    style: GoogleFonts.cairo(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: _gold,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }
 
-// Crosshair ذهبي في مركز الخريطة
-class _Crosshair extends StatelessWidget {
-  const _Crosshair();
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 44, height: 44,
-      child: Stack(alignment: Alignment.center, children: [
-        // خط عمودي
-        Container(
-          width: 1.5, height: 44,
-          color: const Color(0xFFC9A84C)),
-        // خط أفقي
-        Container(
-          width: 44, height: 1.5,
-          color: const Color(0xFFC9A84C)),
-        // نقطة المركز
-        Container(
-          width: 8, height: 8,
-          decoration: BoxDecoration(
-            color: const Color(0xFFC9A84C),
-            shape: BoxShape.circle,
-            boxShadow: [BoxShadow(
-              color: const Color(0xFFC9A84C).withOpacity(0.8),
-              blurRadius: 8)]),
-        ),
-      ]),
-    );
-  }
-}
+class _CatPanel extends StatefulWidget {
+  final double top;
+  final String? selected;
+  final ValueChanged<String?> onSave;
 
-class _TriP extends CustomPainter {
-  @override
-  void paint(Canvas c, Size s) => c.drawPath(
-    ui.Path()..moveTo(0,0)..lineTo(s.width,0)
-             ..lineTo(s.width/2,s.height)..close(),
-    ui.Paint()..color = _gold);
-  @override bool shouldRepaint(_TriP o) => false;
-}
-
-// ── لوحة النطاق ───────────────────────────────────────────────────────────
-// ══════════════════════════════════════════════════════════════════════════════
-//  لوحة نطاق التعميم — خريطة تفاعلية حرة كاملة
-// ══════════════════════════════════════════════════════════════════════════════
-class _RadPanel extends StatefulWidget {
-  final double radius;
-  final double topPad;
-  final ValueChanged<double> onSave;
-  const _RadPanel({
-    required this.radius,
-    required this.topPad,
+  const _CatPanel({
+    required this.top,
+    required this.selected,
     required this.onSave,
   });
-  @override State<_RadPanel> createState() => _RadPanelState();
+
+  @override
+  State<_CatPanel> createState() => _CatPanelState();
 }
 
-class _RadPanelState extends State<_RadPanel> {
-  // ── state ─────────────────────────────────────────────────────────────────
-  late double  _radiusKm;
-  late LatLng  _center;
-  bool         _ksaMode = false;
-  bool         _draggingCenter = false;
-  bool         _draggingEdge   = false;
+class _CatPanelState extends State<_CatPanel> {
+  String? _sel;
 
-  final MapController _mapCtrl = MapController();
-
-  // نقطة المركز على الشاشة
-  Offset _centerScreen = Offset.zero;
-  Offset _edgeScreen   = Offset.zero;
-
-  static const _quickPicks = [2.0, 5.0, 10.0, 25.0, 50.0];
-  static const _saCenter   = LatLng(23.8859, 45.0792);
-
-  // ── init ──────────────────────────────────────────────────────────────────
   @override
   void initState() {
     super.initState();
-    _radiusKm = widget.radius.clamp(1, 500);
-    _center   = LocationService.defaultLocation;
-
-    // نستمع لحركة الخريطة لتحديث مواضع العلامات
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _mapCtrl.mapEventStream.listen((_) => _recalcScreenPositions());
-    });
+    _sel = widget.selected;
   }
 
-  // ── حساب نقطة الحافة الشرقية ──────────────────────────────────────────────
-  LatLng get _edgeLatLng {
-    final lngOffset = (_radiusKm / 111.32) /
-        math.cos(_center.latitude * math.pi / 180);
-    return LatLng(_center.latitude, _center.longitude + lngOffset);
+  @override
+  Widget build(BuildContext context) {
+    return _PanelBase(
+      top: widget.top,
+      title: 'فئة التعميم',
+      subtitle: 'اختر نوع التعميم',
+      onSave: () => widget.onSave(_sel),
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
+        children: _cats.map((cat) {
+          final key = cat['k']! as String;
+          final name = cat['n']! as String;
+          final color = cat['c']! as Color;
+          final selected = _sel == key;
+          return GestureDetector(
+            onTap: () => setState(() => _sel = selected ? null : key),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              margin: const EdgeInsets.only(bottom: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 11),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(13),
+                border: Border.all(
+                  color: selected ? color : Colors.white.withValues(alpha: 0.07),
+                ),
+                color: selected
+                    ? color.withValues(alpha: 0.12)
+                    : Colors.white.withValues(alpha: 0.03),
+              ),
+              child: Row(
+                children: [
+                  if (selected)
+                    Icon(Icons.check_rounded, color: color, size: 13)
+                  else
+                    const SizedBox(width: 13),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      name,
+                      style: GoogleFonts.cairo(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color:
+                            selected ? color : Colors.white.withValues(alpha: 0.8),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: color,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _LocPanel extends StatefulWidget {
+  final double top;
+  final LatLng? location;
+  final ValueChanged<LatLng> onSave;
+
+  const _LocPanel({
+    required this.top,
+    required this.location,
+    required this.onSave,
+  });
+
+  @override
+  State<_LocPanel> createState() => _LocPanelState();
+}
+
+class _LocPanelState extends State<_LocPanel> {
+  late LatLng _loc;
+  final _mapCtrl = MapController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loc = widget.location ?? const LatLng(24.7136, 46.6753);
   }
 
-  // ── تحديث إحداثيات الشاشة ────────────────────────────────────────────────
-  void _recalcScreenPositions() {
-    if (!mounted) return;
-    try {
-      final cam = _mapCtrl.camera;
-      final c = cam.latLngToScreenPoint(_center);
-      final e = cam.latLngToScreenPoint(_edgeLatLng);
-      setState(() {
-        _centerScreen = Offset(c.x.toDouble(), c.y.toDouble());
-        _edgeScreen   = Offset(e.x.toDouble(), e.y.toDouble());
-      });
-    } catch (_) {}
+  @override
+  Widget build(BuildContext context) {
+    return _PanelBase(
+      top: widget.top,
+      title: 'موقع التعميم',
+      subtitle: 'حدد الموقع على الخريطة',
+      onSave: () => widget.onSave(_loc),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
+        child: Column(
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: _gold.withValues(alpha: 0.25)),
+                  ),
+                  child: Stack(
+                    children: [
+                      FlutterMap(
+                        mapController: _mapCtrl,
+                        options: MapOptions(
+                          initialCenter: _loc,
+                          initialZoom: 15,
+                          onMapEvent: (_) {
+                            final center = _mapCtrl.camera.center;
+                            setState(
+                              () => _loc = LatLng(center.latitude, center.longitude),
+                            );
+                          },
+                          interactionOptions:
+                              const InteractionOptions(flags: InteractiveFlag.all),
+                        ),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.taameem.app',
+                          ),
+                        ],
+                      ),
+                      const Center(child: _Crosshair()),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '${_loc.latitude.toStringAsFixed(6)}°  ${_loc.longitude.toStringAsFixed(6)}°',
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 10,
+                color: _gold,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RadPanel extends StatefulWidget {
+  final double top;
+  final double radius;
+  final LatLng? center;
+  final ValueChanged<double> onSave;
+
+  const _RadPanel({
+    required this.top,
+    required this.radius,
+    required this.center,
+    required this.onSave,
+  });
+
+  @override
+  State<_RadPanel> createState() => _RadPanelState();
+}
+
+class _RadPanelState extends State<_RadPanel> {
+  late double _rad;
+  late LatLng _center;
+  final _mapCtrl = MapController();
+  bool _draggingEdge = false;
+  bool _ksa = false;
+
+  static const _picks = [2.0, 5.0, 10.0, 25.0, 50.0];
+
+  @override
+  void initState() {
+    super.initState();
+    _rad = widget.radius;
+    _center = widget.center ?? const LatLng(24.7136, 46.6753);
   }
 
-  // ── تحويل نقطة شاشة إلى latLng ───────────────────────────────────────────
-  LatLng? _screenToLatLng(Offset pos) {
-    try {
-      return _mapCtrl.camera.pointToLatLng(
-          math.Point(pos.dx, pos.dy));
-    } catch (_) { return null; }
-  }
-
-  // ── تحديث كل شيء ─────────────────────────────────────────────────────────
-  void _updateRadius(double km, {bool moveMap = false}) {
-    setState(() => _radiusKm = km.clamp(0.5, 900));
-    if (moveMap && km < 200) {
-      final zoom = km < 2  ? 13.0 : km < 5  ? 12.0 : km < 12 ? 11.0
-                 : km < 30 ? 10.0 : km < 70 ?  9.0 : km < 150 ? 8.0 : 7.0;
-      _mapCtrl.move(_center, zoom);
+  int _zoom(double km) {
+    if (km < 2) {
+      return 13;
     }
-  }
-
-  // ── المملكة كاملة ────────────────────────────────────────────────────────
-  void _toggleKSA() {
-    setState(() => _ksaMode = !_ksaMode);
-    if (_ksaMode) {
-      _center = _saCenter;
-      _radiusKm = 900;
-      _mapCtrl.move(_saCenter, 5);
-    } else {
-      _radiusKm = 10;
-      _updateRadius(10, moveMap: true);
+    if (km < 5) {
+      return 12;
     }
-  }
-
-  // ── zoom مناسب للنطاق ─────────────────────────────────────────────────────
-  double _zoomFor(double km) {
-    if (km < 2)   return 13;
-    if (km < 5)   return 12;
-    if (km < 12)  return 11;
-    if (km < 30)  return 10;
-    if (km < 70)  return 9;
-    if (km < 150) return 8;
+    if (km < 12) {
+      return 11;
+    }
+    if (km < 30) {
+      return 10;
+    }
+    if (km < 70) {
+      return 9;
+    }
+    if (km < 150) {
+      return 8;
+    }
     return 7;
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
-    final topPad = widget.topPad;
-    final radTxt = _ksaMode
-        ? '🇸🇦 المملكة كاملة'
-        : '${_radiusKm < 10
-            ? _radiusKm.toStringAsFixed(1)
-            : _radiusKm.round()} كم';
-
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, topPad + 50, 0, 0),
-      child: Column(children: [
-
-        // ── رأس اللوحة ──────────────────────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('نطاق التعميم',
-              style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 17,
-                  fontWeight: FontWeight.w800, color: Colors.white)),
-            const SizedBox(height: 3),
-            Row(children: [
-              Text('سيصل للمستخدمين داخل ',
-                style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 10,
-                    color: Colors.white.withOpacity(0.45))),
-              Text(radTxt,
-                style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 11,
-                    fontWeight: FontWeight.w800, color: _gold)),
-            ]),
-          ]),
-        ),
-
-        // ── الخريطة التفاعلية ───────────────────────────────────────────────
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: _gold.withOpacity(0.4), width: 1.5),
-                ),
-                child: Stack(children: [
-
-                  // ── الخريطة ─────────────────────────────────────────────
-                  FlutterMap(
-                    mapController: _mapCtrl,
-                    options: MapOptions(
-                      initialCenter: _center,
-                      initialZoom: _zoomFor(_radiusKm),
-                      // تمكين كل أنواع التفاعل
-                      interactionOptions: const InteractionOptions(
-                        flags: InteractiveFlag.all),
-                      onMapReady: () =>
-                          Future.delayed(
-                            const Duration(milliseconds: 100),
-                            _recalcScreenPositions),
-                      onMapEvent: (_) => _recalcScreenPositions(),
-                    ),
+    return _PanelBase(
+      top: widget.top,
+      title: 'نطاق التعميم',
+      subtitle: 'سيصل التعميم لمن داخل هذا النطاق',
+      onSave: () => widget.onSave(_ksa ? 900 : _rad),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
+        child: Column(
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: _gold.withValues(alpha: 0.25)),
+                  ),
+                  child: Stack(
                     children: [
-                      // طبقة الخريطة الداكنة
-                      TileLayer(
-                        urlTemplate:
-                          'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-                        subdomains: const ['a', 'b', 'c', 'd'],
-                        userAgentPackageName: 'com.taameem.app',
-                      ),
-                      // دائرة النطاق
-                      CircleLayer(circles: [
-                        CircleMarker(
-                          point: _center,
-                          radius: _radiusKm * 1000,
-                          useRadiusInMeter: true,
-                          color: _gold.withOpacity(0.10),
-                          borderColor: _gold.withOpacity(0.65),
-                          borderStrokeWidth: 2.5,
+                      FlutterMap(
+                        mapController: _mapCtrl,
+                        options: MapOptions(
+                          initialCenter: _center,
+                          initialZoom: _zoom(_rad).toDouble(),
+                          onMapEvent: (_) {
+                            final center = _mapCtrl.camera.center;
+                            setState(
+                              () => _center = LatLng(center.latitude, center.longitude),
+                            );
+                          },
+                          interactionOptions:
+                              const InteractionOptions(flags: InteractiveFlag.all),
                         ),
-                      ]),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.taameem.app',
+                          ),
+                          CircleLayer(
+                            circles: [
+                              CircleMarker(
+                                point: _center,
+                                radius: _rad * 1000,
+                                useRadiusInMeter: true,
+                                color: _gold.withValues(alpha: 0.1),
+                                borderColor: _gold.withValues(alpha: 0.65),
+                                borderStrokeWidth: 2,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const Center(child: _Crosshair()),
+                      _EdgeHandle(
+                        mapCtrl: _mapCtrl,
+                        center: _center,
+                        rad: _rad,
+                        dragging: _draggingEdge,
+                        onDragStart: () => setState(() => _draggingEdge = true),
+                        onDragUpdate: (newRad) => setState(() => _rad = newRad),
+                        onDragEnd: () => setState(() => _draggingEdge = false),
+                      ),
                     ],
                   ),
-
-                  // ── علامة المركز (قابلة للسحب) ──────────────────────────
-                  Positioned(
-                    left: _centerScreen.dx - 14,
-                    top:  _centerScreen.dy - 14,
-                    child: GestureDetector(
-                      onPanStart: (_) =>
-                          setState(() => _draggingCenter = true),
-                      onPanUpdate: (d) {
-                        final ll = _screenToLatLng(
-                            _centerScreen + d.delta);
-                        if (ll != null) {
-                          setState(() => _center = ll);
-                          _recalcScreenPositions();
-                        }
-                      },
-                      onPanEnd: (_) =>
-                          setState(() => _draggingCenter = false),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 100),
-                        width: 28, height: 28,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _draggingCenter
-                              ? _gold.withOpacity(0.5)
-                              : _gold.withOpacity(0.25),
-                          border: Border.all(color: _gold, width: 2),
-                          boxShadow: [BoxShadow(
-                            color: _gold.withOpacity(0.6),
-                            blurRadius: 10)],
-                        ),
-                        child: Center(
-                          child: Container(
-                            width: 8, height: 8,
-                            decoration: const BoxDecoration(
-                              color: _gold, shape: BoxShape.circle),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // ── علامة الحافة (لتغيير الحجم) ─────────────────────────
-                  Positioned(
-                    left: _edgeScreen.dx - 9,
-                    top:  _edgeScreen.dy - 9,
-                    child: GestureDetector(
-                      onPanStart: (_) =>
-                          setState(() => _draggingEdge = true),
-                      onPanUpdate: (d) {
-                        final ll = _screenToLatLng(
-                            _edgeScreen + d.delta);
-                        if (ll != null) {
-                          final dist = const Distance()
-                              .as(LengthUnit.Kilometer, _center, ll);
-                          _updateRadius(dist, moveMap: false);
-                          setState(() => _ksaMode = false);
-                          _recalcScreenPositions();
-                        }
-                      },
-                      onPanEnd: (_) =>
-                          setState(() => _draggingEdge = false),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 100),
-                        width: 18, height: 18,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _draggingEdge ? _gold : Colors.white,
-                          border: Border.all(
-                            color: _draggingEdge ? Colors.white : _gold,
-                            width: 2.5),
-                          boxShadow: [BoxShadow(
-                            color: _gold.withOpacity(0.7),
-                            blurRadius: 8)],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // ── تلميح ───────────────────────────────────────────────
-                  Positioned(
-                    bottom: 8, left: 0, right: 0,
-                    child: Center(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.6),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              color: _gold.withOpacity(0.3))),
-                        child: Text(
-                          '⬤ اسحب المركز • ⬤ اسحب الحافة لتغيير الحجم',
-                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                            fontSize: 8.5,
-                            color: Colors.white.withOpacity(0.7)),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                ]),
+                ),
               ),
             ),
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        // ── شريط التحكم ──────────────────────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                  color: _gold.withOpacity(0.25), width: 1.5)),
-            child: Column(children: [
-
-              // قيمة النطاق
-              Text(radTxt,
-                style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                  fontSize: 22, fontWeight: FontWeight.w800,
-                  color: _gold,
-                  shadows: [Shadow(
-                    color: _gold.withOpacity(0.4), blurRadius: 12)],
-                )),
-
-              const SizedBox(height: 8),
-
-              // السلايدر
-              SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: _gold,
-                  thumbColor: _gold,
-                  inactiveTrackColor: Colors.white.withOpacity(0.15),
-                  overlayColor: _goldGlow,
-                  trackHeight: 3,
-                ),
-                child: Slider(
-                  value: _radiusKm.clamp(1, 200),
-                  min: 1, max: 200,
-                  onChanged: (v) {
-                    setState(() => _ksaMode = false);
-                    _updateRadius(v, moveMap: true);
-                  },
-                ),
+            const SizedBox(height: 10),
+            Text(
+              '${_rad.round()} كم',
+              style: GoogleFonts.cairo(
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+                color: _gold,
               ),
-
-              // أزرار سريعة
-              Row(children: _quickPicks.map((km) {
-                final sel = !_ksaMode &&
-                    (_radiusKm - km).abs() < 0.5;
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() => _ksaMode = false);
-                      _updateRadius(km, moveMap: true);
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
-                      margin: const EdgeInsets.only(left: 5),
-                      height: 28,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: sel
-                              ? _gold
-                              : _gold.withOpacity(0.3)),
-                        color: sel
-                            ? _goldBg
-                            : Colors.transparent,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            SliderTheme(
+              data: SliderThemeData(
+                thumbColor: _gold,
+                activeTrackColor: _gold,
+                inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
+                overlayColor: _gold.withValues(alpha: 0.2),
+                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
+              ),
+              child: Slider(
+                value: _rad.clamp(1, 200),
+                min: 1,
+                max: 200,
+                onChanged: (value) {
+                  setState(() {
+                    _rad = value;
+                    _ksa = false;
+                  });
+                  try {
+                    _mapCtrl.move(_center, _zoom(value).toDouble());
+                  } catch (_) {}
+                },
+              ),
+            ),
+            Wrap(
+              spacing: 7,
+              runSpacing: 7,
+              children: _picks.map((value) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _rad = value;
+                      _ksa = false;
+                    });
+                    try {
+                      _mapCtrl.move(_center, _zoom(value).toDouble());
+                    } catch (_) {}
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 13,
+                      vertical: 7,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color:
+                            _rad == value && !_ksa ? _gold : _gold.withValues(alpha: 0.25),
                       ),
-                      child: Center(
-                        child: Text('${km < 10 ? km.toInt() : km.toInt()} كم',
-                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: sel ? _gold : Colors.white54)),
+                      color: _rad == value && !_ksa
+                          ? _gold.withValues(alpha: 0.18)
+                          : _gold.withValues(alpha: 0.05),
+                    ),
+                    child: Text(
+                      '${value.round()} كم',
+                      style: GoogleFonts.cairo(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: _rad == value && !_ksa
+                            ? _gold
+                            : Colors.white.withValues(alpha: 0.6),
                       ),
                     ),
                   ),
                 );
-              }).toList()),
-
-              const SizedBox(height: 8),
-
-              // المملكة كاملة
-              GestureDetector(
-                onTap: _toggleKSA,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: double.infinity, height: 36,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: _ksaMode
-                          ? Colors.red.shade400
-                          : Colors.red.withOpacity(0.4)),
-                    color: _ksaMode
-                        ? Colors.red.withOpacity(0.18)
-                        : Colors.transparent,
+              }).toList(),
+            ),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _ksa = true;
+                  _rad = 900;
+                  _center = const LatLng(23.8859, 45.0792);
+                });
+                try {
+                  _mapCtrl.move(const LatLng(23.8859, 45.0792), 5);
+                } catch (_) {}
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: double.infinity,
+                height: 42,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: _ksa
+                        ? const Color(0xFFFC8181)
+                        : const Color(0xFFFC8181).withValues(alpha: 0.4),
                   ),
-                  child: Center(
-                    child: Text('🇸🇦   المملكة كاملة',
-                      style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.red.shade300)),
+                  color: _ksa
+                      ? const Color(0xFFFC8181).withValues(alpha: 0.12)
+                      : Colors.transparent,
+                ),
+                child: Center(
+                  child: Text(
+                    '🇸🇦  المملكة كاملة',
+                    style: GoogleFonts.cairo(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFFFC8181),
+                    ),
                   ),
                 ),
               ),
-            ]),
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        // ── زر الحفظ ────────────────────────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-          child: GestureDetector(
-            onTap: () => widget.onSave(_ksaMode ? 999 : _radiusKm),
-            child: Container(
-              width: double.infinity, height: 42,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(13),
-                border: Border.all(color: _gold, width: 1.8)),
-              child: Center(
-                child: Text('حفظ النطاق',
-                  style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                    fontSize: 14, fontWeight: FontWeight.w800,
-                    color: _gold)),
-              ),
             ),
-          ),
+            const SizedBox(height: 8),
+          ],
         ),
-      ]),
+      ),
     );
   }
 }
 
-// ── لوحة المدة ────────────────────────────────────────────────────────────
-// ══════════════════════════════════════════════════════════════════════════════
-//  لوحة مُدة التعميم — عجلات تمرير (من اليمين: ساعات، أيام، أسابيع، سنوات)
-// ══════════════════════════════════════════════════════════════════════════════
+class _EdgeHandle extends StatelessWidget {
+  final MapController mapCtrl;
+  final LatLng center;
+  final double rad;
+  final bool dragging;
+  final VoidCallback onDragStart;
+  final VoidCallback onDragEnd;
+  final ValueChanged<double> onDragUpdate;
+
+  const _EdgeHandle({
+    required this.mapCtrl,
+    required this.center,
+    required this.rad,
+    required this.dragging,
+    required this.onDragStart,
+    required this.onDragUpdate,
+    required this.onDragEnd,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    try {
+      final dLng = (rad / 111.32) /
+          (0.0174533 * center.latitude).abs().clamp(0.01, 1.0);
+      final edgePoint = mapCtrl.camera.latLngToScreenPoint(
+        LatLng(center.latitude, center.longitude + dLng),
+      );
+      return Positioned(
+        left: edgePoint.x - 10,
+        top: edgePoint.y - 10,
+        child: GestureDetector(
+          onPanStart: (_) => onDragStart(),
+          onPanUpdate: (details) {
+            final delta = details.delta.dx - details.delta.dy;
+            final nextRadius = rad + (delta * 0.12);
+            onDragUpdate(nextRadius.clamp(0.5, 500));
+          },
+          onPanEnd: (_) => onDragEnd(),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            width: 20,
+            height: 20,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: dragging ? Colors.white : _gold,
+              border: Border.all(
+                color: dragging ? _gold : Colors.white,
+                width: 2.5,
+              ),
+              boxShadow: [
+                BoxShadow(color: _gold.withValues(alpha: 0.8), blurRadius: 10),
+              ],
+            ),
+          ),
+        ),
+      );
+    } catch (_) {
+      return const SizedBox.shrink();
+    }
+  }
+}
+
+class _Crosshair extends StatelessWidget {
+  const _Crosshair();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 44,
+      height: 44,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(width: 44, height: 1.5, color: _gold),
+          Container(width: 1.5, height: 44, color: _gold),
+          Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: _gold,
+              boxShadow: [
+                BoxShadow(color: _gold.withValues(alpha: 0.9), blurRadius: 8),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _DurPanel extends StatefulWidget {
+  final double top;
   final Duration duration;
-  final double topPad;
   final ValueChanged<Duration> onSave;
+
   const _DurPanel({
+    required this.top,
     required this.duration,
-    required this.topPad,
     required this.onSave,
   });
-  @override State<_DurPanel> createState() => _DurPanelState();
+
+  @override
+  State<_DurPanel> createState() => _DurPanelState();
 }
 
 class _DurPanelState extends State<_DurPanel> {
-  // ── قيم الأعمدة ───────────────────────────────────────────────────────────
-  int _hours = 0, _days = 3, _weeks = 0, _years = 0;
+  int _h = 0;
+  int _d = 3;
+  int _w = 0;
+  int _y = 0;
+  late final Map<String, FixedExtentScrollController> _ctrl;
 
-  // ── controllers ───────────────────────────────────────────────────────────
-  late FixedExtentScrollController _hCtrl, _dCtrl, _wCtrl, _yCtrl;
-
-  // ── اختصارات سريعة (y, w, d, h) ─────────────────────────────────────────
-  static const _quick = [
-    {'l': 'ساعة',    'y': 0, 'w': 0, 'd': 0, 'h': 1},
-    {'l': 'يوم',     'y': 0, 'w': 0, 'd': 1, 'h': 0},
-    {'l': '3 أيام',  'y': 0, 'w': 0, 'd': 3, 'h': 0},
-    {'l': 'أسبوع',   'y': 0, 'w': 1, 'd': 0, 'h': 0},
-    {'l': 'أسبوعان', 'y': 0, 'w': 2, 'd': 0, 'h': 0},
-    {'l': 'شهر',     'y': 0, 'w': 4, 'd': 0, 'h': 0},
-    {'l': 'سنة',     'y': 1, 'w': 0, 'd': 0, 'h': 0},
+  static const _durPicks = [
+    {'l': 'ساعة', 'h': 1, 'd': 0, 'w': 0, 'y': 0},
+    {'l': 'يوم', 'h': 0, 'd': 1, 'w': 0, 'y': 0},
+    {'l': '3 أيام', 'h': 0, 'd': 3, 'w': 0, 'y': 0},
+    {'l': 'أسبوع', 'h': 0, 'd': 0, 'w': 1, 'y': 0},
+    {'l': 'شهر', 'h': 0, 'd': 0, 'w': 4, 'y': 0},
+    {'l': 'سنة', 'h': 0, 'd': 0, 'w': 0, 'y': 1},
   ];
 
   @override
   void initState() {
     super.initState();
-    // تحليل المدة الأولية
-    final d = widget.duration;
-    _years  = d.inDays ~/ 365;
-    final rem = d.inDays % 365;
-    _weeks  = rem ~/ 7;
-    _days   = rem % 7;
-    _hours  = d.inHours % 24;
-
-    _hCtrl = FixedExtentScrollController(initialItem: _hours);
-    _dCtrl = FixedExtentScrollController(initialItem: _days);
-    _wCtrl = FixedExtentScrollController(initialItem: _weeks);
-    _yCtrl = FixedExtentScrollController(initialItem: _years);
+    final duration = widget.duration;
+    if (duration.inDays >= 365) {
+      _y = duration.inDays ~/ 365;
+    } else if (duration.inDays >= 7) {
+      _w = duration.inDays ~/ 7;
+    } else if (duration.inDays >= 1) {
+      _d = duration.inDays;
+    } else {
+      _h = duration.inHours;
+    }
+    _ctrl = {
+      'h': FixedExtentScrollController(initialItem: _h),
+      'd': FixedExtentScrollController(initialItem: _d),
+      'w': FixedExtentScrollController(initialItem: _w),
+      'y': FixedExtentScrollController(initialItem: _y),
+    };
   }
 
   @override
   void dispose() {
-    _hCtrl.dispose(); _dCtrl.dispose();
-    _wCtrl.dispose(); _yCtrl.dispose();
+    for (final controller in _ctrl.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
-  // ── الإجمالي ──────────────────────────────────────────────────────────────
-  Duration get _total => Duration(
-    hours: _hours,
-    days:  _days + _weeks * 7 + _years * 365,
-  );
-
-  // ── نص ملخص المدة ────────────────────────────────────────────────────────
-  String get _label {
-    final p = <String>[];
-    if (_years > 0)  p.add('$_years ${_years  == 1 ? "سنة"   : "سنوات"}');
-    if (_weeks > 0)  p.add('$_weeks ${_weeks  == 1 ? "أسبوع" : "أسابيع"}');
-    if (_days  > 0)  p.add('$_days  ${_days   == 1 ? "يوم"   : "أيام"}');
-    if (_hours > 0)  p.add('$_hours ${_hours  == 1 ? "ساعة"  : "ساعات"}');
-    return p.isEmpty ? 'لم تُحدد' : p.join(' و ');
+  Duration get _result {
+    final total = _y * 365 + _w * 7 + _d;
+    if (total > 0) {
+      return Duration(days: total);
+    }
+    return Duration(hours: _h);
   }
 
-  // ── ضبط سريع ─────────────────────────────────────────────────────────────
-  void _applyQuick(Map q) {
-    _years = q['y'] as int; _weeks = q['w'] as int;
-    _days  = q['d'] as int; _hours = q['h'] as int;
-    _hCtrl.animateToItem(_hours, duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOut);
-    _dCtrl.animateToItem(_days,  duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOut);
-    _wCtrl.animateToItem(_weeks, duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOut);
-    _yCtrl.animateToItem(_years, duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOut);
-    setState(() {});
+  void _setQuick(int h, int d, int w, int y) {
+    setState(() {
+      _h = h;
+      _d = d;
+      _w = w;
+      _y = y;
+    });
+    _ctrl['h']!.jumpToItem(h);
+    _ctrl['d']!.jumpToItem(d);
+    _ctrl['w']!.jumpToItem(w);
+    _ctrl['y']!.jumpToItem(y);
   }
 
-  // ── بناء عمود عجلة واحدة ─────────────────────────────────────────────────
-  Widget _col({
-    required String label,
-    required int maxVal,
-    required int curVal,
-    required FixedExtentScrollController ctrl,
-    required ValueChanged<int> onChange,
-  }) {
+  Widget _wheel(String key, int max, int val, ValueChanged<int> onChanged) {
     return Expanded(
-      child: Column(children: [
-        // عنوان العمود
-        Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 4),
-          child: Text(label,
-            style: TextStyle(fontFamily: 'NotoNaskhArabic',
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-              color: Colors.white.withOpacity(0.45)),
-          ),
-        ),
-        // العجلة
-        Expanded(
-          child: ListWheelScrollView.useDelegate(
-            controller: ctrl,
-            itemExtent: 52,
-            physics: const FixedExtentScrollPhysics(),
-            perspective: 0.003,
-            onSelectedItemChanged: (i) {
-              onChange(i);
-              setState(() {});
-            },
-            childDelegate: ListWheelChildBuilderDelegate(
-              childCount: maxVal + 1,
-              builder: (_, i) {
-                final diff = (i - curVal).abs();
-                final isActive = diff == 0;
-                final isNear   = diff == 1;
-                return Center(
-                  child: AnimatedDefaultTextStyle(
-                    duration: const Duration(milliseconds: 150),
-                    style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                      fontSize: isActive ? 26 : isNear ? 20 : 16,
-                      fontWeight: isActive
-                          ? FontWeight.w800
-                          : FontWeight.w400,
-                      color: isActive
-                          ? _gold
-                          : isNear
-                              ? Colors.white.withOpacity(0.55)
-                              : Colors.white.withOpacity(0.2),
-                    ),
-                    child: Text(i.toString().padLeft(2, '0')),
-                  ),
-                );
-              },
+      child: ListWheelScrollView.useDelegate(
+        controller: _ctrl[key]!,
+        itemExtent: 48,
+        perspective: 0.003,
+        diameterRatio: 1.5,
+        physics: const FixedExtentScrollPhysics(),
+        onSelectedItemChanged: onChanged,
+        childDelegate: ListWheelChildBuilderDelegate(
+          builder: (_, index) => Center(
+            child: Text(
+              index.toString().padLeft(2, '0'),
+              style: GoogleFonts.cairo(
+                fontSize: index == val ? 26 : 20,
+                fontWeight: index == val ? FontWeight.w800 : FontWeight.w500,
+                color: index == val
+                    ? _gold
+                    : Colors.white.withValues(
+                        alpha: index == val - 1 || index == val + 1 ? 0.5 : 0.2,
+                      ),
+              ),
             ),
           ),
+          childCount: max + 1,
         ),
-      ]),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, widget.topPad + 50, 0, 0),
-      child: Column(children: [
-
-        // ── رأس ────────────────────────────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('مُدة التعميم',
-              style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                fontSize: 17, fontWeight: FontWeight.w800, color: Colors.white)),
-            const SizedBox(height: 3),
-            Row(children: [
-              Text('ينتهي التعميم بعد ',
-                style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                  fontSize: 10, color: Colors.white.withOpacity(0.45))),
-              Flexible(
-                child: Text(_label,
-                  style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                    fontSize: 11, fontWeight: FontWeight.w800, color: _gold)),
-              ),
-            ]),
-          ]),
-        ),
-
-        // ── عجلات التمرير ──────────────────────────────────────────────────
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: Container(
+    return _PanelBase(
+      top: widget.top,
+      title: 'مُدة التعميم',
+      subtitle: 'ينتهي التعميم تلقائياً بعد هذه المدة',
+      onSave: () => widget.onSave(_result),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
+        child: Column(
+          children: [
+            Container(
+              height: 190,
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: _gold.withOpacity(0.3), width: 1.5),
+                border: Border.all(color: _gold.withValues(alpha: 0.15)),
+                color: Colors.black.withValues(alpha: 0.3),
               ),
-              child: Stack(children: [
-
-                // الصف بالأعمدة
-                Positioned.fill(
-                  child: Row(
-                    children: [
-                      // ساعات (يمين)
-                      _col(label: 'ساعات', maxVal: 23,
-                        curVal: _hours, ctrl: _hCtrl,
-                        onChange: (v) => _hours = v),
-                      _Divider(),
-                      // أيام
-                      _col(label: 'أيام', maxVal: 6,
-                        curVal: _days, ctrl: _dCtrl,
-                        onChange: (v) => _days = v),
-                      _Divider(),
-                      // أسابيع
-                      _col(label: 'أسابيع', maxVal: 51,
-                        curVal: _weeks, ctrl: _wCtrl,
-                        onChange: (v) => _weeks = v),
-                      _Divider(),
-                      // سنوات (يسار)
-                      _col(label: 'سنوات', maxVal: 1,
-                        curVal: _years, ctrl: _yCtrl,
-                        onChange: (v) => _years = v),
-                    ],
-                  ),
-                ),
-
-                // إطار العنصر المحدد
-                IgnorePointer(
-                  child: Center(
+              child: Stack(
+                children: [
+                  Center(
                     child: Container(
-                      height: 52,
-                      margin: const EdgeInsets.symmetric(horizontal: 12),
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      height: 48,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: _gold.withOpacity(0.09),
+                        borderRadius: BorderRadius.circular(10),
+                        color: _gold.withValues(alpha: 0.07),
                         border: Border(
-                          top: BorderSide(
-                            color: _gold.withOpacity(0.4), width: 1.5),
-                          bottom: BorderSide(
-                            color: _gold.withOpacity(0.4), width: 1.5),
+                          top: BorderSide(color: _gold.withValues(alpha: 0.25)),
+                          bottom: BorderSide(color: _gold.withValues(alpha: 0.25)),
                         ),
                       ),
                     ),
                   ),
-                ),
-
-                // تدرج العلوي
-                IgnorePointer(
-                  child: Positioned(
-                    top: 0, left: 0, right: 0, height: 90,
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 72,
                     child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(16)),
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.85),
-                            Colors.transparent,
-                          ],
+                          colors: [Color(0xFF0A1A0C), Colors.transparent],
                         ),
                       ),
                     ),
                   ),
-                ),
-
-                // تدرج السفلي
-                IgnorePointer(
-                  child: Positioned(
-                    bottom: 0, left: 0, right: 0, height: 90,
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 72,
                     child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(
-                          bottom: Radius.circular(16)),
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.85),
-                            Colors.transparent,
-                          ],
+                          colors: [Color(0xFF0A1A0C), Colors.transparent],
                         ),
                       ),
                     ),
                   ),
-                ),
-              ]),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 10),
-
-        // ── اختصارات سريعة ─────────────────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('اختيار سريع',
-                style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                  fontSize: 10, color: Colors.white.withOpacity(0.4))),
-              const SizedBox(height: 7),
-              Wrap(
-                spacing: 7, runSpacing: 7,
-                children: _quick.map((q) {
-                  // هل هو محدد؟
-                  final sel = _years == q['y'] && _weeks == q['w'] &&
-                      _days  == q['d'] && _hours == q['h'];
-                  return GestureDetector(
-                    onTap: () => _applyQuick(q),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
-                      height: 30,
-                      padding: const EdgeInsets.symmetric(horizontal: 13),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: sel
-                              ? _gold
-                              : _gold.withOpacity(0.3)),
-                        color: sel ? _goldBg : Colors.transparent,
+                  Row(
+                    children: [
+                      _wheel('h', 23, _h, (value) => setState(() => _h = value)),
+                      Container(
+                        width: 1,
+                        height: double.infinity,
+                        color: Colors.white.withValues(alpha: 0.06),
                       ),
-                      child: Center(
-                        child: Text(q['l'] as String,
-                          style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: sel
-                                ? _gold
-                                : Colors.white.withOpacity(0.65)),
+                      _wheel('d', 6, _d, (value) => setState(() => _d = value)),
+                      Container(
+                        width: 1,
+                        height: double.infinity,
+                        color: Colors.white.withValues(alpha: 0.06),
+                      ),
+                      _wheel('w', 51, _w, (value) => setState(() => _w = value)),
+                      Container(
+                        width: 1,
+                        height: double.infinity,
+                        color: Colors.white.withValues(alpha: 0.06),
+                      ),
+                      _wheel('y', 1, _y, (value) => setState(() => _y = value)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Row(
+                children: [
+                  for (final label in ['ساعات', 'أيام', 'أسابيع', 'سنوات'])
+                    Expanded(
+                      child: Text(
+                        label,
+                        style: GoogleFonts.cairo(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white.withValues(alpha: 0.35),
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                  );
-                }).toList(),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 7,
+              runSpacing: 7,
+              children: _durPicks.map((pick) {
+                return GestureDetector(
+                  onTap: () => _setQuick(
+                    pick['h']! as int,
+                    pick['d']! as int,
+                    pick['w']! as int,
+                    pick['y']! as int,
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 13,
+                      vertical: 7,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: _gold.withValues(alpha: 0.25)),
+                      color: _gold.withValues(alpha: 0.05),
+                    ),
+                    child: Text(
+                      pick['l']! as String,
+                      style: GoogleFonts.cairo(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white.withValues(alpha: 0.6),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TtlPanel extends StatefulWidget {
+  final double top;
+  final String initial;
+  final ValueChanged<String> onSave;
+
+  const _TtlPanel({
+    required this.top,
+    required this.initial,
+    required this.onSave,
+  });
+
+  @override
+  State<_TtlPanel> createState() => _TtlPanelState();
+}
+
+class _TtlPanelState extends State<_TtlPanel> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initial);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _PanelBase(
+      top: widget.top,
+      title: 'عنوان التعميم',
+      subtitle: 'اكتب عنواناً أو وصفاً (اختياري)',
+      onSave: () => widget.onSave(_controller.text.trim()),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: _gold.withValues(alpha: 0.2)),
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: _gold.withValues(alpha: 0.06),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(15),
+                  ),
+                  border: Border(
+                    bottom: BorderSide(color: _gold.withValues(alpha: 0.12)),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.short_text_rounded, color: _gold, size: 16),
+                    const SizedBox(width: 7),
+                    Text(
+                      'عنوان / وصف التعميم',
+                      style: GoogleFonts.cairo(
+                        fontSize: 11,
+                        color: Colors.white.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              TextField(
+                controller: _controller,
+                textDirection: TextDirection.rtl,
+                style: GoogleFonts.cairo(fontSize: 13, color: Colors.white),
+                maxLines: 5,
+                minLines: 3,
+                decoration: InputDecoration(
+                  hintText: 'اكتب عنواناً أو وصفاً...',
+                  hintStyle: GoogleFonts.cairo(
+                    fontSize: 13,
+                    color: Colors.white.withValues(alpha: 0.2),
+                  ),
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(14),
+                ),
               ),
             ],
           ),
         ),
-
-        const SizedBox(height: 10),
-
-        // ── زر الحفظ ────────────────────────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-          child: GestureDetector(
-            onTap: () => widget.onSave(_total),
-            child: Container(
-              width: double.infinity, height: 42,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(13),
-                border: Border.all(color: _gold, width: 1.8),
-              ),
-              child: Center(
-                child: Text('حفظ المدة',
-                  style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                    fontSize: 14, fontWeight: FontWeight.w800,
-                    color: _gold)),
-              ),
-            ),
-          ),
-        ),
-      ]),
-    );
-  }
-}
-
-// فاصل رفيع بين الأعمدة
-class _Divider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) => Container(
-    width: 1,
-    margin: const EdgeInsets.symmetric(vertical: 20),
-    color: const Color(0xFFC9A84C).withOpacity(0.2),
-  );
-}
-
-// ── لوحة العنوان ──────────────────────────────────────────────────────────
-class _TitlePanel extends StatelessWidget {
-  final TextEditingController ctrl;
-  final String initial, topPad2 = '';
-  final double topPad;
-  final ValueChanged<String> onSave;
-  const _TitlePanel({required this.ctrl, required this.initial,
-    required this.topPad, required this.onSave});
-  @override
-  Widget build(BuildContext context) {
-    if (ctrl.text.isEmpty && initial.isNotEmpty) ctrl.text = initial;
-    return _PanelBase(
-      title: 'عنوان التعميم', topPad: topPad,
-      onSave: () => onSave(ctrl.text.trim()),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: _gold, width: 1.8)),
-        child: Column(children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.35),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(14),
-                topRight: Radius.circular(14))),
-            child: Row(children: [
-              const Text('✏️', style: TextStyle(fontSize: 16)),
-              const SizedBox(width: 8),
-              Text('عنوان / وصف التعميم',
-                style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                    fontSize: 12, color: Colors.white.withOpacity(0.55))),
-            ]),
-          ),
-          Container(height: 1, color: _gold.withOpacity(0.4)),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: TextField(
-              controller: ctrl,
-              style: TextStyle(fontFamily: 'NotoNaskhArabic',fontSize: 14, color: Colors.white),
-              maxLines: 4, minLines: 3,
-              decoration: InputDecoration(
-                hintText: 'اكتب عنوان أو وصف التعميم...',
-                hintStyle: TextStyle(fontFamily: 'NotoNaskhArabic',
-                    fontSize: 13, color: Colors.white.withOpacity(0.3)),
-                border: InputBorder.none),
-            ),
-          ),
-        ]),
       ),
     );
   }
 }
 
-// ── لوحة المرفقات ─────────────────────────────────────────────────────────
-// ══════════════════════════════════════════════════════════════════════════════
-//  لوحة المرفقات — عرض عمودي بنسبة 14:22 مع تكبير عند الضغط
-// ══════════════════════════════════════════════════════════════════════════════
 class _AttPanel extends StatelessWidget {
+  final double top;
   final List<File> media;
-  final double topPad;
-  final VoidCallback onCapture, onGallery;
+  final Future<void> Function() onCapture;
+  final Future<void> Function() onGallery;
   final ValueChanged<int> onRemove;
+  final VoidCallback onSave;
 
   const _AttPanel({
+    required this.top,
     required this.media,
-    required this.topPad,
     required this.onCapture,
     required this.onGallery,
     required this.onRemove,
+    required this.onSave,
   });
 
-  bool _isImg(File f) {
-    final e = f.path.toLowerCase();
-    return ['.jpg', '.jpeg', '.png', '.heic', '.webp'].any(e.endsWith);
-  }
-
-  // ── تكبير الصورة كاملة ─────────────────────────────────────────────────
-  void _showFullscreen(BuildContext context, File f) {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        opaque: false,
-        barrierColor: Colors.black.withOpacity(0.95),
-        pageBuilder: (_, __, ___) => Scaffold(
-          backgroundColor: Colors.black.withOpacity(0.95),
-          body: Stack(children: [
-            // الصورة قابلة للتكبير والتصغير
-            Center(
-              child: InteractiveViewer(
-                minScale: 0.5,
-                maxScale: 4.0,
-                child: _isImg(f)
-                  ? Image.file(f, fit: BoxFit.contain)
-                  : Container(
-                      width: 260, height: 380,
-                      color: Colors.grey.shade900,
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.videocam_rounded,
-                              color: Colors.white54, size: 64),
-                          SizedBox(height: 12),
-                          Text('فيديو',
-                            style: TextStyle(color: Colors.white54,
-                                fontSize: 14)),
-                        ],
-                      ),
-                    ),
-              ),
-            ),
-            // زر الإغلاق
-            Positioned(
-              top: 52, right: 16,
-              child: GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  width: 38, height: 38,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.6),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        color: Colors.white.withOpacity(0.3))),
-                  child: const Icon(Icons.close_rounded,
-                      color: Colors.white, size: 18),
-                ),
-              ),
-            ),
-          ]),
-        ),
-      ),
-    );
+  static bool _isImg(File file) {
+    final ext = file.path.toLowerCase();
+    return ['.jpg', '.jpeg', '.png', '.heic', '.webp'].any(ext.endsWith);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, topPad + 52, 10, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          // ── رأس اللوحة ───────────────────────────────────────────────────
-          Row(children: [
-            const Icon(Icons.perm_media_outlined,
-                color: _gold, size: 18),
-            const SizedBox(width: 8),
-            Text('المرفقات',
-              style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                fontSize: 16, fontWeight: FontWeight.w800,
-                color: Colors.white)),
-            const SizedBox(width: 8),
-            if (media.isNotEmpty)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.85),
-                  borderRadius: BorderRadius.circular(10)),
-                child: Text('${media.length}',
-                  style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                    fontSize: 11, fontWeight: FontWeight.w800,
-                    color: Colors.white)),
-              ),
-          ]),
-
-          const SizedBox(height: 10),
-
-          // ── أزرار الإضافة ─────────────────────────────────────────────────
-          Row(children: [
-            Expanded(child: _actionBtn(
-              icon: Icons.camera_alt_outlined,
-              label: 'التقط',
-              onTap: onCapture)),
-            const SizedBox(width: 8),
-            Expanded(child: _actionBtn(
-              icon: Icons.photo_library_outlined,
-              label: 'المعرض',
-              onTap: onGallery)),
-          ]),
-
-          const SizedBox(height: 10),
-
-          // ── قائمة المرفقات العمودية بنسبة 14:22 ──────────────────────────
-          Expanded(
-            child: media.isEmpty
-              ? Center(child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.add_photo_alternate_outlined,
-                        color: Colors.white24, size: 44),
-                    const SizedBox(height: 8),
-                    Text('لا توجد مرفقات',
-                      style: TextStyle(fontFamily: 'NotoNaskhArabic',
-                        fontSize: 12, color: Colors.white30)),
-                  ],
-                ))
-              : ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: media.length,
-                  itemBuilder: (ctx, i) => GestureDetector(
-                    onTap: () => _showFullscreen(ctx, media[i]),
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      // نسبة 14:22 (عرض:ارتفاع) — صورة طولية مصغّرة
-                      child: AspectRatio(
-                        aspectRatio: 14 / 22,
-                        child: Stack(
-                          clipBehavior: Clip.hardEdge,
-                          children: [
-                            // الصورة
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: _isImg(media[i])
-                                ? Image.file(media[i],
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: double.infinity)
-                                : Container(
-                                    color: Colors.grey.shade900,
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.videocam_rounded,
-                                            color: Colors.white54, size: 28),
-                                        SizedBox(height: 4),
-                                        Text('فيديو',
-                                          style: TextStyle(
-                                            color: Colors.white38,
-                                            fontSize: 11)),
-                                      ],
+    return _PanelBase(
+      top: top,
+      title: 'المرفقات',
+      subtitle: media.isEmpty ? 'أضف صوراً أو فيديو' : '${media.length} مرفق',
+      onSave: onSave,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+        child: Column(
+          children: [
+            Expanded(
+              child: media.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.add_photo_alternate_rounded,
+                            color: Colors.white.withValues(alpha: 0.25),
+                            size: 52,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'لا توجد مرفقات',
+                            style: GoogleFonts.cairo(
+                              fontSize: 13,
+                              color: Colors.white.withValues(alpha: 0.35),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : GridView.builder(
+                      padding: EdgeInsets.zero,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                      ),
+                      itemCount: media.length,
+                      itemBuilder: (_, index) => Stack(
+                        children: [
+                          Positioned.fill(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: _isImg(media[index])
+                                  ? Image.file(media[index], fit: BoxFit.cover)
+                                  : Container(
+                                      color: Colors.grey.shade800,
+                                      child: const Icon(
+                                        Icons.play_circle_outline_rounded,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ),
                                     ),
-                                  ),
                             ),
-
-                            // حدود ذهبية خفيفة
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
+                          ),
+                          Positioned(
+                            top: 5,
+                            right: 5,
+                            child: GestureDetector(
+                              onTap: () => onRemove(index),
                               child: Container(
+                                width: 20,
+                                height: 20,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xFFE53E3E),
+                                  shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: _gold.withOpacity(0.25),
-                                    width: 1)),
-                              ),
-                            ),
-
-                            // أيقونة التكبير (أسفل اليمين)
-                            Positioned(
-                              bottom: 6, right: 6,
-                              child: Container(
-                                width: 22, height: 22,
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.5),
-                                  borderRadius: BorderRadius.circular(6)),
+                                    color: Colors.white.withValues(alpha: 0.5),
+                                    width: 1,
+                                  ),
+                                ),
                                 child: const Icon(
-                                  Icons.open_in_full_rounded,
-                                  color: Colors.white70,
-                                  size: 12),
-                              ),
-                            ),
-
-                            // زر الحذف (أعلى اليمين)
-                            Positioned(
-                              top: 6, right: 6,
-                              child: GestureDetector(
-                                onTap: () => onRemove(i),
-                                child: Container(
-                                  width: 22, height: 22,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle),
-                                  child: const Icon(
-                                    Icons.close_rounded,
-                                    color: Colors.white,
-                                    size: 13),
+                                  Icons.close_rounded,
+                                  color: Colors.white,
+                                  size: 13,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Positioned(
+                            bottom: 5,
+                            left: 5,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 7,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.6),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                '${index + 1}',
+                                style: GoogleFonts.cairo(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: _gold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: onCapture,
+                    child: Container(
+                      height: 44,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(13),
+                        border: Border.all(color: _gold, width: 1.5),
+                        color: _gold.withValues(alpha: 0.06),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.camera_alt_rounded,
+                            color: _gold,
+                            size: 17,
+                          ),
+                          const SizedBox(width: 7),
+                          Text(
+                            'التقط',
+                            style: GoogleFonts.cairo(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: _gold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-          ),
-        ],
+                const SizedBox(width: 8),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: onGallery,
+                    child: Container(
+                      height: 44,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(13),
+                        border: Border.all(color: _gold, width: 1.5),
+                        color: _gold.withValues(alpha: 0.06),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.photo_library_rounded,
+                            color: _gold,
+                            size: 17,
+                          ),
+                          const SizedBox(width: 7),
+                          Text(
+                            'المعرض',
+                            style: GoogleFonts.cairo(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: _gold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
+}
 
-  Widget _actionBtn({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) => GestureDetector(
-    onTap: onTap,
-    child: Container(
-      height: 36,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: _gold.withOpacity(0.6), width: 1.5)),
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Icon(icon, color: _gold, size: 14),
-        const SizedBox(width: 5),
-        Text(label, style: TextStyle(fontFamily: 'NotoNaskhArabic',
-          fontSize: 12, fontWeight: FontWeight.w700, color: _gold)),
-      ]),
-    ),
-  );
+class _SuccessScreen extends StatelessWidget {
+  final double radius;
+
+  const _SuccessScreen({required this.radius});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF050C06),
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  duration: const Duration(milliseconds: 600),
+                  curve: Curves.elasticOut,
+                  builder: (_, value, __) => Transform.scale(
+                    scale: value,
+                    child: Container(
+                      width: 90,
+                      height: 90,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: const LinearGradient(
+                          colors: [_emerald, _forest],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: _emerald.withValues(alpha: 0.5),
+                            blurRadius: 40,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.check_rounded,
+                        color: Colors.white,
+                        size: 44,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'تم النشر!',
+                  style: GoogleFonts.cairo(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'تعميمك الآن على الخريطة\nوسيصل لمن هم في نطاق ${radius.round()} كم',
+                  style: GoogleFonts.cairo(
+                    fontSize: 13,
+                    color: Colors.white60,
+                    height: 1.8,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).popUntil((route) => route.isFirst),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 36,
+                      vertical: 14,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: const LinearGradient(
+                        colors: [_emerald, _forest],
+                      ),
+                    ),
+                    child: Text(
+                      'العودة للخريطة',
+                      style: GoogleFonts.cairo(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

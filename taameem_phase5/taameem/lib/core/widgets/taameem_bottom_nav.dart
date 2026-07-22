@@ -34,18 +34,18 @@ class TaameemBottomNav extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.82),
+          color: Colors.white.withValues(alpha: 0.82),
           borderRadius: BorderRadius.circular(26),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.12),
+              color: Colors.black.withValues(alpha: 0.12),
               blurRadius: 24, offset: const Offset(0, 6)),
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 8,  offset: const Offset(0, 2)),
           ],
           border: Border.all(
-              color: Colors.white.withOpacity(0.6), width: 1),
+              color: Colors.white.withValues(alpha: 0.6), width: 1),
         ),
         child: Row(
           children: [
@@ -79,11 +79,11 @@ class TaameemBottomNav extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.emerald.withOpacity(0.45),
+                            color: AppColors.emerald.withValues(alpha: 0.45),
                             blurRadius: 12, offset: const Offset(0, 4)),
                         ],
                         border: Border.all(
-                          color: AppColors.gold.withOpacity(0.5),
+                          color: AppColors.gold.withValues(alpha: 0.5),
                           width: 1.5),
                       ),
                       child: const Center(
@@ -155,7 +155,7 @@ class _NavItem extends StatelessWidget {
                 horizontal: 12, vertical: 7),
             decoration: BoxDecoration(
               color: a
-                  ? AppColors.emerald.withOpacity(0.13)
+                  ? AppColors.emerald.withValues(alpha: 0.13)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(18),
             ),
